@@ -3,24 +3,16 @@ print("[ULF] LootItemEligibility.lua LOADED")
 ULF_LootItemEligibility = {}
 
 -- ============================================================
--- CONFIGURATION
--- ============================================================
-
-local EXCLUDED_CATEGORIES = {
-
-    Book = true,
-    Material = true,
-    Other = true
-
-}
-
--- ============================================================
 -- CHECK ITEM ELIGIBILITY
 -- ============================================================
 
 function ULF_LootItemEligibility.IsEligible(record)
 
     if not record then
+        return false
+    end
+
+    if record.IsQuestItem == true then
         return false
     end
 

@@ -59,6 +59,8 @@ local function CreateScanStats()
 
         DuplicateTemplates = 0,
 
+        QuestItems = 0,
+
         PropertyErrors = 0,
 
         NoRootTemplate = 0,
@@ -677,6 +679,10 @@ local function BuildItemRecord(statName)
             template
         )
 
+    local isQuestItem =
+        StartsWith(statName, "QUEST_")
+        or
+        StartsWith(templateName, "QUEST_")
 
     -- ========================================================
     -- RECORD
@@ -707,7 +713,9 @@ local function BuildItemRecord(statName)
         Category = category,
 
         ClassificationReason =
-            classificationReason
+            classificationReason,
+
+        isQuestItem = isQuestItem
 
     }
 
@@ -759,6 +767,11 @@ local function PrintScanSummary(
     print(
         "[ULF] Unique physical items: " ..
         tostring(itemCount)
+    )
+
+    print(
+        "[ULF] Quest items: " ..
+        tostring(itemCount.QuestItems)
     )
 
 
@@ -836,7 +849,7 @@ local function PrintCategorySamples(
 
             for _, record in ipairs(samples) do
 
-                print(
+               print(
                     "[ULF] " ..
                     tostring(record.Stat) ..
                     " -> " ..
@@ -845,10 +858,10 @@ local function PrintCategorySamples(
                     tostring(record.Rarity) ..
                     " | Level " ..
                     tostring(record.Level) ..
+                    " | Quest: " ..
+                    tostring(record.IsQuestItem) ..
                     " | Reason: " ..
-                    tostring(
-                        record.ClassificationReason
-                    )
+                    tostring(record.ClassificationReason)
                 )
 
             end
@@ -919,6 +932,11 @@ local function ScanItems()
         -- ====================================================
 
         if record then
+
+            if record.IsQuestItem then
+                scanStats.QuestItems =
+                    scanStats.QuestItems + 1
+            end
 
             scanStats.PhysicalItems =
                 scanStats.PhysicalItems + 1
