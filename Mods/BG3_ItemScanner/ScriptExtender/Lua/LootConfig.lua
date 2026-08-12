@@ -31,7 +31,7 @@ ULF_LootConfig = {
     -- V1 starts simple.
     -- This will be refined when LootGenerator is implemented.
 
-    BaseDropChance = 0.20,
+    BaseDropChance = 0.35,
 
 
     -- ========================================================
@@ -70,6 +70,23 @@ ULF_LootConfig = {
 
     },
 
+    -- ============================================================
+    -- ITEM CATEGORIES
+    -- ============================================================
+
+    AllowedCategories = {
+        Weapon = true,
+        Armor = true,
+        Accessory = true,
+        Consumable = true,
+        Scroll = true,
+        Food = false,
+
+        Book = false,
+        Material = false,
+        Other = false,
+        Grenade = false
+    },
 
     -- ========================================================
     -- DEBUG

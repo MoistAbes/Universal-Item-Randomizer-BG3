@@ -37,6 +37,7 @@ local CATEGORY_ORDER = {
     "Book",
     "Material",
     "Other"
+
 }
 
 
@@ -78,8 +79,11 @@ local function CreateScanStats()
             Book = 0,
             Material = 0,
             Other = 0
+
         }
+
     }
+
 end
 
 
@@ -101,8 +105,11 @@ local function CreateCategorySamples()
         Book = {},
         Material = {},
         Other = {}
+
     }
+
 end
+
 
 -- ============================================================
 -- SAFE PROPERTY ACCESS
@@ -111,8 +118,11 @@ end
 local function SafeGet(object, property)
 
     if not object then
+
         return nil, "NoObject"
+
     end
+
 
     local ok, value = pcall(function()
 
@@ -120,14 +130,18 @@ local function SafeGet(object, property)
 
     end)
 
+
     if not ok then
 
         return nil, "PropertyError"
 
     end
 
+
     return value, nil
+
 end
+
 
 -- ============================================================
 -- SAFE STRING
@@ -136,8 +150,11 @@ end
 local function SafeString(value)
 
     if value == nil then
+
         return nil
+
     end
+
 
     local ok, result = pcall(function()
 
@@ -145,11 +162,16 @@ local function SafeString(value)
 
     end)
 
+
     if ok then
+
         return result
+
     end
 
+
     return nil
+
 end
 
 
@@ -160,8 +182,11 @@ end
 local function GetDisplayName(template)
 
     if not template then
+
         return nil
+
     end
+
 
     local displayName, errorCode =
         SafeGet(
@@ -169,13 +194,20 @@ local function GetDisplayName(template)
             "DisplayName"
         )
 
+
     if errorCode then
+
         return nil
+
     end
 
+
     if not displayName then
+
         return nil
+
     end
+
 
     local ok, result = pcall(function()
 
@@ -183,11 +215,16 @@ local function GetDisplayName(template)
 
     end)
 
+
     if ok then
+
         return result
+
     end
 
+
     return nil
+
 end
 
 
@@ -198,8 +235,11 @@ end
 local function Contains(text, value)
 
     if not text or not value then
+
         return false
+
     end
+
 
     return string.find(
         string.upper(text),
@@ -207,19 +247,24 @@ local function Contains(text, value)
         1,
         true
     ) ~= nil
+
 end
 
 
 local function StartsWith(text, value)
 
     if not text or not value then
+
         return false
+
     end
+
 
     return string.find(
         string.upper(text),
         "^" .. string.upper(value)
     ) ~= nil
+
 end
 
 
@@ -241,7 +286,9 @@ local function GetNameSignals(
         .. " "
         .. (SafeString(templateName) or "")
 
+
     return string.upper(combined)
+
 end
 
 
@@ -258,6 +305,7 @@ local function ClassifyItem(
 )
 
     local text =
+
         GetNameSignals(
             statName,
             displayName,
@@ -273,6 +321,7 @@ local function ClassifyItem(
         or StartsWith(templateName, "WPN_") then
 
         return "Weapon", "WPN prefix"
+
     end
 
 
@@ -284,6 +333,7 @@ local function ClassifyItem(
         or StartsWith(templateName, "ARM_") then
 
         return "Armor", "ARM prefix"
+
     end
 
 
@@ -303,6 +353,7 @@ local function ClassifyItem(
         or Contains(text, "MUSHROOM") then
 
         return "Food", "food-related name"
+
     end
 
 
@@ -313,6 +364,7 @@ local function ClassifyItem(
     if Contains(text, "SCROLL") then
 
         return "Scroll", "scroll-related name"
+
     end
 
 
@@ -328,6 +380,7 @@ local function ClassifyItem(
 
         return "Grenade",
             "grenade/explosive-related name"
+
     end
 
 
@@ -343,6 +396,7 @@ local function ClassifyItem(
 
         return "Consumable",
             "consumable-related name"
+
     end
 
 
@@ -360,6 +414,7 @@ local function ClassifyItem(
 
         return "Book",
             "book-related name"
+
     end
 
 
@@ -377,6 +432,7 @@ local function ClassifyItem(
 
         return "Material",
             "material-related name"
+
     end
 
 
@@ -400,6 +456,7 @@ local function ClassifyItem(
 
         return "Accessory",
             "accessory-related name"
+
     end
 
 
@@ -409,6 +466,7 @@ local function ClassifyItem(
 
     return "Other",
         "no known classification signal"
+
 end
 
 
@@ -425,23 +483,44 @@ local function AddCategorySample(
     local samples =
         categorySamples[category]
 
+
     if not samples then
+
         return
+
     end
 
+
     if #samples >= MAX_SAMPLES_PER_CATEGORY then
+
         return
+
     end
+
 
     table.insert(
         samples,
         record
     )
+
 end
 
 
 -- ============================================================
--- BUILD ITEM RECORD
+-- SCAN ONE ITEM / BUILD ITEM RECORD
+-- ============================================================
+--
+-- This is the actual single-item scanner.
+--
+-- Input:
+--     statName
+--
+-- Returns:
+--     record, nil
+--
+-- or:
+--     nil, errorCode
+--
 -- ============================================================
 
 local function BuildItemRecord(statName)
@@ -449,8 +528,11 @@ local function BuildItemRecord(statName)
     local stat =
         Ext.Stats.Get(statName)
 
+
     if not stat then
+
         return nil, "StatNotFound"
+
     end
 
 
@@ -464,14 +546,19 @@ local function BuildItemRecord(statName)
             "RootTemplate"
         )
 
+
     if errorCode then
+
         return nil, "PropertyError"
+
     end
+
 
     if not rootTemplate
         or rootTemplate == "" then
 
         return nil, "NoRootTemplate"
+
     end
 
 
@@ -484,8 +571,11 @@ local function BuildItemRecord(statName)
             rootTemplate
         )
 
+
     if not template then
+
         return nil, "TemplateNotFound"
+
     end
 
 
@@ -495,17 +585,24 @@ local function BuildItemRecord(statName)
 
     local templateType,
           templateTypeError =
+
         SafeGet(
             template,
             "TemplateType"
         )
 
+
     if templateTypeError then
+
         return nil, "PropertyError"
+
     end
 
+
     if templateType ~= "item" then
+
         return nil, "WrongTemplateType"
+
     end
 
 
@@ -518,11 +615,13 @@ local function BuildItemRecord(statName)
             template
         )
 
+
     local templateName =
         SafeGet(
             template,
             "Name"
         )
+
 
     local icon =
         SafeGet(
@@ -541,17 +640,20 @@ local function BuildItemRecord(statName)
             "Rarity"
         )
 
+
     local level =
         SafeGet(
             stat,
             "Level"
         )
 
+
     local weaponGroup =
         SafeGet(
             stat,
             "Weapon Group"
         )
+
 
     local proficiencyGroup =
         SafeGet(
@@ -606,10 +708,12 @@ local function BuildItemRecord(statName)
 
         ClassificationReason =
             classificationReason
+
     }
 
 
     return record, nil
+
 end
 
 
@@ -659,27 +763,6 @@ local function PrintScanSummary(
 
 
     -- ========================================================
-    -- CATEGORIES
-    -- ========================================================
-
-    print("")
-    print("[ULF] --- CLASSIFICATION ---")
-
-
-    for _, category in ipairs(CATEGORY_ORDER) do
-
-        print(
-            "[ULF] " ..
-            category ..
-            ": " ..
-            tostring(
-                scanStats.Categories[category]
-            )
-        )
-    end
-
-
-    -- ========================================================
     -- ERRORS
     -- ========================================================
 
@@ -715,6 +798,7 @@ local function PrintScanSummary(
         "[ULF] Duplicate RootTemplates: " ..
         tostring(scanStats.DuplicateTemplates)
     )
+
 end
 
 
@@ -766,9 +850,13 @@ local function PrintCategorySamples(
                         record.ClassificationReason
                     )
                 )
+
             end
+
         end
+
     end
+
 end
 
 
@@ -795,6 +883,7 @@ local function ScanItems()
         )
 
         return nil
+
     end
 
 
@@ -887,6 +976,7 @@ local function ScanItems()
                     record,
                     categorySamples
                 )
+
             end
 
 
@@ -916,7 +1006,9 @@ local function ScanItems()
 
             scanStats.WrongTemplateType =
                 scanStats.WrongTemplateType + 1
+
         end
+
     end
 
 
@@ -925,6 +1017,7 @@ local function ScanItems()
     -- ========================================================
 
     local itemCount = 0
+
 
     for _ in pairs(items) do
 
@@ -943,14 +1036,9 @@ local function ScanItems()
     )
 
 
-    PrintCategorySamples(
-        categorySamples
-    )
-
-
     print("")
     print("[ULF] ========================================")
-    print("[ULF] END OF ITEM DISCOVERY REPORT")
+    print("[ULF] END OF Scan items")
     print("[ULF] ========================================")
 
 
@@ -967,7 +1055,9 @@ local function ScanItems()
         Stats = scanStats,
 
         Samples = categorySamples
+
     }
+
 end
 
 
@@ -975,138 +1065,77 @@ end
 -- TEST RECORD
 -- ============================================================
 
-local function PrintTestRecord(
-    statName,
-    items
-)
-
-    local stat =
-        Ext.Stats.Get(statName)
-
-
-    if not stat then
-
-        print(
-            "[ULF] TEST STAT NOT FOUND: " ..
-            tostring(statName)
-        )
-
-        return
-    end
-
-
-    local rootTemplate =
-        SafeGet(
-            stat,
-            "RootTemplate"
-        )
-
-
-    if not rootTemplate
-        or rootTemplate == "" then
-
-        print(
-            "[ULF] TEST HAS NO ROOT TEMPLATE: " ..
-            tostring(statName)
-        )
-
-        return
-    end
-
-
-    local record =
-        items[rootTemplate]
-
-
-    if not record then
-
-        print(
-            "[ULF] TEST RECORD NOT FOUND: " ..
-            tostring(statName)
-        )
-
-        return
-    end
-
+function PrintTestRecord(statName)
 
     print("")
-    print("[ULF] TEST RECORD")
-    print("[ULF] ----------------------------------------")
+    print("[ULF][TEST] ========================================")
+    print("[ULF][TEST] TEST RECORD")
+    print("[ULF][TEST] ========================================")
+    print("[ULF][TEST] Searching Stat: " .. tostring(statName))
 
+    if not statName or statName == "" then
+        print("[ULF][TEST] ERROR: Missing Stat")
+        return nil
+    end
 
-    print(
-        "Stat: " ..
-        tostring(record.Stat)
-    )
+    if not ULF_Database then
+        print("[ULF][TEST] ERROR: ULF_Database is nil")
+        return nil
+    end
 
+    if not ULF_Database.Items then
+        print("[ULF][TEST] ERROR: ULF_Database.Items is nil")
+        return nil
+    end
 
-    print(
-        "DisplayName: " ..
-        tostring(record.DisplayName)
-    )
+    local items = ULF_Database.Items
+    local found = nil
 
+    for key, item in pairs(items) do
 
-    print(
-        "RootTemplate: " ..
-        tostring(record.RootTemplate)
-    )
+        if type(item) == "table"
+            and tostring(item.Stat) == tostring(statName) then
 
+            found = item
 
-    print(
-        "TemplateName: " ..
-        tostring(record.TemplateName)
-    )
+            print("")
+            print("[ULF][TEST] MATCH FOUND")
+            print("[ULF][TEST] Database Key: " .. tostring(key))
+            print("[ULF][TEST] ----------------------------------------")
 
+            for field, value in pairs(item) do
 
-    print(
-        "TemplateType: " ..
-        tostring(record.TemplateType)
-    )
+                if type(value) == "table" then
 
+                    print(
+                        "[ULF][TEST] "
+                        .. tostring(field)
+                        .. " = <table>"
+                    )
 
-    print(
-        "Icon: " ..
-        tostring(record.Icon)
-    )
+                else
 
+                    print(
+                        "[ULF][TEST] "
+                        .. tostring(field)
+                        .. " = "
+                        .. tostring(value)
+                    )
 
-    print(
-        "Rarity: " ..
-        tostring(record.Rarity)
-    )
+                end
+            end
 
+            break
+        end
+    end
 
-    print(
-        "Level: " ..
-        tostring(record.Level)
-    )
+    if not found then
+        print("[ULF][TEST] NO MATCH FOUND")
+    end
 
+    print("[ULF][TEST] ========================================")
 
-    print(
-        "WeaponGroup: " ..
-        tostring(record.WeaponGroup)
-    )
-
-
-    print(
-        "ProficiencyGroup: " ..
-        tostring(record.ProficiencyGroup)
-    )
-
-
-    print(
-        "Category: " ..
-        tostring(record.Category)
-    )
-
-
-    print(
-        "ClassificationReason: " ..
-        tostring(record.ClassificationReason)
-    )
-
-
-    print("[ULF] ----------------------------------------")
+    return found
 end
 
 
@@ -1118,5 +1147,9 @@ ULF_ItemScanner = {
 
     Scan = ScanItems,
 
+    -- Scan exactly one Stat and build its item record.
+    ScanItem = BuildItemRecord,
+
     PrintTestRecord = PrintTestRecord
+
 }

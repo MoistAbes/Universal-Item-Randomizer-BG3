@@ -30,13 +30,15 @@ function ULF_LootItemResolver.Resolve(rarity)
 
 
     local item =
-        ULF_DatabaseQuery.GetRandomByRarity(rarity)
+        ULF_DatabaseQuery.GetRandomEligibleByRarity(
+            rarity
+        )
 
 
     if not item then
 
         print(
-            "[ULF][LOOT] No item found for rarity: " ..
+            "[ULF][LOOT] No eligible item found for rarity: " ..
             tostring(rarity)
         )
 

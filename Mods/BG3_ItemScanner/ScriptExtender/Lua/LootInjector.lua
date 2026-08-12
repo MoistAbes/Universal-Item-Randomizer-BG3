@@ -1,281 +1,197 @@
 print("[ULF] LootInjector.lua LOADED")
 
-local function GetRandomItems(count)
 
-    local results = {}
+-- ============================================================
+-- DEBUG: ENEMY PROFILE
+-- ============================================================
 
-    if not ULF_Database
-        or not ULF_Database.Items then
-
-        print(
-            "[ULF][INJECTOR] ERROR: Database unavailable"
-        )
-
-        return results
-    end
-
-    local candidates = {}
-
-    for rootTemplate, record in pairs(ULF_Database.Items) do
-
-        if record
-            and record.Stat
-            and record.DisplayName
-            and record.RootTemplate then
-
-            table.insert(
-                candidates,
-                record
-            )
-
-        end
-    end
+local function DebugEnemyProfile(profile)
 
     print(
-        "[ULF][INJECTOR] Database candidates: " ..
-        tostring(#candidates)
+        "[ULF][INJECTOR] Enemy Profile:"
     )
 
-    for i = 1, count do
+    print(
+        "  UUID: " ..
+        tostring(profile.EntityUuid)
+    )
 
-        if #candidates == 0 then
-            break
-        end
+    print(
+        "  Template: " ..
+        tostring(profile.OriginalTemplate)
+    )
 
-        local index =
-            math.random(1, #candidates)
+    print(
+        "  Race: " ..
+        tostring(profile.Race)
+    )
 
-        local selected =
-            table.remove(candidates, index)
+    print(
+        "  Level: " ..
+        tostring(profile.Level)
+    )
 
-        table.insert(
-            results,
-            selected
+end
+
+
+-- ============================================================
+-- DEBUG: LOOT ITEM
+-- ============================================================
+
+local function DebugLootItem(record)
+
+    print(
+        "[ULF][LOOT] Item Category: " ..
+        tostring(record.Category)
+    )
+
+    print(
+        "[ULF][LOOT] Item Type: " ..
+        tostring(record.Type)
+    )
+
+    print(
+        "[ULF][LOOT] Item Stat: " ..
+        tostring(record.Stat)
+    )
+
+    print(
+        "[ULF][LOOT] Item DisplayName: " ..
+        tostring(record.DisplayName)
+    )
+
+end
+
+
+-- ============================================================
+-- PROCESS ENEMY LOOT
+-- ============================================================
+
+local function ProcessEnemyLoot(victim, enemyProfile)
+
+    -- ========================================================
+    -- ENEMY ELIGIBILITY
+    -- ========================================================
+
+    local canGenerate =
+        ULF_LootEligibility.CanGenerate(
+            enemyProfile
         )
 
+    print(
+        "[ULF][LOOT] Eligibility: " ..
+        tostring(canGenerate)
+    )
+
+    if not canGenerate then
+        return
     end
 
-    return results
-end
 
-local function GetItemRootTemplate(record)
+    -- ========================================================
+    -- DROP CHANCE
+    -- ========================================================
 
-    if not record then
-        return nil
-    end
-
-    if not record.RootTemplate
-        or record.RootTemplate == "" then
-
-        return nil
-    end
-
-    return record.RootTemplate
-end
-
-local function AddItemToEntity(victim, rootTemplate, amount)
-
-    if not victim then
-        return false
-    end
-
-    if not rootTemplate then
-        return false
-    end
-
-    local success, result =
-        pcall(function()
-
-            return Osi.TemplateAddTo(
-                rootTemplate,
-                victim,
-                amount
-            )
-
-        end)
-
-    if not success then
-
-        print(
-            "[ULF][INJECTOR] TemplateAddTo failed: " ..
-            tostring(result)
+    local shouldDrop =
+        ULF_LootGenerator.RollDropChance(
+            enemyProfile
         )
 
-        return false
-    end
-
-    return true
-end
-
-local function InjectLoot(victim, count)
-
-    if not victim then
+    if not shouldDrop then
 
         print(
-            "[ULF][INJECTOR] ERROR: victim is nil"
+            "[ULF][LOOT] Drop chance failed"
         )
 
         return
     end
 
-    print("")
-    print("[ULF][INJECTOR] ========================================")
-    print("[ULF][INJECTOR] LOOT INJECTION")
-    print("[ULF][INJECTOR] ========================================")
+
+    -- ========================================================
+    -- DROP COUNT
+    -- ========================================================
+
+    local dropCount =
+        ULF_LootGenerator.GetDropCount(
+            enemyProfile
+        )
 
     print(
-        "[ULF][INJECTOR] Victim: " ..
-        tostring(victim)
+        "[ULF][LOOT] Drop count: " ..
+        tostring(dropCount)
     )
 
-    local items =
-        GetRandomItems(count)
+    if not dropCount
+        or dropCount <= 0 then
 
-    print(
-        "[ULF][INJECTOR] Selected items: " ..
-        tostring(#items)
-    )
+        print(
+            "[ULF][LOOT] Drop count is zero"
+        )
 
-    local added = 0
-
-    for _, record in ipairs(items) do
-
-        local rootTemplate =
-            GetItemRootTemplate(record)
-
-        if rootTemplate then
-
-            local success =
-                AddItemToEntity(
-                    victim,
-                    rootTemplate,
-                    1
-                )
-
-            if success then
-
-                added = added + 1
-
-                print(
-                    "[ULF][INJECTOR] Added: " ..
-                    tostring(record.Stat) ..
-                    " -> " ..
-                    tostring(record.DisplayName)
-                )
-
-            end
-
-        end
-
+        return
     end
 
-    print(
-        "[ULF][INJECTOR] Successfully added: " ..
-        tostring(added)
-    )
 
-    print(
-        "[ULF][INJECTOR] ========================================"
-    )
-end
+    -- ========================================================
+    -- GENERATE EACH DROP
+    -- ========================================================
 
-Ext.Osiris.RegisterListener(
-    "Died",
-    1,
-    "after",
-    function(victim)
+    for i = 1, dropCount do
 
         print(
-            "[ULF][INJECTOR] Died event: " ..
-            tostring(victim)
-        )
-
-        local entity =
-            Ext.Entity.Get(victim)
-
-        if not entity then
-            print(
-                "[ULF][INJECTOR] ERROR: Victim entity not found"
-            )
-
-            return
-        end
-
-        local enemyProfile =
-            ULF_EnemyProfile.Build(entity)
-
-        if not enemyProfile then
-            print(
-                "[ULF][INJECTOR] ERROR: Failed to build enemy profile"
-            )
-
-            return
-        end
-
-        -- Temporary research output
-
-        print(
-            "[ULF][INJECTOR] Enemy Profile:"
-        )
-
-        print(
-            "  UUID: " ..
-            tostring(enemyProfile.EntityUuid)
-        )
-
-        print(
-            "  Template: " ..
-            tostring(enemyProfile.OriginalTemplate)
-        )
-
-        print(
-            "  Race: " ..
-            tostring(enemyProfile.Race)
-        )
-
-        print(
-            "  Level: " ..
-            tostring(enemyProfile.Level)
-        )
-
-        -- Check if source can drop loot 
-
-        local canGenerate =
-        ULF_LootEligibility.CanGenerate(enemyProfile)
-
-        print(
-            "[ULF][LOOT] Eligibility: " ..
-            tostring(canGenerate)
-        )
-
-        local dropCount =
-        ULF_LootGenerator.GetDropCount(enemyProfile)
-
-        print(
-            "[ULF][LOOT] Drop count: " ..
+            "[ULF][LOOT] Generating drop " ..
+            tostring(i) ..
+            "/" ..
             tostring(dropCount)
         )
 
+
+        -- ====================================================
+        -- MAX RARITY
+        -- ====================================================
+
         local maxRarity =
-        ULF_LootTier.GetMaxRarity(enemyProfile)
+            ULF_LootTier.GetMaxRarity(
+                enemyProfile
+            )
 
         print(
             "[ULF][LOOT] Max rarity: " ..
             tostring(maxRarity)
         )
 
+
+        -- ====================================================
+        -- RESOLVE RARITY
+        -- ====================================================
+
         local resolvedRarity =
-        ULF_LootRarityResolver.Resolve(maxRarity)
+            ULF_LootRarityResolver.Resolve(
+                maxRarity
+            )
 
         print(
             "[ULF][LOOT] Resolved rarity: " ..
             tostring(resolvedRarity)
         )
 
-        local itemRecord =
-        ULF_LootItemResolver.Resolve(resolvedRarity)
 
-        if itemRecord then
+        -- ====================================================
+        -- RESOLVE ITEM
+        -- ====================================================
+
+        local itemRecord =
+            ULF_LootItemResolver.Resolve(
+                resolvedRarity
+            )
+
+        if not itemRecord then
+
+            print(
+                "[ULF][LOOT] Item resolution failed"
+            )
+
+        else
 
             print(
                 "[ULF][LOOT] Item resolved successfully"
@@ -285,6 +201,11 @@ Ext.Osiris.RegisterListener(
                 "[ULF][LOOT] Item UUID: " ..
                 tostring(itemRecord.RootTemplate)
             )
+
+
+            -- ================================================
+            -- SPAWN ITEM
+            -- ================================================
 
             local success =
                 ULF_LootSpawner.AddItem(
@@ -297,17 +218,91 @@ Ext.Osiris.RegisterListener(
                 tostring(success)
             )
 
-            else
 
-                print(
-                    "[ULF][LOOT] Item resolution failed"
-                )
+            -- ================================================
+            -- DEBUG ITEM
+            -- ================================================
 
-            end
+            DebugLootItem(
+                itemRecord
+            )
 
-        -- Loot logic will come here later.
+        end
 
-        -- InjectLoot(victim, 5)
+    end
+
+end
+
+
+-- ============================================================
+-- OSIRIS: DIED
+-- ============================================================
+
+Ext.Osiris.RegisterListener(
+    "Died",
+    1,
+    "after",
+    function(victim)
+
+        print(
+            "[ULF][INJECTOR] Died event: " ..
+            tostring(victim)
+        )
+
+
+        -- ====================================================
+        -- GET ENTITY
+        -- ====================================================
+
+        local entity =
+            Ext.Entity.Get(victim)
+
+        if not entity then
+
+            print(
+                "[ULF][INJECTOR] ERROR: Victim entity not found"
+            )
+
+            return
+        end
+
+
+        -- ====================================================
+        -- BUILD ENEMY PROFILE
+        -- ====================================================
+
+        local enemyProfile =
+            ULF_EnemyProfile.Build(
+                entity
+            )
+
+        if not enemyProfile then
+
+            print(
+                "[ULF][INJECTOR] ERROR: Failed to build enemy profile"
+            )
+
+            return
+        end
+
+
+        -- ====================================================
+        -- DEBUG PROFILE
+        -- ====================================================
+
+        DebugEnemyProfile(
+            enemyProfile
+        )
+
+
+        -- ====================================================
+        -- PROCESS LOOT
+        -- ====================================================
+
+        ProcessEnemyLoot(
+            victim,
+            enemyProfile
+        )
 
     end
 )

@@ -6,16 +6,22 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 -- ============================================================
 
 Ext.Require("LootConfig.lua")
+
 Ext.Require("LootEligibility.lua")
+Ext.Require("LootItemEligibility.lua")
+
 Ext.Require("LootGenerator.lua")
 Ext.Require("LootTier.lua")
 Ext.Require("LootRarityResolver.lua")
+
 Ext.Require("ULF_Database.lua")
 Ext.Require("DatabaseCache.lua")
 Ext.Require("DatabaseIndex.lua")
 Ext.Require("DatabaseQuery.lua")
+
 Ext.Require("LootItemResolver.lua")
 Ext.Require("LootSpawner.lua")
+
 Ext.Require("EnemyProfile.lua")
 Ext.Require("ItemScanner.lua")
 Ext.Require("LootInjector.lua")
@@ -104,6 +110,25 @@ Ext.Events.SessionLoaded:Subscribe(function()
         end
 
 
+        -- debug  print all item caregories
+        -- ULF_DatabaseQuery.ScanCategories()
+        -- -- debug
+        -- ULF_DatabaseQuery.ScanOtherStatPrefixes()
+        -- -- debug
+        -- ULF_DatabaseQuery.ScanLootDataQuality()
+        --   -- debug
+        -- ULF_DatabaseQuery.ScanLootEligibilitySignals()
+        -- -- debug
+        -- ULF_DatabaseQuery.FindSuspiciousLootItems()
+    
+        ULF_DatabaseQuery.ResearchItem("OBJ_CrownController_Ketheric")
+        ULF_DatabaseQuery.ResearchItem("WPN_Flail_Rusty")
+        ULF_DatabaseQuery.ResearchItem("OBJ_BloodPotion_Human")
+        ULF_DatabaseQuery.ResearchItem("OBJ_ArrowOfFiendSlaying")
+        ULF_DatabaseQuery.ResearchItem("OBJ_Scroll_GlyphOfWarding")
+        ULF_DatabaseQuery.ResearchItem("OBJ_Dye_BlackBlue")
+        ULF_DatabaseQuery.ResearchItem("OBJ_WoodenPatchwork")
+
         -- ====================================================
         -- CACHE LOADED
         -- ====================================================
@@ -158,7 +183,25 @@ Ext.Events.SessionLoaded:Subscribe(function()
     -- FULL SCAN
     -- ========================================================
 
+    local scanResult =
     ULF_ItemScanner.Scan()
+
+    if not scanResult then
+
+        print(
+            "[ULF] ERROR: Item scan returned nil"
+        )
+
+        return
+    end
+
+
+    ULF_Database.Items =
+        scanResult.Items or {}
+
+
+    ULF_Database.Meta.ItemCount =
+        scanResult.ItemCount or 0
 
 
     -- ========================================================

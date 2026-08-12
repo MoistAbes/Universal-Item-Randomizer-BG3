@@ -40,6 +40,37 @@ function ULF_LootGenerator.GetDropCount(profile)
 
 end
 
+function ULF_LootGenerator.RollDropChance(profile)
+
+    if not profile then
+        return false
+    end
+
+    local chance =
+        tonumber(ULF_LootConfig.BaseDropChance)
+
+    if not chance then
+        return false
+    end
+
+    local roll =
+        math.random()
+
+    local success =
+        roll <= chance
+
+    print(
+        "[ULF][LOOT] Drop roll: " ..
+        string.format("%.3f", roll) ..
+        " / chance: " ..
+        string.format("%.3f", chance) ..
+        " -> " ..
+        tostring(success)
+    )
+
+    return success
+end
+
 
 print(
     "[ULF][LOOT] Generator API exported"
