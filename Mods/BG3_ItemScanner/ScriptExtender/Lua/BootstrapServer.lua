@@ -5,26 +5,38 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 -- LOAD MODULES
 -- ============================================================
 
-Ext.Require("LootConfig.lua")
+-- CONFIG
+Ext.Require("Config/LootConfig.lua")
 
-Ext.Require("LootEligibility.lua")
-Ext.Require("LootItemEligibility.lua")
 
-Ext.Require("LootGenerator.lua")
-Ext.Require("LootTier.lua")
-Ext.Require("LootRarityResolver.lua")
+-- LOOT - BASIC
+Ext.Require("Loot/LootEligibility.lua")
+Ext.Require("Loot/LootItemEligibility.lua")
 
-Ext.Require("ULF_Database.lua")
-Ext.Require("DatabaseCache.lua")
-Ext.Require("DatabaseIndex.lua")
-Ext.Require("DatabaseQuery.lua")
+Ext.Require("Loot/LootGenerator.lua")
+Ext.Require("Loot/LootTier.lua")
+Ext.Require("Loot/LootRarityResolver.lua")
 
-Ext.Require("LootItemResolver.lua")
-Ext.Require("LootSpawner.lua")
 
-Ext.Require("EnemyProfile.lua")
-Ext.Require("ItemScanner.lua")
-Ext.Require("LootInjector.lua")
+-- DATABASE
+Ext.Require("Database/ULF_Database.lua")
+Ext.Require("Database/DatabaseCache.lua")
+Ext.Require("Database/DatabaseIndex.lua")
+Ext.Require("Database/DatabaseQuery.lua")
+
+
+-- SCANNER
+Ext.Require("Scanner/ItemScanner.lua")
+Ext.Require("Scanner/EnemyProfile.lua")
+
+
+-- LOOT - RESOLUTION / SPAWNING
+Ext.Require("Loot/LootItemResolver.lua")
+Ext.Require("Loot/LootSpawner.lua")
+
+
+-- LOOT - INJECTION
+Ext.Require("Loot/LootInjector.lua")
 
 
 -- ============================================================
