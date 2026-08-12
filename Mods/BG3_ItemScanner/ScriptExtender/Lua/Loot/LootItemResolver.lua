@@ -28,25 +28,30 @@ function ULF_LootItemResolver.Resolve(rarity)
         return nil
     end
 
+    local candidates =
+        ULF_DatabaseQuery.GetByRarity(rarity)
 
-    local item =
-        ULF_DatabaseQuery.GetRandomEligibleByRarity(
-            rarity
-        )
-
-
-    if not item then
-
-        print(
-            "[ULF][LOOT] No eligible item found for rarity: " ..
-            tostring(rarity)
-        )
-
+    if not candidates or #candidates == 0 then
         return nil
     end
 
+    local eligible = {}
 
-    return item
+    for _, record in ipairs(candidates) do
+
+        if ULF_LootItemEligibility.IsEligible(record) then
+            table.insert(eligible, record)
+        end
+
+    end
+
+    if #eligible == 0 then
+        return nil
+    end
+
+    return eligible[
+        math.random(#eligible)
+    ]
 
 end
 

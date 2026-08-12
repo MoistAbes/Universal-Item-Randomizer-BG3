@@ -144,75 +144,37 @@ function ULF_DatabaseQuery.GetRandomByRarity(rarity)
     )
 end
 
--- ============================================================
--- RANDOM BY RARITY WITH ELIGIBLE FILTER
--- ============================================================
 
-function ULF_DatabaseQuery.GetRandomEligibleByRarity(rarity)
+function ULF_DatabaseQuery.GetByRarity(rarity)
 
-    if not rarity then
-        return nil
+    local index =
+        ULF_Database.Indexes.Rarity
+
+    if not index then
+        return {}
     end
 
-    local rarityIndex =
-        ULF_Database.Indexes
-        and ULF_Database.Indexes.Rarity
+    local itemIds =
+        index[rarity]
 
-    if not rarityIndex then
-
-        print("[ULF][QUERY] ERROR: Rarity index is missing")
-        return nil
+    if not itemIds then
+        return {}
     end
 
-    local items =
-        rarityIndex[rarity]
+    local results = {}
 
-    if not items
-        or #items == 0 then
-
-        print(
-            "[ULF][QUERY] No items found for rarity: " ..
-            tostring(rarity)
-        )
-
-        return nil
-    end
-
-
-    local eligible = {}
-
-
-    for _, rootTemplate in ipairs(items) do
+    for _, itemId in ipairs(itemIds) do
 
         local record =
-            ULF_Database.Items[rootTemplate]
+            ULF_Database.Items[itemId]
 
-        if record
-            and ULF_LootItemEligibility
-            and ULF_LootItemEligibility.IsEligible(record) then
-
-            eligible[#eligible + 1] = record
-
+        if record then
+            table.insert(results, record)
         end
 
     end
 
-
-    if #eligible == 0 then
-
-        print(
-            "[ULF][QUERY] No eligible items for rarity: " ..
-            tostring(rarity)
-        )
-
-        return nil
-    end
-
-
-    return eligible[
-        math.random(1, #eligible)
-    ]
-
+    return results
 end
 
 -- ============================================================
