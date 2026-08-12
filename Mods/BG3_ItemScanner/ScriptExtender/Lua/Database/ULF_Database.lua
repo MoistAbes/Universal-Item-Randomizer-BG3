@@ -1,4 +1,6 @@
 ULF_Database = {
+    Ready = false,
+
     Meta = {
         CacheVersion = 2,
         SchemaVersion = 1,

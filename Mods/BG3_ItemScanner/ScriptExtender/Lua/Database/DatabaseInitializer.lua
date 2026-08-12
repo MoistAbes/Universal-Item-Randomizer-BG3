@@ -2,6 +2,8 @@ ULF_DatabaseInitializer = {}
 
 function ULF_DatabaseInitializer.Initialize()
 
+    ULF_Database.Ready = false
+
     print("[ULF] Initializing item database")
 
     -- ========================================================
@@ -33,6 +35,8 @@ function ULF_DatabaseInitializer.Initialize()
             ) ..
             " items"
         )
+
+        ULF_Database.Ready = true
 
         return true
     end
@@ -119,6 +123,8 @@ function ULF_DatabaseInitializer.Initialize()
         )
 
     end
+
+    ULF_Database.Ready = true
 
     return true
 end

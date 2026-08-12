@@ -51,9 +51,11 @@ Ext.Events.SessionLoaded:Subscribe(function()
     local success =
         ULF_DatabaseInitializer.Initialize()
 
-    if not success then
+    if not success
+        or not ULF_Database.Ready then
+
         print(
-            "[ULF] ERROR: Database initialization failed"
+            "[ULF] ERROR: Database is not ready"
         )
 
         return
