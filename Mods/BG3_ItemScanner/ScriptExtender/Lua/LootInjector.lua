@@ -1,29 +1,33 @@
 print("[ULF] LootInjector.lua LOADED")
 
-local function GetRandomTestItems(count)
+local function GetRandomItems(count)
+
     local results = {}
 
-    if not ULF_Database then
-        print("[ULF][INJECTOR] ERROR: ULF_Database does not exist")
-        return results
-    end
+    if not ULF_Database
+        or not ULF_Database.Items then
 
-    if not ULF_Database.Items then
-        print("[ULF][INJECTOR] ERROR: ULF_Database.Items does not exist")
+        print(
+            "[ULF][INJECTOR] ERROR: Database unavailable"
+        )
+
         return results
     end
 
     local candidates = {}
 
     for rootTemplate, record in pairs(ULF_Database.Items) do
+
         if record
-            and record.RootTemplate
+            and record.Stat
             and record.DisplayName
-        then
-            table.insert(candidates, {
-                RootTemplate = rootTemplate,
-                Record = record
-            })
+            and record.RootTemplate then
+
+            table.insert(
+                candidates,
+                record
+            )
+
         end
     end
 
@@ -33,161 +37,146 @@ local function GetRandomTestItems(count)
     )
 
     for i = 1, count do
+
         if #candidates == 0 then
             break
         end
 
-        local index = math.random(1, #candidates)
-        local selected = table.remove(candidates, index)
+        local index =
+            math.random(1, #candidates)
 
-        table.insert(results, selected)
+        local selected =
+            table.remove(candidates, index)
+
+        table.insert(
+            results,
+            selected
+        )
+
     end
 
     return results
 end
 
-local function InjectTestLoot(victim)
+local function GetItemRootTemplate(record)
+
+    if not record then
+        return nil
+    end
+
+    if not record.RootTemplate
+        or record.RootTemplate == "" then
+
+        return nil
+    end
+
+    return record.RootTemplate
+end
+
+local function AddItemToEntity(victim, rootTemplate, amount)
+
+    if not victim then
+        return false
+    end
+
+    if not rootTemplate then
+        return false
+    end
+
+    local success, result =
+        pcall(function()
+
+            return Osi.TemplateAddTo(
+                rootTemplate,
+                victim,
+                amount
+            )
+
+        end)
+
+    if not success then
+
+        print(
+            "[ULF][INJECTOR] TemplateAddTo failed: " ..
+            tostring(result)
+        )
+
+        return false
+    end
+
+    return true
+end
+
+local function InjectLoot(victim, count)
+
+    if not victim then
+
+        print(
+            "[ULF][INJECTOR] ERROR: victim is nil"
+        )
+
+        return
+    end
 
     print("")
     print("[ULF][INJECTOR] ========================================")
-    print("[ULF][INJECTOR] TEST LOOT INJECTION")
+    print("[ULF][INJECTOR] LOOT INJECTION")
     print("[ULF][INJECTOR] ========================================")
-
-    if not victim then
-        print("[ULF][INJECTOR] ERROR: victim is nil")
-        return
-    end
 
     print(
         "[ULF][INJECTOR] Victim: " ..
         tostring(victim)
     )
 
-    print(
-        "[ULF][INJECTOR] ULF_Database type: " ..
-        tostring(type(ULF_Database))
-    )
+    local items =
+        GetRandomItems(count)
 
     print(
-        "[ULF][INJECTOR] ULF_Database.Items type: " ..
-        tostring(type(ULF_Database.Items))
+        "[ULF][INJECTOR] Selected items: " ..
+        tostring(#items)
     )
 
+    local added = 0
 
-    -- ========================================================
-    -- GET KNOWN TEST ITEM
-    -- ========================================================
+    for _, record in ipairs(items) do
 
-    local stat = Ext.Stats.Get("WPN_Battleaxe")
+        local rootTemplate =
+            GetItemRootTemplate(record)
 
-    if not stat then
+        if rootTemplate then
 
-        print(
-            "[ULF][INJECTOR] ERROR: WPN_Battleaxe stat not found"
-        )
+            local success =
+                AddItemToEntity(
+                    victim,
+                    rootTemplate,
+                    1
+                )
 
-        return
+            if success then
+
+                added = added + 1
+
+                print(
+                    "[ULF][INJECTOR] Added: " ..
+                    tostring(record.Stat) ..
+                    " -> " ..
+                    tostring(record.DisplayName)
+                )
+
+            end
+
+        end
+
     end
 
-
-    local rootTemplate
-
-    local ok, value = pcall(function()
-        return stat.RootTemplate
-    end)
-
-
-    if not ok then
-
-        print(
-            "[ULF][INJECTOR] ERROR: Could not read RootTemplate"
-        )
-
-        return
-    end
-
-
-    rootTemplate = value
-
-
-    if not rootTemplate
-        or rootTemplate == "" then
-
-        print(
-            "[ULF][INJECTOR] ERROR: WPN_Battleaxe has no RootTemplate"
-        )
-
-        return
-    end
-
-
     print(
-        "[ULF][INJECTOR] Test item: WPN_Battleaxe"
+        "[ULF][INJECTOR] Successfully added: " ..
+        tostring(added)
     )
-
-    print(
-        "[ULF][INJECTOR] RootTemplate: " ..
-        tostring(rootTemplate)
-    )
-
-
-    -- ========================================================
-    -- ADD ITEM
-    -- ========================================================
-
-    print(
-        "[ULF][INJECTOR] Calling Osi.TemplateAddTo..."
-    )
-
-
-    local success, result = pcall(function()
-
-        return Osi.TemplateAddTo(
-            rootTemplate,
-            victim,
-            1
-        )
-
-    end)
-
-
-    if not success then
-
-        print(
-            "[ULF][INJECTOR] ERROR: TemplateAddTo failed"
-        )
-
-        print(
-            "[ULF][INJECTOR] " ..
-            tostring(result)
-        )
-
-        print(
-            "[ULF][INJECTOR] ========================================"
-        )
-
-        return
-    end
-
-
-    print(
-        "[ULF][INJECTOR] TemplateAddTo succeeded"
-    )
-
-    print(
-        "[ULF][INJECTOR] Result: " ..
-        tostring(result)
-    )
-
-    print(
-        "[ULF][INJECTOR] Added 1x Battleaxe to victim"
-    )
-
 
     print(
         "[ULF][INJECTOR] ========================================"
     )
-
 end
 
 Ext.Osiris.RegisterListener(
@@ -201,6 +190,124 @@ Ext.Osiris.RegisterListener(
             tostring(victim)
         )
 
-        InjectTestLoot(victim)
+        local entity =
+            Ext.Entity.Get(victim)
+
+        if not entity then
+            print(
+                "[ULF][INJECTOR] ERROR: Victim entity not found"
+            )
+
+            return
+        end
+
+        local enemyProfile =
+            ULF_EnemyProfile.Build(entity)
+
+        if not enemyProfile then
+            print(
+                "[ULF][INJECTOR] ERROR: Failed to build enemy profile"
+            )
+
+            return
+        end
+
+        -- Temporary research output
+
+        print(
+            "[ULF][INJECTOR] Enemy Profile:"
+        )
+
+        print(
+            "  UUID: " ..
+            tostring(enemyProfile.EntityUuid)
+        )
+
+        print(
+            "  Template: " ..
+            tostring(enemyProfile.OriginalTemplate)
+        )
+
+        print(
+            "  Race: " ..
+            tostring(enemyProfile.Race)
+        )
+
+        print(
+            "  Level: " ..
+            tostring(enemyProfile.Level)
+        )
+
+        -- Check if source can drop loot 
+
+        local canGenerate =
+        ULF_LootEligibility.CanGenerate(enemyProfile)
+
+        print(
+            "[ULF][LOOT] Eligibility: " ..
+            tostring(canGenerate)
+        )
+
+        local dropCount =
+        ULF_LootGenerator.GetDropCount(enemyProfile)
+
+        print(
+            "[ULF][LOOT] Drop count: " ..
+            tostring(dropCount)
+        )
+
+        local maxRarity =
+        ULF_LootTier.GetMaxRarity(enemyProfile)
+
+        print(
+            "[ULF][LOOT] Max rarity: " ..
+            tostring(maxRarity)
+        )
+
+        local resolvedRarity =
+        ULF_LootRarityResolver.Resolve(maxRarity)
+
+        print(
+            "[ULF][LOOT] Resolved rarity: " ..
+            tostring(resolvedRarity)
+        )
+
+        local itemRecord =
+        ULF_LootItemResolver.Resolve(resolvedRarity)
+
+        if itemRecord then
+
+            print(
+                "[ULF][LOOT] Item resolved successfully"
+            )
+
+            print(
+                "[ULF][LOOT] Item UUID: " ..
+                tostring(itemRecord.RootTemplate)
+            )
+
+            local success =
+                ULF_LootSpawner.AddItem(
+                    victim,
+                    itemRecord
+                )
+
+            print(
+                "[ULF][LOOT] Spawn result: " ..
+                tostring(success)
+            )
+
+            else
+
+                print(
+                    "[ULF][LOOT] Item resolution failed"
+                )
+
+            end
+
+        -- Loot logic will come here later.
+
+        -- InjectLoot(victim, 5)
+
     end
 )

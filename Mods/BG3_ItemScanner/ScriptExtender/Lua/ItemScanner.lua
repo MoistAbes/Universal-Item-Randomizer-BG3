@@ -1,90 +1,108 @@
 print("[ULF] ItemScanner.lua LOADED")
 
 -- ============================================================
--- UNIVERSAL LOOT FRAMEWORK
--- ITEM DISCOVERY / CLASSIFICATION v2
+-- ITEM SCANNER
 --
--- v2 goals:
+-- Responsible for:
+--   - discovering stats
+--   - resolving RootTemplates
+--   - reading item properties
+--   - classifying items
+--   - building item records
 --
---   1. Discover physical item templates.
---   2. Deduplicate by RootTemplate.
---   3. Collect more useful item information.
---   4. Classify items using multiple signals.
---   5. Produce category statistics.
---   6. Print representative samples.
---
--- IMPORTANT:
--- This version still DOES NOT modify game loot.
--- It only discovers and classifies items.
+-- NOT responsible for:
+--   - cache
+--   - database initialization
+--   - indexes
+--   - loot injection
+--   - SessionLoaded
 -- ============================================================
 
 
--- local ItemDatabase = {}
-
-
 -- ============================================================
--- SCAN STATISTICS
+-- CONSTANTS
 -- ============================================================
-
-local ScanStats = {
-
-    StatsTotal = 0,
-
-    StatsWithRootTemplate = 0,
-
-    RootTemplatesResolved = 0,
-
-    PhysicalItems = 0,
-
-    DuplicateTemplates = 0,
-
-    PropertyErrors = 0,
-
-    NoRootTemplate = 0,
-
-    TemplateNotFound = 0,
-
-    WrongTemplateType = 0,
-
-    Categories = {
-        Weapon = 0,
-        Armor = 0,
-        Accessory = 0,
-        Consumable = 0,
-        Scroll = 0,
-        Food = 0,
-        Grenade = 0,
-        Book = 0,
-        Material = 0,
-        Other = 0
-    }
-}
-
-
--- ============================================================
--- CATEGORY SAMPLE STORAGE
---
--- We don't print thousands of items.
--- We only keep a small number of examples per category.
--- ============================================================
-
-local CategorySamples = {
-
-    Weapon = {},
-    Armor = {},
-    Accessory = {},
-    Consumable = {},
-    Scroll = {},
-    Food = {},
-    Grenade = {},
-    Book = {},
-    Material = {},
-    Other = {}
-}
-
 
 local MAX_SAMPLES_PER_CATEGORY = 10
 
+local CATEGORY_ORDER = {
+
+    "Weapon",
+    "Armor",
+    "Accessory",
+    "Consumable",
+    "Scroll",
+    "Food",
+    "Grenade",
+    "Book",
+    "Material",
+    "Other"
+}
+
+
+-- ============================================================
+-- CREATE SCAN STATISTICS
+-- ============================================================
+
+local function CreateScanStats()
+
+    return {
+
+        StatsTotal = 0,
+
+        StatsWithRootTemplate = 0,
+
+        RootTemplatesResolved = 0,
+
+        PhysicalItems = 0,
+
+        DuplicateTemplates = 0,
+
+        PropertyErrors = 0,
+
+        NoRootTemplate = 0,
+
+        TemplateNotFound = 0,
+
+        WrongTemplateType = 0,
+
+        Categories = {
+
+            Weapon = 0,
+            Armor = 0,
+            Accessory = 0,
+            Consumable = 0,
+            Scroll = 0,
+            Food = 0,
+            Grenade = 0,
+            Book = 0,
+            Material = 0,
+            Other = 0
+        }
+    }
+end
+
+
+-- ============================================================
+-- CREATE CATEGORY SAMPLES
+-- ============================================================
+
+local function CreateCategorySamples()
+
+    return {
+
+        Weapon = {},
+        Armor = {},
+        Accessory = {},
+        Consumable = {},
+        Scroll = {},
+        Food = {},
+        Grenade = {},
+        Book = {},
+        Material = {},
+        Other = {}
+    }
+end
 
 -- ============================================================
 -- SAFE PROPERTY ACCESS
@@ -97,22 +115,22 @@ local function SafeGet(object, property)
     end
 
     local ok, value = pcall(function()
+
         return object[property]
+
     end)
 
     if not ok then
+
         return nil, "PropertyError"
+
     end
 
     return value, nil
 end
 
-
 -- ============================================================
 -- SAFE STRING
---
--- Converts values to strings without allowing a strange
--- object/value to break the scanner.
 -- ============================================================
 
 local function SafeString(value)
@@ -122,7 +140,9 @@ local function SafeString(value)
     end
 
     local ok, result = pcall(function()
+
         return tostring(value)
+
     end)
 
     if ok then
@@ -144,7 +164,10 @@ local function GetDisplayName(template)
     end
 
     local displayName, errorCode =
-        SafeGet(template, "DisplayName")
+        SafeGet(
+            template,
+            "DisplayName"
+        )
 
     if errorCode then
         return nil
@@ -155,7 +178,9 @@ local function GetDisplayName(template)
     end
 
     local ok, result = pcall(function()
+
         return displayName:Get()
+
     end)
 
     if ok then
@@ -202,9 +227,14 @@ end
 -- NAME / STAT SIGNALS
 -- ============================================================
 
-local function GetNameSignals(statName, displayName, templateName)
+local function GetNameSignals(
+    statName,
+    displayName,
+    templateName
+)
 
     local combined =
+
         (SafeString(statName) or "")
         .. " "
         .. (SafeString(displayName) or "")
@@ -216,18 +246,7 @@ end
 
 
 -- ============================================================
--- CLASSIFICATION
---
--- IMPORTANT:
---
--- This is intentionally conservative.
---
--- The classifier produces:
---
---   Category
---   ClassificationReason
---
--- This allows us to inspect mistakes later.
+-- ITEM CLASSIFICATION
 -- ============================================================
 
 local function ClassifyItem(
@@ -307,7 +326,8 @@ local function ClassifyItem(
         or Contains(text, "SMOKEPOWDER")
         or Contains(text, "SPORE") then
 
-        return "Grenade", "grenade/explosive-related name"
+        return "Grenade",
+            "grenade/explosive-related name"
     end
 
 
@@ -321,7 +341,8 @@ local function ClassifyItem(
         or Contains(text, "COATING")
         or Contains(text, "POISON") then
 
-        return "Consumable", "consumable-related name"
+        return "Consumable",
+            "consumable-related name"
     end
 
 
@@ -337,7 +358,8 @@ local function ClassifyItem(
         or Contains(text, "GRIMOIRE")
         or Contains(text, "CODEX") then
 
-        return "Book", "book-related name"
+        return "Book",
+            "book-related name"
     end
 
 
@@ -353,14 +375,13 @@ local function ClassifyItem(
         or Contains(text, "CRYSTAL")
         or Contains(text, "DYE") then
 
-        return "Material", "material-related name"
+        return "Material",
+            "material-related name"
     end
 
 
     -- ========================================================
     -- ACCESSORY
-    --
-    -- This is intentionally AFTER weapons/armor/consumables.
     -- ========================================================
 
     if Contains(text, "RING")
@@ -377,7 +398,8 @@ local function ClassifyItem(
         or Contains(text, "CAPE")
         or Contains(text, "BELT") then
 
-        return "Accessory", "accessory-related name"
+        return "Accessory",
+            "accessory-related name"
     end
 
 
@@ -385,18 +407,23 @@ local function ClassifyItem(
     -- OTHER
     -- ========================================================
 
-    return "Other", "no known classification signal"
+    return "Other",
+        "no known classification signal"
 end
 
 
 -- ============================================================
--- ADD SAMPLE
+-- ADD CATEGORY SAMPLE
 -- ============================================================
 
-local function AddCategorySample(category, record)
+local function AddCategorySample(
+    category,
+    record,
+    categorySamples
+)
 
     local samples =
-        CategorySamples[category]
+        categorySamples[category]
 
     if not samples then
         return
@@ -428,11 +455,14 @@ local function BuildItemRecord(statName)
 
 
     -- ========================================================
-    -- RootTemplate
+    -- ROOT TEMPLATE
     -- ========================================================
 
     local rootTemplate, errorCode =
-        SafeGet(stat, "RootTemplate")
+        SafeGet(
+            stat,
+            "RootTemplate"
+        )
 
     if errorCode then
         return nil, "PropertyError"
@@ -445,32 +475,30 @@ local function BuildItemRecord(statName)
     end
 
 
-    ScanStats.StatsWithRootTemplate =
-        ScanStats.StatsWithRootTemplate + 1
-
-
     -- ========================================================
-    -- Resolve template
+    -- RESOLVE TEMPLATE
     -- ========================================================
 
     local template =
-        Ext.Template.GetRootTemplate(rootTemplate)
+        Ext.Template.GetRootTemplate(
+            rootTemplate
+        )
 
     if not template then
         return nil, "TemplateNotFound"
     end
 
 
-    ScanStats.RootTemplatesResolved =
-        ScanStats.RootTemplatesResolved + 1
-
-
     -- ========================================================
-    -- TemplateType
+    -- TEMPLATE TYPE
     -- ========================================================
 
-    local templateType, templateTypeError =
-        SafeGet(template, "TemplateType")
+    local templateType,
+          templateTypeError =
+        SafeGet(
+            template,
+            "TemplateType"
+        )
 
     if templateTypeError then
         return nil, "PropertyError"
@@ -482,44 +510,63 @@ local function BuildItemRecord(statName)
 
 
     -- ========================================================
-    -- Template information
+    -- TEMPLATE INFORMATION
     -- ========================================================
 
     local displayName =
-        GetDisplayName(template)
+        GetDisplayName(
+            template
+        )
 
     local templateName =
-        SafeGet(template, "Name")
+        SafeGet(
+            template,
+            "Name"
+        )
 
     local icon =
-        SafeGet(template, "Icon")
+        SafeGet(
+            template,
+            "Icon"
+        )
 
 
     -- ========================================================
-    -- Stat information
+    -- STAT INFORMATION
     -- ========================================================
 
     local rarity =
-        SafeGet(stat, "Rarity")
+        SafeGet(
+            stat,
+            "Rarity"
+        )
 
     local level =
-        SafeGet(stat, "Level")
-
+        SafeGet(
+            stat,
+            "Level"
+        )
 
     local weaponGroup =
-        SafeGet(stat, "Weapon Group")
-
+        SafeGet(
+            stat,
+            "Weapon Group"
+        )
 
     local proficiencyGroup =
-        SafeGet(stat, "Proficiency Group")
+        SafeGet(
+            stat,
+            "Proficiency Group"
+        )
 
 
     -- ========================================================
-    -- Classification
+    -- CLASSIFICATION
     -- ========================================================
 
     local category,
           classificationReason =
+
         ClassifyItem(
             statName,
             displayName,
@@ -530,7 +577,7 @@ local function BuildItemRecord(statName)
 
 
     -- ========================================================
-    -- Record
+    -- RECORD
     -- ========================================================
 
     local record = {
@@ -567,135 +614,13 @@ end
 
 
 -- ============================================================
--- SCAN ALL STATS
+-- PRINT SCAN SUMMARY
 -- ============================================================
 
-local function ScanItems()
-
-    print("")
-    print("[ULF] ========================================")
-    print("[ULF] STARTING UNIVERSAL ITEM SCAN v2")
-    print("[ULF] ========================================")
-
-
-    local stats =
-        Ext.Stats.GetStats()
-
-    if not stats then
-
-        print(
-            "[ULF] ERROR: Ext.Stats.GetStats() returned nil"
-        )
-
-        return
-    end
-
-
-    -- ========================================================
-    -- SCAN
-    -- ========================================================
-
-    for _, statName in ipairs(stats) do
-
-        ScanStats.StatsTotal =
-            ScanStats.StatsTotal + 1
-
-
-        local record, errorCode =
-            BuildItemRecord(statName)
-
-
-        -- ====================================================
-        -- PHYSICAL ITEM
-        -- ====================================================
-
-        if record then
-
-            ScanStats.PhysicalItems =
-                ScanStats.PhysicalItems + 1
-
-
-            local rootTemplate =
-                record.RootTemplate
-
-
-            -- =================================================
-            -- DEDUPLICATION
-            -- =================================================
-
-            if ULF_Database.Items[rootTemplate] then
-
-                ScanStats.DuplicateTemplates =
-                    ScanStats.DuplicateTemplates + 1
-
-            else
-
-                ULF_Database.Items[rootTemplate] =
-                    record
-
-
-                -- =============================================
-                -- CATEGORY COUNT
-                -- =============================================
-
-                local category =
-                    record.Category
-
-
-                if ScanStats.Categories[category] ~= nil then
-
-                    ScanStats.Categories[category] =
-                        ScanStats.Categories[category] + 1
-
-                end
-
-
-                -- =============================================
-                -- SAMPLE
-                -- =============================================
-
-                AddCategorySample(
-                    category,
-                    record
-                )
-
-            end
-
-
-        -- ====================================================
-        -- SKIPPED
-        -- ====================================================
-
-        elseif errorCode == "PropertyError" then
-
-            ScanStats.PropertyErrors =
-                ScanStats.PropertyErrors + 1
-
-
-        elseif errorCode == "NoRootTemplate" then
-
-            ScanStats.NoRootTemplate =
-                ScanStats.NoRootTemplate + 1
-
-
-        elseif errorCode == "TemplateNotFound" then
-
-            ScanStats.TemplateNotFound =
-                ScanStats.TemplateNotFound + 1
-
-
-        elseif errorCode == "WrongTemplateType" then
-
-            ScanStats.WrongTemplateType =
-                ScanStats.WrongTemplateType + 1
-
-        end
-    end
-
-
-    -- ========================================================
-    -- SUMMARY
-    -- ========================================================
+local function PrintScanSummary(
+    scanStats,
+    itemCount
+)
 
     print("")
     print("[ULF] ========================================")
@@ -705,44 +630,31 @@ local function ScanItems()
 
     print(
         "[ULF] Stats scanned: " ..
-        tostring(ScanStats.StatsTotal)
+        tostring(scanStats.StatsTotal)
     )
 
 
     print(
         "[ULF] Stats with RootTemplate: " ..
-        tostring(ScanStats.StatsWithRootTemplate)
+        tostring(scanStats.StatsWithRootTemplate)
     )
 
 
     print(
         "[ULF] RootTemplates resolved: " ..
-        tostring(ScanStats.RootTemplatesResolved)
+        tostring(scanStats.RootTemplatesResolved)
     )
 
 
     print(
         "[ULF] Physical item records: " ..
-        tostring(ScanStats.PhysicalItems)
+        tostring(scanStats.PhysicalItems)
     )
 
 
     print(
         "[ULF] Unique physical items: " ..
-        tostring(
-            #(
-                (function()
-
-                    local keys = {}
-
-                    for key, _ in pairs(ULF_Database.Items) do
-                        table.insert(keys, key)
-                    end
-
-                    return keys
-                end)()
-            )
-        )
+        tostring(itemCount)
     )
 
 
@@ -754,64 +666,17 @@ local function ScanItems()
     print("[ULF] --- CLASSIFICATION ---")
 
 
-    print(
-        "[ULF] Weapon: " ..
-        tostring(ScanStats.Categories.Weapon)
-    )
+    for _, category in ipairs(CATEGORY_ORDER) do
 
-
-    print(
-        "[ULF] Armor: " ..
-        tostring(ScanStats.Categories.Armor)
-    )
-
-
-    print(
-        "[ULF] Accessory: " ..
-        tostring(ScanStats.Categories.Accessory)
-    )
-
-
-    print(
-        "[ULF] Consumable: " ..
-        tostring(ScanStats.Categories.Consumable)
-    )
-
-
-    print(
-        "[ULF] Scroll: " ..
-        tostring(ScanStats.Categories.Scroll)
-    )
-
-
-    print(
-        "[ULF] Food: " ..
-        tostring(ScanStats.Categories.Food)
-    )
-
-
-    print(
-        "[ULF] Grenade: " ..
-        tostring(ScanStats.Categories.Grenade)
-    )
-
-
-    print(
-        "[ULF] Book: " ..
-        tostring(ScanStats.Categories.Book)
-    )
-
-
-    print(
-        "[ULF] Material: " ..
-        tostring(ScanStats.Categories.Material)
-    )
-
-
-    print(
-        "[ULF] Other: " ..
-        tostring(ScanStats.Categories.Other)
-    )
+        print(
+            "[ULF] " ..
+            category ..
+            ": " ..
+            tostring(
+                scanStats.Categories[category]
+            )
+        )
+    end
 
 
     -- ========================================================
@@ -824,56 +689,47 @@ local function ScanItems()
 
     print(
         "[ULF] No RootTemplate: " ..
-        tostring(ScanStats.NoRootTemplate)
+        tostring(scanStats.NoRootTemplate)
     )
 
 
     print(
         "[ULF] Template not found: " ..
-        tostring(ScanStats.TemplateNotFound)
+        tostring(scanStats.TemplateNotFound)
     )
 
 
     print(
         "[ULF] Wrong TemplateType: " ..
-        tostring(ScanStats.WrongTemplateType)
+        tostring(scanStats.WrongTemplateType)
     )
 
 
     print(
         "[ULF] Property errors: " ..
-        tostring(ScanStats.PropertyErrors)
+        tostring(scanStats.PropertyErrors)
     )
 
 
     print(
         "[ULF] Duplicate RootTemplates: " ..
-        tostring(ScanStats.DuplicateTemplates)
+        tostring(scanStats.DuplicateTemplates)
     )
+end
 
 
-    -- ========================================================
-    -- CATEGORY SAMPLES
-    -- ========================================================
+-- ============================================================
+-- PRINT CATEGORY SAMPLES
+-- ============================================================
 
-    local categoryOrder = {
+local function PrintCategorySamples(
+    categorySamples
+)
 
-        "Weapon",
-        "Armor",
-        "Accessory",
-        "Consumable",
-        "Scroll",
-        "Food",
-        "Grenade",
-        "Book",
-        "Material",
-        "Other"
-    }
-
-
-    for _, category in ipairs(categoryOrder) do
+    for _, category in ipairs(CATEGORY_ORDER) do
 
         print("")
+
         print(
             "[ULF] --- SAMPLE: " ..
             category ..
@@ -882,7 +738,7 @@ local function ScanItems()
 
 
         local samples =
-            CategorySamples[category]
+            categorySamples[category]
 
 
         if not samples
@@ -910,16 +766,208 @@ local function ScanItems()
                         record.ClassificationReason
                     )
                 )
-
             end
         end
     end
+end
+
+
+-- ============================================================
+-- SCAN ALL STATS
+-- ============================================================
+
+local function ScanItems()
+
+    print("")
+    print("[ULF] ========================================")
+    print("[ULF] STARTING UNIVERSAL ITEM SCAN")
+    print("[ULF] ========================================")
+
+
+    local stats =
+        Ext.Stats.GetStats()
+
+
+    if not stats then
+
+        print(
+            "[ULF] ERROR: Ext.Stats.GetStats() returned nil"
+        )
+
+        return nil
+    end
+
+
+    local scanStats =
+        CreateScanStats()
+
+
+    local categorySamples =
+        CreateCategorySamples()
+
+
+    local items = {}
+
+
+    -- ========================================================
+    -- SCAN
+    -- ========================================================
+
+    for _, statName in ipairs(stats) do
+
+        scanStats.StatsTotal =
+            scanStats.StatsTotal + 1
+
+
+        local record, errorCode =
+            BuildItemRecord(
+                statName
+            )
+
+
+        -- ====================================================
+        -- PHYSICAL ITEM
+        -- ====================================================
+
+        if record then
+
+            scanStats.PhysicalItems =
+                scanStats.PhysicalItems + 1
+
+
+            scanStats.StatsWithRootTemplate =
+                scanStats.StatsWithRootTemplate + 1
+
+
+            scanStats.RootTemplatesResolved =
+                scanStats.RootTemplatesResolved + 1
+
+
+            local rootTemplate =
+                record.RootTemplate
+
+
+            -- =================================================
+            -- DEDUPLICATION
+            -- =================================================
+
+            if items[rootTemplate] then
+
+                scanStats.DuplicateTemplates =
+                    scanStats.DuplicateTemplates + 1
+
+            else
+
+                items[rootTemplate] =
+                    record
+
+
+                -- =============================================
+                -- CATEGORY COUNT
+                -- =============================================
+
+                local category =
+                    record.Category
+
+
+                if scanStats.Categories[category] ~= nil then
+
+                    scanStats.Categories[category] =
+                        scanStats.Categories[category] + 1
+
+                end
+
+
+                -- =============================================
+                -- SAMPLE
+                -- =============================================
+
+                AddCategorySample(
+                    category,
+                    record,
+                    categorySamples
+                )
+            end
+
+
+        -- ====================================================
+        -- SKIPPED
+        -- ====================================================
+
+        elseif errorCode == "PropertyError" then
+
+            scanStats.PropertyErrors =
+                scanStats.PropertyErrors + 1
+
+
+        elseif errorCode == "NoRootTemplate" then
+
+            scanStats.NoRootTemplate =
+                scanStats.NoRootTemplate + 1
+
+
+        elseif errorCode == "TemplateNotFound" then
+
+            scanStats.TemplateNotFound =
+                scanStats.TemplateNotFound + 1
+
+
+        elseif errorCode == "WrongTemplateType" then
+
+            scanStats.WrongTemplateType =
+                scanStats.WrongTemplateType + 1
+        end
+    end
+
+
+    -- ========================================================
+    -- ITEM COUNT
+    -- ========================================================
+
+    local itemCount = 0
+
+    for _ in pairs(items) do
+
+        itemCount = itemCount + 1
+
+    end
+
+
+    -- ========================================================
+    -- REPORT
+    -- ========================================================
+
+    PrintScanSummary(
+        scanStats,
+        itemCount
+    )
+
+
+    PrintCategorySamples(
+        categorySamples
+    )
 
 
     print("")
     print("[ULF] ========================================")
     print("[ULF] END OF ITEM DISCOVERY REPORT")
     print("[ULF] ========================================")
+
+
+    -- ========================================================
+    -- RETURN RESULT
+    -- ========================================================
+
+    return {
+
+        Items = items,
+
+        ItemCount = itemCount,
+
+        Stats = scanStats,
+
+        Samples = categorySamples
+    }
 end
 
 
@@ -927,7 +975,10 @@ end
 -- TEST RECORD
 -- ============================================================
 
-local function PrintTestRecord(statName)
+local function PrintTestRecord(
+    statName,
+    items
+)
 
     local stat =
         Ext.Stats.Get(statName)
@@ -945,7 +996,10 @@ local function PrintTestRecord(statName)
 
 
     local rootTemplate =
-        SafeGet(stat, "RootTemplate")
+        SafeGet(
+            stat,
+            "RootTemplate"
+        )
 
 
     if not rootTemplate
@@ -961,7 +1015,7 @@ local function PrintTestRecord(statName)
 
 
     local record =
-        ULF_Database.Items[rootTemplate]
+        items[rootTemplate]
 
 
     if not record then
@@ -1057,91 +1111,12 @@ end
 
 
 -- ============================================================
--- SESSION LOADED
+-- PUBLIC API
 -- ============================================================
 
-Ext.Events.SessionLoaded:Subscribe(function()
+ULF_ItemScanner = {
 
-    print("[ULF] SESSION LOADED")
+    Scan = ScanItems,
 
-
-    -- ========================================================
-    -- RESET DATABASE
-    -- ========================================================
-
-    ULF_Database.Items = {}
-
-
-    -- ========================================================
-    -- RESET STATS
-    -- ========================================================
-
-    ScanStats = {
-
-        StatsTotal = 0,
-
-        StatsWithRootTemplate = 0,
-
-        RootTemplatesResolved = 0,
-
-        PhysicalItems = 0,
-
-        DuplicateTemplates = 0,
-
-        PropertyErrors = 0,
-
-        NoRootTemplate = 0,
-
-        TemplateNotFound = 0,
-
-        WrongTemplateType = 0,
-
-        Categories = {
-
-            Weapon = 0,
-            Armor = 0,
-            Accessory = 0,
-            Consumable = 0,
-            Scroll = 0,
-            Food = 0,
-            Grenade = 0,
-            Book = 0,
-            Material = 0,
-            Other = 0
-        }
-    }
-
-
-    -- ========================================================
-    -- RESET SAMPLES
-    -- ========================================================
-
-    CategorySamples = {
-
-        Weapon = {},
-        Armor = {},
-        Accessory = {},
-        Consumable = {},
-        Scroll = {},
-        Food = {},
-        Grenade = {},
-        Book = {},
-        Material = {},
-        Other = {}
-    }
-
-
-    -- ========================================================
-    -- RUN SCANNER
-    -- ========================================================
-
-    ScanItems()
-
-
-    -- ========================================================
-    -- KNOWN TEST
-    -- ========================================================
-
-    PrintTestRecord("WPN_Battleaxe")
-
-end)
+    PrintTestRecord = PrintTestRecord
+}
