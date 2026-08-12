@@ -23,16 +23,6 @@ function ULF_LootItemEligibility.IsEligible(record)
         return false
     end
 
-    if not ULF_LootConfig
-        or not ULF_LootConfig.AllowedCategories then
-
-        print(
-            "[ULF][LOOT] ERROR: Category configuration missing"
-        )
-
-        return false
-    end
-
     return
         ULF_LootConfig.AllowedCategories[category] == true
 end
