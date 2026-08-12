@@ -9,16 +9,6 @@ ULF_DatabaseQuery = {}
 
 local function GetRandomFromIndex(index, value)
 
-    if not ULF_Database then
-
-        print(
-            "[ULF][QUERY] ERROR: ULF_Database is nil"
-        )
-
-        return nil
-    end
-
-
     if not ULF_Database.Indexes then
 
         print(
@@ -185,17 +175,6 @@ function ULF_DatabaseQuery.ScanCategories()
 
     local categories = {}
 
-    if not ULF_Database
-        or not ULF_Database.Items then
-
-        print(
-            "[ULF][QUERY] ERROR: Database is unavailable"
-        )
-
-        return
-    end
-
-
     for _, record in pairs(ULF_Database.Items) do
 
         local category =
@@ -269,18 +248,6 @@ function ULF_DatabaseQuery.ScanOtherStatPrefixes()
         UNI = 0,
         Other = 0
     }
-
-
-    if not ULF_Database
-        or not ULF_Database.Items then
-
-        print(
-            "[ULF][QUERY] ERROR: Database is unavailable"
-        )
-
-        return
-    end
-
 
     for _, record in pairs(ULF_Database.Items) do
 
@@ -416,17 +383,6 @@ end
 -- ============================================================
 
 function ULF_DatabaseQuery.ScanLootEligibilitySignals()
-
-    if not ULF_Database
-        or not ULF_Database.Items then
-
-        print(
-            "[ULF][QUERY] ERROR: Database is unavailable"
-        )
-
-        return
-    end
-
 
     -- ========================================================
     -- LOOT CATEGORIES
@@ -963,17 +919,6 @@ end
 
 function ULF_DatabaseQuery.FindSuspiciousLootItems()
 
-    if not ULF_Database
-        or not ULF_Database.Items then
-
-        print(
-            "[ULF][QUERY] ERROR: Database is unavailable"
-        )
-
-        return
-    end
-
-
     -- ========================================================
     -- CONFIGURATION
     -- ========================================================
@@ -1245,17 +1190,6 @@ end
 -- ============================================================
 
 function ULF_DatabaseQuery.ScanLootDataQuality()
-
-    if not ULF_Database
-        or not ULF_Database.Items then
-
-        print(
-            "[ULF][QUERY] ERROR: Database is unavailable"
-        )
-
-        return
-    end
-
 
     local total = 0
 
