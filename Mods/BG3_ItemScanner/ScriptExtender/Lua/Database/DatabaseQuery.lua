@@ -9,16 +9,6 @@ ULF_DatabaseQuery = {}
 
 local function GetRandomFromIndex(index, value)
 
-    if not ULF_Database.Indexes then
-
-        print(
-            "[ULF][QUERY] ERROR: Indexes are missing"
-        )
-
-        return nil
-    end
-
-
     if not index then
 
         print(
@@ -86,8 +76,7 @@ end
 function ULF_DatabaseQuery.GetRandomByCategory(category)
 
 local categoryIndex =
-    ULF_Database.Indexes
-    and ULF_Database.Indexes.Category
+    ULF_Database.Indexes.Category
 
 
 if not categoryIndex then
@@ -114,8 +103,7 @@ end
 function ULF_DatabaseQuery.GetRandomByRarity(rarity)
 
     local rarityIndex =
-        ULF_Database.Indexes
-        and ULF_Database.Indexes.Rarity
+        ULF_Database.Indexes.Rarity
 
 
     if not rarityIndex then
@@ -137,15 +125,15 @@ end
 
 function ULF_DatabaseQuery.GetByRarity(rarity)
 
-    local index =
+    local rarityIndex =
         ULF_Database.Indexes.Rarity
 
-    if not index then
+    if not rarityIndex then
         return {}
     end
 
     local itemIds =
-        index[rarity]
+        rarityIndex[rarity]
 
     if not itemIds then
         return {}
