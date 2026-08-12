@@ -121,13 +121,13 @@ Ext.Events.SessionLoaded:Subscribe(function()
         -- -- debug
         -- ULF_DatabaseQuery.FindSuspiciousLootItems()
     
-        ULF_DatabaseQuery.ResearchItem("OBJ_CrownController_Ketheric")
-        ULF_DatabaseQuery.ResearchItem("WPN_Flail_Rusty")
-        ULF_DatabaseQuery.ResearchItem("OBJ_BloodPotion_Human")
-        ULF_DatabaseQuery.ResearchItem("OBJ_ArrowOfFiendSlaying")
-        ULF_DatabaseQuery.ResearchItem("OBJ_Scroll_GlyphOfWarding")
-        ULF_DatabaseQuery.ResearchItem("OBJ_Dye_BlackBlue")
-        ULF_DatabaseQuery.ResearchItem("OBJ_WoodenPatchwork")
+        -- ULF_DatabaseQuery.ResearchItem("OBJ_CrownController_Ketheric")
+        -- ULF_DatabaseQuery.ResearchItem("WPN_Flail_Rusty")
+        -- ULF_DatabaseQuery.ResearchItem("OBJ_BloodPotion_Human")
+        -- ULF_DatabaseQuery.ResearchItem("OBJ_ArrowOfFiendSlaying")
+        -- ULF_DatabaseQuery.ResearchItem("OBJ_Scroll_GlyphOfWarding")
+        -- ULF_DatabaseQuery.ResearchItem("OBJ_Dye_BlackBlue")
+        -- ULF_DatabaseQuery.ResearchItem("OBJ_WoodenPatchwork")
 
         -- ====================================================
         -- CACHE LOADED

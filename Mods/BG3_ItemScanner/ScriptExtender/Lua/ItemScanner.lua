@@ -679,7 +679,7 @@ local function BuildItemRecord(statName)
             template
         )
 
-    local isQuestItem =
+    local IsQuestItem =
         StartsWith(statName, "QUEST_")
         or
         StartsWith(templateName, "QUEST_")
@@ -715,7 +715,7 @@ local function BuildItemRecord(statName)
         ClassificationReason =
             classificationReason,
 
-        isQuestItem = isQuestItem
+        IsQuestItem = IsQuestItem
 
     }
 
@@ -771,7 +771,7 @@ local function PrintScanSummary(
 
     print(
         "[ULF] Quest items: " ..
-        tostring(itemCount.QuestItems)
+        tostring(scanStats.QuestItems)
     )
 
 

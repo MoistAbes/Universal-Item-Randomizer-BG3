@@ -7,29 +7,11 @@ print("[ULF] LootInjector.lua LOADED")
 
 local function DebugEnemyProfile(profile)
 
-    print(
-        "[ULF][INJECTOR] Enemy Profile:"
-    )
-
-    print(
-        "  UUID: " ..
-        tostring(profile.EntityUuid)
-    )
-
-    print(
-        "  Template: " ..
-        tostring(profile.OriginalTemplate)
-    )
-
-    print(
-        "  Race: " ..
-        tostring(profile.Race)
-    )
-
-    print(
-        "  Level: " ..
-        tostring(profile.Level)
-    )
+    print("[ULF][INJECTOR] Enemy Profile:")
+    print("  UUID: " ..tostring(profile.EntityUuid))
+    print("  Template: " ..tostring(profile.OriginalTemplate))
+    print("  Race: " ..tostring(profile.Race))
+    print("  Level: " ..tostring(profile.Level))
 
 end
 
