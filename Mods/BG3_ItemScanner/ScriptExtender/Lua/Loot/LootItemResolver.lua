@@ -18,16 +18,6 @@ function ULF_LootItemResolver.Resolve(rarity)
         return nil
     end
 
-
-    if not ULF_DatabaseQuery then
-
-        print(
-            "[ULF][LOOT] ERROR: DatabaseQuery is not loaded"
-        )
-
-        return nil
-    end
-
     local candidates =
         ULF_DatabaseQuery.GetByRarity(rarity)
 
