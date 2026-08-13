@@ -2,6 +2,30 @@ print("[ULF] PartyContext.lua LOADED")
 
 ULF_PartyContext = {}
 
+local function IsSummon(character)
+
+    local entity =
+        Ext.Entity.Get(character)
+
+    if not entity then
+        return false
+    end
+
+    for _, componentName in ipairs(
+        entity:GetAllComponentNames()
+    ) do
+
+        if componentName ==
+            "eoc::summon::IsSummonComponent"
+        then
+            return true
+        end
+
+    end
+
+    return false
+end
+
 -- ============================================================
 -- GET PARTY MEMBERS
 -- ============================================================
@@ -28,7 +52,9 @@ function ULF_PartyContext.GetMembers()
 
         local character = row and row[1]
 
-        if character then
+        if character
+            and not IsSummon(character)
+        then
 
             local level = nil
             local entity = Ext.Entity.Get(character)
@@ -59,11 +85,10 @@ function ULF_PartyContext.GetMembers()
 
         end
 
-    end
+end
 
     return members
 end
-
 
 -- ============================================================
 -- BUILD PARTY LEVEL DATA
@@ -120,7 +145,6 @@ function ULF_PartyContext.GetData()
         LowestLevel = lowestLevel
     }
 end
-
 
 -- ============================================================
 -- DEBUG PRINT
