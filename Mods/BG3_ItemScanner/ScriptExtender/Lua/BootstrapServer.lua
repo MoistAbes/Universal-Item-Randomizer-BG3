@@ -7,7 +7,16 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 
 -- CONFIG
 Ext.Require("Config/LootConfig.lua")
+Ext.Require("Config/LootConfigValidator.lua")
 
+if not ULF_LootConfigValidator.Validate() then
+
+    print(
+        "[ULF] ERROR: Loot configuration is invalid"
+    )
+
+    return
+end
 
 -- LOOT - BASIC
 Ext.Require("Loot/LootEligibility.lua")
