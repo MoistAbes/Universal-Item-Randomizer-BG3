@@ -1,21 +1,5 @@
 print("[ULF] LootInjector.lua LOADED")
 
-
--- ============================================================
--- DEBUG: ENEMY PROFILE
--- ============================================================
-
-local function DebugEnemyProfile(profile)
-
-    print("[ULF][INJECTOR] Enemy Profile:")
-    print("  UUID: " ..tostring(profile.EntityUuid))
-    print("  Template: " ..tostring(profile.OriginalTemplate))
-    print("  Race: " ..tostring(profile.Race))
-    print("  Level: " ..tostring(profile.Level))
-
-end
-
-
 -- ============================================================
 -- DEBUG: LOOT ITEM
 -- ============================================================
@@ -280,7 +264,6 @@ Ext.Osiris.RegisterListener(
         -- ====================================================
         ULF_EnemyDebugInspector.Inspect(entity)
 
-
         -- ====================================================
         -- BUILD ENEMY PROFILE
         -- ====================================================
@@ -304,10 +287,7 @@ Ext.Osiris.RegisterListener(
         -- DEBUG PROFILE
         -- ====================================================
 
-        DebugEnemyProfile(
-            enemyProfile
-        )
-
+        ULF_EnemyProfile.DebugPrint(enemyProfile)
 
         -- ====================================================
         -- PROCESS LOOT

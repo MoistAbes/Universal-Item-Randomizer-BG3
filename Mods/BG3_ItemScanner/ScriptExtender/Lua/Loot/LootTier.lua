@@ -12,7 +12,7 @@ function ULF_LootTier.GetMaxRarity(profile)
     end
 
     local level =
-        tonumber(profile.Level)
+        tonumber(profile.ClassLevel)
 
     if not level then
         return nil

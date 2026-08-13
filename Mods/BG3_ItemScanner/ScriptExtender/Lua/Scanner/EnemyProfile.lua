@@ -13,64 +13,182 @@ function ULF_EnemyProfile.Build(entity)
         return nil
     end
 
+    -- Cache all components once.
+    local components = entity:GetAllComponents()
+
 
     -- ========================================================
     -- UUID
     -- ========================================================
 
-    local uuidComponent =
-        entity:GetAllComponents().Uuid
-
     local entityUuid = nil
 
-    if uuidComponent then
+    if components.Uuid then
         entityUuid =
-            uuidComponent.EntityUuid
+            components.Uuid.EntityUuid
+    end
+
+    -- ========================================================
+    -- AI ARCHETYPE
+    -- ========================================================
+
+    local archetype = nil
+
+    if entity.ServerAiArchetype then
+
+        archetype =
+            entity.ServerAiArchetype.BaseArchetype
+
     end
 
 
     -- ========================================================
-    -- ORIGINAL TEMPLATE
+    -- CLASS LEVEL
     -- ========================================================
 
-    local templateComponent =
-        entity:GetAllComponents().OriginalTemplate
+    local classLevel = nil
 
-    local originalTemplate = nil
+    if entity.Classes and entity.Classes.Classes then
 
-    if templateComponent then
-        originalTemplate =
-            templateComponent.OriginalTemplate
+        for _, classInfo in ipairs(entity.Classes.Classes) do
+
+            if classInfo then
+
+                classLevel =
+                    classInfo.Level
+
+                break
+
+            end
+
+        end
+
     end
 
 
-    -- ========================================================
-    -- RACE
-    -- ========================================================
+-- ========================================================
+-- ITEMS
+-- ========================================================
 
-    local raceComponent =
-        entity:GetAllComponents().Race
+    local items = {}
 
-    local race = nil
+    if entity.InventoryOwner
+        and entity.InventoryOwner.Inventories
+    then
 
-    if raceComponent then
-        race =
-            raceComponent.Race
-    end
+        for _, inventoryHandle in ipairs(
+            entity.InventoryOwner.Inventories
+        ) do
+
+            local inventoryEntity =
+                Ext.Entity.Get(inventoryHandle)
+
+            if inventoryEntity
+                and inventoryEntity.InventoryContainer
+                and inventoryEntity.InventoryContainer.Items
+            then
+
+                for _, slotData in pairs(
+                    inventoryEntity.InventoryContainer.Items
+                ) do
+
+                    if slotData and slotData.Item then
+
+                        local itemEntity =
+                            Ext.Entity.Get(slotData.Item)
+
+                        if itemEntity then
+
+                            local itemType = nil
+                            local equipped = false
+                            local rarity = 0
 
 
-    -- ========================================================
-    -- LEVEL
-    -- ========================================================
+                            -- ====================================
+                            -- ITEM TYPE
+                            -- ====================================
 
-    local levelComponent =
-        entity:GetAllComponents().EocLevel
+                            if itemEntity.Weapon then
 
-    local level = nil
+                                itemType = "Weapon"
 
-    if levelComponent then
-        level =
-            levelComponent.Level
+                            elseif itemEntity.Equipable
+                                and itemEntity.Equipable.Slot == "Ring"
+                            then
+
+                                itemType = "Ring"
+
+                            elseif itemEntity.Equipable
+                                and itemEntity.Equipable.Slot == "Amulet"
+                            then
+
+                                itemType = "Amulet"
+
+                            elseif itemEntity.Armor then
+
+                                if itemEntity.Armor.Shield then
+                                    itemType = "Shield"
+                                else
+                                    itemType = "Armor"
+                                end
+
+                            end
+
+
+                            -- ====================================
+                            -- EQUIPPED
+                            -- ====================================
+
+                            if itemEntity.Wielding
+                                and itemEntity.Wielding.Owner
+                            then
+
+                                equipped =
+                                    itemEntity.Wielding.Owner == entity
+
+                            end
+
+                            -- ====================================
+                            -- RARITY
+                            -- ====================================
+
+                            if itemEntity.Value
+                                and itemEntity.Value.Rarity ~= nil
+                            then
+
+                                rarity =
+                                    itemEntity.Value.Rarity
+
+                            end
+
+
+                            -- ====================================
+                            -- ADD ONLY SUPPORTED TYPES
+                            -- ====================================
+
+                            if itemType then
+
+                                table.insert(
+                                    items,
+                                    {
+                                        Type = itemType,
+                                        Equipped = equipped,
+                                        Rarity = rarity
+                                    }
+                                )
+
+                            end
+
+                        end
+
+                    end
+
+                end
+
+            end
+
+        end
+
     end
 
 
@@ -82,92 +200,111 @@ function ULF_EnemyProfile.Build(entity)
 
         EntityUuid = entityUuid,
 
-        OriginalTemplate = originalTemplate,
+        Class = {
+            Level = classLevel
+        },
 
-        Race = race,
+        Archetype = archetype,
 
-        Level = level
+        ClassLevel = classLevel,
+
+        Items = items
 
     }
 
 end
 
-
 -- ============================================================
--- TEST API
+-- DEBUG PRINT
 -- ============================================================
 
-function ULF_EnemyProfile.Test()
+function ULF_EnemyProfile.DebugPrint(profile)
 
-    return "ENEMY_PROFILE_OK"
+    if not profile then
+        print("[ULF][ENEMY-PROFILE] ERROR: Profile is nil")
+        return
+    end
+
+    print("[ULF][ENEMY-PROFILE] ========================================")
+    print("[ULF][ENEMY-PROFILE] ENEMY PROFILE")
+    print("[ULF][ENEMY-PROFILE] ========================================")
+
+    -- ========================================================
+    -- IDENTITY
+    -- ========================================================
+
+    print("[ULF][ENEMY-PROFILE] [IDENTITY]")
+
+    print(
+        "  Entity UUID:  " ..
+        tostring(profile.EntityUuid)
+    )
+
+    -- ========================================================
+    -- CLASS
+    -- ========================================================
+
+    print("[ULF][ENEMY-PROFILE] [CLASS]")
+
+    local classLevel = nil
+
+    if profile.Class then
+        classLevel = profile.Class.Level
+    end
+
+    print(
+        "  Class Level:   " ..
+        tostring(classLevel or "-")
+    )
+
+    -- ========================================================
+    -- ARCHETYPE
+    -- ========================================================
+
+    print("[ULF][ENEMY-PROFILE] [ARCHETYPE]")
+
+    print(
+        "  Archetype:     " ..
+        tostring(profile.Archetype or "-")
+    )
+
+    -- ========================================================
+    -- ITEMS
+    -- ========================================================
+
+    print("[ULF][ENEMY-PROFILE] [ITEMS]")
+
+    local itemCount = 0
+
+    if profile.Items then
+        itemCount = #profile.Items
+    end
+
+    print(
+        "  Items:         " ..
+        tostring(itemCount)
+    )
+
+    if itemCount > 0 then
+
+        for i, item in ipairs(profile.Items) do
+
+            print(
+                "  [" .. tostring(i) .. "] " ..
+                "Type: " ..
+                tostring(item.Type) ..
+                " | Equipped: " ..
+                tostring(item.Equipped) ..
+                " | Rarity: " ..
+                tostring(item.Rarity)
+            )
+
+        end
+
+    end
+
+    print("[ULF][ENEMY-PROFILE] ========================================")
+    print("[ULF][ENEMY-PROFILE] END PROFILE")
+    print("[ULF][ENEMY-PROFILE] ========================================")
 
 end
-
-
-print(
-    "[ULF][ENEMY] API exported: " ..
-    tostring(type(ULF_EnemyProfile))
-)
-
-
--- ============================================================
--- RESEARCH NOTES
--- ============================================================
---
--- Current research status:
---
--- CONFIRMED:
---
--- EntityUuid
---   -> Uuid.EntityUuid
---
--- OriginalTemplate
---   -> OriginalTemplate.OriginalTemplate
---
--- Race
---   -> Race.Race
---
--- Level
---   -> EocLevel.Level
---
--- Inventory:
---   -> InventoryOwner.Inventories
---   -> Main inventory can be empty
---   -> Equipment inventory can be empty
---   -> Therefore Inventory contents are NOT currently treated
---      as the source of enemy loot rules.
---
--- LootComponent:
---   -> Flags / InventoryType were tested
---   -> Imp / Mephit = 3 / 8
---   -> Goblin / Refugee / DrainVictim = 1 / 33
---   -> Therefore these values are NOT sufficient to identify
---      a generic "enemy" category.
---
--- Classes:
---   -> Component exists
---   -> Some NPCs return empty/default class UUIDs
---   -> Not currently used by EnemyProfile.
---
--- FUTURE RESEARCH:
---
--- EnemyProfile can be expanded later with:
---   - Classes
---   - Faction
---   - Tags
---   - Archetype
---   - Loot-related data
---   - Other combat/reward information
---
--- IMPORTANT:
--- Keep this profile intentionally small.
--- Add new fields only when research confirms that they are
--- useful for the loot system.
---
--- Design goal:
--- Simple now -> easy to expand later.
--- Keep responsibilities separated and avoid premature indexes
--- or complex enemy classification systems.
---
--- get all comoponents is used a lot we could do something like local components =entity:GetAllComponents() and use it
--- ============================================================
