@@ -75,7 +75,7 @@ local function ProcessEnemyLoot(victim, enemyProfile)
     -- ========================================================
 
     local shouldDrop =
-        ULF_LootGenerator.RollDropChance()
+        ULF_LootGeneration.ShouldGenerate()
 
     if not shouldDrop then
 
@@ -92,7 +92,7 @@ local function ProcessEnemyLoot(victim, enemyProfile)
     -- ========================================================
 
     local dropCount =
-        ULF_LootGenerator.GetDropCount(
+        ULF_LootGeneration.GetDropCount(
             enemyProfile
         )
 
@@ -274,6 +274,11 @@ Ext.Osiris.RegisterListener(
 
             return
         end
+
+        -- ====================================================
+        -- ENEMY RESEARCH
+        -- ====================================================
+        ULF_EnemyDebugInspector.Inspect(entity)
 
 
         -- ====================================================

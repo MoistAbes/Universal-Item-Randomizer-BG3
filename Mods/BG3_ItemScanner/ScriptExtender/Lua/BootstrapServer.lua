@@ -30,7 +30,7 @@ end
 Ext.Require("Loot/LootEligibility.lua")
 Ext.Require("Loot/LootItemEligibility.lua")
 
-Ext.Require("Loot/LootGenerator.lua")
+Ext.Require("Loot/LootGeneration.lua")
 Ext.Require("Loot/LootTier.lua")
 Ext.Require("Loot/LootRarityResolver.lua")
 
@@ -46,6 +46,7 @@ Ext.Require("Database/DatabaseInitializer.lua")
 -- SCANNER
 Ext.Require("Scanner/ItemScanner.lua")
 Ext.Require("Scanner/EnemyProfile.lua")
+Ext.Require("Scanner/EnemyDebugInspector.lua")
 
 
 -- LOOT - RESOLUTION / SPAWNING

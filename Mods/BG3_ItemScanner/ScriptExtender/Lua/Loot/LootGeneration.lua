@@ -1,13 +1,13 @@
 print("[ULF] LootGenerator.lua LOADED")
 
-ULF_LootGenerator = {}
+ULF_LootGeneration = {}
 
 
 -- ============================================================
 -- DETERMINE DROP COUNT
 -- ============================================================
 
-function ULF_LootGenerator.GetDropCount(profile)
+function ULF_LootGeneration.GetDropCount(profile)
 
     if not profile then
         return 0
@@ -40,7 +40,7 @@ function ULF_LootGenerator.GetDropCount(profile)
 
 end
 
-function ULF_LootGenerator.RollDropChance()
+function ULF_LootGeneration.ShouldGenerate()
 
     local chance =
         ULF_LootConfig.BaseDropChance
