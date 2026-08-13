@@ -47,11 +47,7 @@ function ULF_LootGenerator.RollDropChance(profile)
     end
 
     local chance =
-        tonumber(ULF_LootConfig.BaseDropChance)
-
-    if not chance then
-        return false
-    end
+        ULF_LootConfig.BaseDropChance
 
     local roll =
         math.random()

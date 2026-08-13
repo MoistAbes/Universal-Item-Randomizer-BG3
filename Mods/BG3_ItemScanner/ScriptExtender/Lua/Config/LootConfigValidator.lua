@@ -101,6 +101,35 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
 
 end
 
+function ULF_LootConfigValidator.ValidateBaseDropChance(
+    chance
+)
+
+    if type(chance) ~= "number" then
+
+        print(
+            "[ULF][CONFIG] ERROR: BaseDropChance must be a number"
+        )
+
+        return false
+    end
+
+
+    if chance < 0
+        or chance > 1 then
+
+        print(
+            "[ULF][CONFIG] ERROR: BaseDropChance must be between 0 and 1"
+        )
+
+        return false
+    end
+
+
+    return true
+
+end
+
 -- ============================================================
 -- VALIDATE CONFIGURATION
 -- ============================================================
@@ -109,6 +138,13 @@ function ULF_LootConfigValidator.Validate()
 
     if not ULF_LootConfigValidator.ValidateRarityWeights(
         ULF_LootConfig.RarityWeights
+    ) then
+
+        return false
+    end
+
+    if not ULF_LootConfigValidator.ValidateBaseDropChance(
+        ULF_LootConfig.BaseDropChance
     ) then
 
         return false

@@ -1,10 +1,5 @@
 ULF_LootConfig = {
 
-    -- Bonus loot is added to vanilla loot.
-    -- We do NOT remove or replace vanilla loot in V1.
-    PreserveVanillaLoot = true,
-
-
     -- ========================================================
     -- SOURCES
     -- ========================================================
@@ -23,7 +18,7 @@ ULF_LootConfig = {
     -- V1 starts simple.
     -- This will be refined when LootGenerator is implemented.
 
-    BaseDropChance = 0.35,
+    BaseDropChance = 1.1,
 
 
     -- ========================================================
