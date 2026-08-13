@@ -1,5 +1,3 @@
-print("[ULF] LootTier.lua LOADED")
-
 ULF_LootTier = {}
 
 
@@ -10,12 +8,15 @@ ULF_LootTier = {}
 function ULF_LootTier.GetMaxRarity(profile)
 
     if not profile then
-        return "Common"
+        return nil
     end
 
     local level =
-        tonumber(profile.Level) or 1
+        tonumber(profile.Level)
 
+    if not level then
+        return nil
+    end
 
     if level <= 2 then
         return "Uncommon"

@@ -142,6 +142,14 @@ local function ProcessEnemyLoot(victim, enemyProfile)
             tostring(maxRarity)
         )
 
+        if not maxRarity then
+
+            print(
+                "[ULF][LOOT] Failed to resolve max rarity"
+            )
+
+            return
+        end
 
         -- ====================================================
         -- RESOLVE RARITY
@@ -157,6 +165,14 @@ local function ProcessEnemyLoot(victim, enemyProfile)
             tostring(resolvedRarity)
         )
 
+        if not resolvedRarity then
+
+            print(
+                "[ULF][LOOT] Failed to resolve rarity"
+            )
+
+            return
+        end
 
         -- ====================================================
         -- RESOLVE ITEM

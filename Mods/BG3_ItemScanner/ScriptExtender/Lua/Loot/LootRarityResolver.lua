@@ -2,7 +2,6 @@ print("[ULF] LootRarityResolver.lua LOADED")
 
 ULF_LootRarityResolver = {}
 
-
 -- ============================================================
 -- RARITY ORDER
 -- ============================================================
@@ -23,7 +22,7 @@ local RARITY_ORDER = {
 function ULF_LootRarityResolver.Resolve(maxRarity)
 
     if not maxRarity then
-        return "Common"
+        return nil
     end
 
 
@@ -40,7 +39,7 @@ function ULF_LootRarityResolver.Resolve(maxRarity)
 
 
     if not maxIndex then
-        return "Common"
+        return nil
     end
 
 
@@ -61,7 +60,7 @@ function ULF_LootRarityResolver.Resolve(maxRarity)
 
 
     if totalWeight <= 0 then
-        return "Common"
+        return nil
     end
 
 
@@ -88,8 +87,7 @@ function ULF_LootRarityResolver.Resolve(maxRarity)
 
     end
 
-
-    return "Common"
+    return nil
 
 end
 
