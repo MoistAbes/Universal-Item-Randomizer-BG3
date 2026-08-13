@@ -169,4 +169,5 @@ print(
 -- Keep responsibilities separated and avoid premature indexes
 -- or complex enemy classification systems.
 --
+-- get all comoponents is used a lot we could do something like local components =entity:GetAllComponents() and use it
 -- ============================================================

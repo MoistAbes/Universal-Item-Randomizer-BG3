@@ -95,34 +95,6 @@ return GetRandomFromIndex(
 )
 end
 
-
--- ============================================================
--- RANDOM BY RARITY
--- ============================================================
-
-function ULF_DatabaseQuery.GetRandomByRarity(rarity)
-
-    local rarityIndex =
-        ULF_Database.Indexes.Rarity
-
-
-    if not rarityIndex then
-
-        print(
-            "[ULF][QUERY] ERROR: Rarity index is missing"
-        )
-
-        return nil
-    end
-
-
-    return GetRandomFromIndex(
-        rarityIndex,
-        rarity
-    )
-end
-
-
 function ULF_DatabaseQuery.GetByRarity(rarity)
 
     local rarityIndex =

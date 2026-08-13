@@ -1,5 +1,3 @@
-print("[ULF] LootEligibility.lua LOADED")
-
 ULF_LootEligibility = {}
 
 

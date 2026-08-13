@@ -61,48 +61,4 @@ Ext.Events.SessionLoaded:Subscribe(function()
         return
     end
 
-    -- ========================================================
-    -- QUICK QUERY TEST
-    -- ========================================================
-
-    local testItem =
-        ULF_DatabaseQuery.GetRandomByCategory(
-            "Weapon"
-        )
-
-    if testItem then
-
-        print(
-            "[ULF][QUERY TEST] Weapon: " ..
-            tostring(testItem.Stat) ..
-            " -> " ..
-            tostring(testItem.DisplayName)
-        )
-
-    else
-
-        print(
-            "[ULF][QUERY TEST] FAILED"
-        )
-
-    end
-
-    local rarityTest =
-        ULF_DatabaseQuery.GetRandomByRarity(
-            "Rare"
-        )
-
-    if rarityTest then
-
-        print(
-            "[ULF][QUERY TEST] Rare: " ..
-            tostring(rarityTest.Stat) ..
-            " -> " ..
-            tostring(rarityTest.DisplayName) ..
-            " | " ..
-            tostring(rarityTest.Rarity)
-        )
-
-    end
-
 end)
