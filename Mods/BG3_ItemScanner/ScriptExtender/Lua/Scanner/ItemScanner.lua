@@ -1096,16 +1096,6 @@ function PrintTestRecord(statName)
         return nil
     end
 
-    if not ULF_Database then
-        print("[ULF][TEST] ERROR: ULF_Database is nil")
-        return nil
-    end
-
-    if not ULF_Database.Items then
-        print("[ULF][TEST] ERROR: ULF_Database.Items is nil")
-        return nil
-    end
-
     local items = ULF_Database.Items
     local found = nil
 

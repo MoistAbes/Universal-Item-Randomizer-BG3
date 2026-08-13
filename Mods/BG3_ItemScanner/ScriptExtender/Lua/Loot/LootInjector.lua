@@ -231,6 +231,15 @@ Ext.Osiris.RegisterListener(
             tostring(victim)
         )
 
+        if not ULF_Database.Ready then
+
+            print(
+                "[ULF][INJECTOR] Database is not ready"
+            )
+
+            return
+        end
+
 
         -- ====================================================
         -- GET ENTITY
