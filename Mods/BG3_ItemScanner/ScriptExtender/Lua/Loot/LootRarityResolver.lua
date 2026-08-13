@@ -6,14 +6,8 @@ ULF_LootRarityResolver = {}
 -- RARITY ORDER
 -- ============================================================
 
-local RARITY_ORDER = {
-    "Common",
-    "Uncommon",
-    "Rare",
-    "VeryRare",
-    "Legendary"
-}
-
+local RARITY_ORDER =
+    ULF_LootDefinitions.Rarities
 
 -- ============================================================
 -- RESOLVE RANDOM RARITY

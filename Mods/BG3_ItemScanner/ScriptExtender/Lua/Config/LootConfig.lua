@@ -18,17 +18,7 @@ ULF_LootConfig = {
     -- V1 starts simple.
     -- This will be refined when LootGenerator is implemented.
 
-    BaseDropChance = 1.1,
-
-
-    -- ========================================================
-    -- DROP COUNT
-    -- ========================================================
-
-    MinDrops = 1,
-
-    MaxDrops = 5,
-
+    BaseDropChance = 0.7,
 
     -- ========================================================
     -- RARITY

@@ -8,6 +8,13 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 -- CONFIG
 Ext.Require("Config/ModSettings.lua")
 Ext.Require("Config/LootConfig.lua")
+Ext.Require("Loot/LootDefinitions.lua")
+
+
+-- ============================================================
+-- CONFIG VALIDATION
+-- ============================================================
+
 Ext.Require("Config/LootConfigValidator.lua")
 
 if not ULF_LootConfigValidator.Validate() then

@@ -4,19 +4,15 @@
 
 ULF_LootConfigValidator = {}
 
+local CATEGORY_ORDER =
+    ULF_LootDefinitions.Categories
 
 -- ============================================================
 -- RARITY ORDER
 -- ============================================================
 
-local RARITY_ORDER = {
-    "Common",
-    "Uncommon",
-    "Rare",
-    "VeryRare",
-    "Legendary"
-}
-
+local RARITY_ORDER =
+    ULF_LootDefinitions.Rarities
 
 -- ============================================================
 -- VALIDATE RARITY WEIGHTS
@@ -130,6 +126,83 @@ function ULF_LootConfigValidator.ValidateBaseDropChance(
 
 end
 
+function ULF_LootConfigValidator.ValidateAllowedCategories(
+    allowedCategories
+)
+
+    if type(allowedCategories) ~= "table" then
+
+        print(
+            "[ULF][CONFIG] ERROR: AllowedCategories must be a table"
+        )
+
+        return false
+    end
+
+
+    for _, category in ipairs(CATEGORY_ORDER) do
+
+        local enabled =
+            allowedCategories[category]
+
+
+        if enabled == nil then
+
+            print(
+                "[ULF][CONFIG] ERROR: Missing category: " ..
+                category
+            )
+
+            return false
+        end
+
+
+        if type(enabled) ~= "boolean" then
+
+            print(
+                "[ULF][CONFIG] ERROR: Category value must be boolean: " ..
+                category
+            )
+
+            return false
+        end
+
+    end
+
+
+    for category, _ in pairs(allowedCategories) do
+
+        local known = false
+
+        for _, knownCategory in ipairs(CATEGORY_ORDER) do
+
+            if category == knownCategory then
+
+                known = true
+                break
+
+            end
+
+        end
+
+
+        if not known then
+
+            print(
+                "[ULF][CONFIG] ERROR: Unknown category: " ..
+                tostring(category)
+            )
+
+            return false
+        end
+
+    end
+
+
+    return true
+
+end
+
 -- ============================================================
 -- VALIDATE CONFIGURATION
 -- ============================================================
@@ -145,6 +218,13 @@ function ULF_LootConfigValidator.Validate()
 
     if not ULF_LootConfigValidator.ValidateBaseDropChance(
         ULF_LootConfig.BaseDropChance
+    ) then
+
+        return false
+    end
+
+    if not ULF_LootConfigValidator.ValidateAllowedCategories(
+        ULF_LootConfig.AllowedCategories
     ) then
 
         return false
