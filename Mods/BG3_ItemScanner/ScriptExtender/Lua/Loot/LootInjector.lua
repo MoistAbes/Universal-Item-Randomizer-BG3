@@ -242,6 +242,10 @@ Ext.Osiris.RegisterListener(
     "after",
     function(victim)
 
+        if not ULF_ModSettings.Enabled then
+            return
+        end
+
         print(
             "[ULF][INJECTOR] Died event: " ..
             tostring(victim)

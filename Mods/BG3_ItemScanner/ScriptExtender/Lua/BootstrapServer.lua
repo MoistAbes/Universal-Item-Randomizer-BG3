@@ -6,6 +6,7 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 -- ============================================================
 
 -- CONFIG
+Ext.Require("Config/ModSettings.lua")
 Ext.Require("Config/LootConfig.lua")
 Ext.Require("Config/LootConfigValidator.lua")
 

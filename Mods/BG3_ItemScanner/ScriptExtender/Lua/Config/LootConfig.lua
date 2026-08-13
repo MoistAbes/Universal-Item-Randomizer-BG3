@@ -1,11 +1,5 @@
 ULF_LootConfig = {
 
-    -- ========================================================
-    -- SYSTEM
-    -- ========================================================
-
-    Enabled = true,
-
     -- Bonus loot is added to vanilla loot.
     -- We do NOT remove or replace vanilla loot in V1.
     PreserveVanillaLoot = true,
@@ -85,12 +79,6 @@ ULF_LootConfig = {
         Other = false,
         Grenade = false
     },
-
-    -- ========================================================
-    -- DEBUG
-    -- ========================================================
-
-    Debug = true
 
 }
 
