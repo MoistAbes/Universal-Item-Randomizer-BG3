@@ -75,9 +75,7 @@ local function ProcessEnemyLoot(victim, enemyProfile)
     -- ========================================================
 
     local shouldDrop =
-        ULF_LootGenerator.RollDropChance(
-            enemyProfile
-        )
+        ULF_LootGenerator.RollDropChance()
 
     if not shouldDrop then
 

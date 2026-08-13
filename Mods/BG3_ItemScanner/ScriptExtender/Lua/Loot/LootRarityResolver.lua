@@ -45,7 +45,7 @@ function ULF_LootRarityResolver.Resolve(maxRarity)
             RARITY_ORDER[index]
 
         local weight =
-            ULF_LootConfig.RarityWeights[rarity] or 0
+            ULF_LootConfig.RarityWeights[rarity]
 
         totalWeight =
             totalWeight + weight
@@ -69,7 +69,7 @@ function ULF_LootRarityResolver.Resolve(maxRarity)
             RARITY_ORDER[index]
 
         local weight =
-            ULF_LootConfig.RarityWeights[rarity] or 0
+            ULF_LootConfig.RarityWeights[rarity]
 
         accumulated =
             accumulated + weight

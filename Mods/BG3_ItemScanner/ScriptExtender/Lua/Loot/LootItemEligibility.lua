@@ -27,18 +27,6 @@ function ULF_LootItemEligibility.IsEligible(record)
         ULF_LootConfig.AllowedCategories[category] == true
 end
 
-
--- ============================================================
--- TEST API
--- ============================================================
-
-function ULF_LootItemEligibility.Test()
-
-    return "ITEM_ELIGIBILITY_OK"
-
-end
-
-
 -- ============================================================
 -- API EXPORT
 -- ============================================================

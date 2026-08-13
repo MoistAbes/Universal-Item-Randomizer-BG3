@@ -40,11 +40,7 @@ function ULF_LootGenerator.GetDropCount(profile)
 
 end
 
-function ULF_LootGenerator.RollDropChance(profile)
-
-    if not profile then
-        return false
-    end
+function ULF_LootGenerator.RollDropChance()
 
     local chance =
         ULF_LootConfig.BaseDropChance
