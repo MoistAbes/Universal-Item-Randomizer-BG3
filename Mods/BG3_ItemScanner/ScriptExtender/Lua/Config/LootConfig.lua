@@ -1,5 +1,3 @@
-print("[ULF] LootConfig.lua LOADED")
-
 ULF_LootConfig = {
 
     -- ========================================================
