@@ -57,6 +57,10 @@ Ext.Require("Loot/LootSpawner.lua")
 -- LOOT - INJECTION
 Ext.Require("Loot/LootInjector.lua")
 
+-- CONTEXT
+Ext.Require("Context/PartyContext.lua")
+
+
 
 -- ============================================================
 -- SESSION LOADED

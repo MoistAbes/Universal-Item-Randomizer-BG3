@@ -33,7 +33,7 @@ end
 -- PROCESS ENEMY LOOT
 -- ============================================================
 
-local function ProcessEnemyLoot(victim, enemyProfile)
+local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
 
     -- ========================================================
     -- ENEMY ELIGIBILITY
@@ -59,7 +59,7 @@ local function ProcessEnemyLoot(victim, enemyProfile)
     -- ========================================================
 
     local shouldDrop =
-        ULF_LootGeneration.ShouldGenerate()
+        ULF_LootGeneration.ShouldGenerate(enemyProfile, partyContext)
 
     if not shouldDrop then
 
@@ -284,10 +284,17 @@ Ext.Osiris.RegisterListener(
 
 
         -- ====================================================
-        -- DEBUG PROFILE
+        -- Build Player context
         -- ====================================================
 
         ULF_EnemyProfile.DebugPrint(enemyProfile)
+
+        local partyContext =
+            ULF_PartyContext.GetData()
+
+        ULF_PartyContext.DebugPrint(
+            partyContext
+        )
 
         -- ====================================================
         -- PROCESS LOOT
@@ -295,7 +302,8 @@ Ext.Osiris.RegisterListener(
 
         ProcessEnemyLoot(
             victim,
-            enemyProfile
+            enemyProfile,
+            partyContext
         )
 
     end
