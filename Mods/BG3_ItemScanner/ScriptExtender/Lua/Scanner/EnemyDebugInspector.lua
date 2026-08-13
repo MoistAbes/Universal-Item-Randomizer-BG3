@@ -3,6 +3,68 @@ print("[ULF] EnemyDebugInspector.lua LOADED")
 ULF_EnemyDebugInspector = {}
 
 -- ============================================================
+-- HELPERS
+-- ============================================================
+
+local function SafeGetTranslatedString(translatedString)
+    if not translatedString then
+        return nil
+    end
+
+    local ok, result = pcall(function()
+        return translatedString:Get()
+    end)
+
+    if ok then
+        return result
+    end
+
+    return nil
+end
+
+
+local function GetItemCategory(slot)
+    if not slot then
+        return "Other"
+    end
+
+    if slot == "MeleeMainHand" then
+        return "Weapon"
+    end
+
+    if slot == "MeleeOffHand" then
+        return "Weapon"
+    end
+
+    if slot == "Breast" then
+        return "Armor"
+    end
+
+    if slot == "Helmet" then
+        return "Armor"
+    end
+
+    if slot == "Gloves" then
+        return "Armor"
+    end
+
+    if slot == "Boots" then
+        return "Armor"
+    end
+
+    if slot == "Ring" then
+        return "Ring"
+    end
+
+    if slot == "Amulet" then
+        return "Amulet"
+    end
+
+    return "Other"
+end
+
+
+-- ============================================================
 -- MODEL
 -- ============================================================
 
@@ -95,6 +157,14 @@ function ULF_EnemyDebugInspector.CreateModel(entity)
             PrimaryInventory = nil,
             Inventories = {},
             Items = {},
+
+            Summary = {
+                Weapons = 0,
+                Armor = 0,
+                Rings = 0,
+                Amulets = 0,
+                Other = 0,
+            },
         },
     }
 
@@ -113,6 +183,24 @@ function ULF_EnemyDebugInspector.CreateModel(entity)
 
     if entity.Level then
         model.Identity.WorldLevelName = entity.Level.LevelName
+    end
+
+    if entity.DisplayName then
+
+        if entity.DisplayName.Name then
+            model.Identity.Name =
+                SafeGetTranslatedString(
+                    entity.DisplayName.Name
+                )
+        end
+
+        if entity.DisplayName.Title then
+            model.Identity.Title =
+                SafeGetTranslatedString(
+                    entity.DisplayName.Title
+                )
+        end
+
     end
 
 
@@ -208,6 +296,15 @@ function ULF_EnemyDebugInspector.CreateModel(entity)
 
 
     -- ========================================================
+    -- Resistances
+    -- ========================================================
+
+    if entity.Resistances then
+        model.Combat.AC = entity.Resistances.AC
+    end
+
+
+    -- ========================================================
     -- ABILITIES
     -- ========================================================
 
@@ -259,6 +356,10 @@ function ULF_EnemyDebugInspector.CreateModel(entity)
         model.Inventory.PrimaryInventory =
             entity.InventoryOwner.PrimaryInventory
 
+        -- ----------------------------------------------------
+        -- INVENTORY HANDLES
+        -- ----------------------------------------------------
+
         if entity.InventoryOwner.Inventories then
 
             for i, inventory in ipairs(
@@ -267,6 +368,275 @@ function ULF_EnemyDebugInspector.CreateModel(entity)
 
                 model.Inventory.Inventories[i] =
                     inventory
+
+            end
+
+        end
+
+
+        -- ----------------------------------------------------
+        -- INVENTORY ITEMS
+        -- ----------------------------------------------------
+
+        if entity.InventoryOwner.Inventories then
+
+            for _, inventoryHandle in ipairs(
+                entity.InventoryOwner.Inventories
+            ) do
+
+                local inventoryEntity =
+                    Ext.Entity.Get(inventoryHandle)
+
+                if inventoryEntity
+                    and inventoryEntity.InventoryContainer
+                    and inventoryEntity.InventoryContainer.Items
+                then
+
+                    for _, slotData in pairs(
+                        inventoryEntity.InventoryContainer.Items
+                    ) do
+
+                        if slotData and slotData.Item then
+
+                            local itemEntity =
+                                Ext.Entity.Get(slotData.Item)
+
+                            if itemEntity then
+
+                                local itemModel = {
+
+                                    -- --------------------
+                                    -- IDENTITY
+                                    -- --------------------
+
+                                    UUID = nil,
+                                    Name = nil,
+                                    Title = nil,
+
+                                    -- --------------------
+                                    -- TEMPLATE / DATA
+                                    -- --------------------
+
+                                    StatsId = nil,
+                                    OriginalTemplate = nil,
+
+                                    StepsType = nil,
+                                    Weight = nil,
+
+                                    -- --------------------
+                                    -- EQUIPMENT
+                                    -- --------------------
+
+                                    Equipment = {
+                                        Slot = nil,
+                                        EquipmentTypeID = nil,
+                                        Category = "Other",
+                                    },
+
+                                    -- --------------------
+                                    -- VALUE
+                                    -- --------------------
+
+                                    Value = {
+                                        Value = nil,
+                                        Rarity = nil,
+                                        Unique = nil,
+                                    },
+
+                                    -- --------------------
+                                    -- SERVER
+                                    -- --------------------
+
+                                    Server = {
+                                        ItemType = nil,
+                                        Known = nil,
+                                        StoryItem = nil,
+                                        TreasureGenerated = nil,
+                                        UnsoldGenerated = nil,
+                                        TreasureLevel = nil,
+                                    },
+                                }
+
+
+                                -- ====================================
+                                -- ITEM UUID
+                                -- ====================================
+
+                                if itemEntity.Uuid then
+                                    itemModel.UUID =
+                                        itemEntity.Uuid.EntityUuid
+                                end
+
+
+                                -- ====================================
+                                -- ITEM DISPLAY NAME
+                                -- ====================================
+
+                                if itemEntity.DisplayName then
+
+                                    if itemEntity.DisplayName.Name then
+                                        itemModel.Name =
+                                            SafeGetTranslatedString(
+                                                itemEntity.DisplayName.Name
+                                            )
+                                    end
+
+                                    if itemEntity.DisplayName.Title then
+                                        itemModel.Title =
+                                            SafeGetTranslatedString(
+                                                itemEntity.DisplayName.Title
+                                            )
+                                    end
+
+                                end
+
+
+                                -- ====================================
+                                -- ITEM DATA
+                                -- ====================================
+
+                                if itemEntity.Data then
+
+                                    itemModel.StatsId =
+                                        itemEntity.Data.StatsId
+
+                                    itemModel.StepsType =
+                                        itemEntity.Data.StepsType
+
+                                    itemModel.Weight =
+                                        itemEntity.Data.Weight
+
+                                end
+
+
+                                -- ====================================
+                                -- ORIGINAL TEMPLATE
+                                -- ====================================
+
+                                if itemEntity.OriginalTemplate then
+
+                                    itemModel.OriginalTemplate =
+                                        tostring(itemEntity.OriginalTemplate)
+
+                                end
+
+
+                                -- ====================================
+                                -- EQUIPABLE
+                                -- ====================================
+
+                                if itemEntity.Equipable then
+
+                                    itemModel.Equipment.Slot =
+                                        itemEntity.Equipable.Slot
+
+                                    itemModel.Equipment.EquipmentTypeID =
+                                        itemEntity.Equipable.EquipmentTypeID
+
+                                    itemModel.Equipment.Category =
+                                        GetItemCategory(
+                                            itemEntity.Equipable.Slot
+                                        )
+
+                                end
+
+
+                                -- ====================================
+                                -- VALUE
+                                -- ====================================
+
+                                if itemEntity.Value then
+
+                                    itemModel.Value.Value =
+                                        itemEntity.Value.Value
+
+                                    itemModel.Value.Rarity =
+                                        itemEntity.Value.Rarity
+
+                                    itemModel.Value.Unique =
+                                        itemEntity.Value.Unique
+
+                                end
+
+
+                                -- ====================================
+                                -- SERVER ITEM
+                                -- ====================================
+
+                                if itemEntity.ServerItem then
+
+                                    itemModel.Server.ItemType =
+                                        itemEntity.ServerItem.ItemType
+
+                                    itemModel.Server.Known =
+                                        itemEntity.ServerItem.Known
+
+                                    itemModel.Server.StoryItem =
+                                        itemEntity.ServerItem.StoryItem
+
+                                    itemModel.Server.TreasureGenerated =
+                                        itemEntity.ServerItem.TreasureGenerated
+
+                                    itemModel.Server.UnsoldGenerated =
+                                        itemEntity.ServerItem.UnsoldGenerated
+
+                                    itemModel.Server.TreasureLevel =
+                                        itemEntity.ServerItem.TreasureLevel
+
+                                end
+
+
+                                -- ====================================
+                                -- SUMMARY
+                                -- ====================================
+
+                                local category =
+                                    itemModel.Equipment.Category
+
+                                if category == "Weapon" then
+
+                                    model.Inventory.Summary.Weapons =
+                                        model.Inventory.Summary.Weapons + 1
+
+                                elseif category == "Armor" then
+
+                                    model.Inventory.Summary.Armor =
+                                        model.Inventory.Summary.Armor + 1
+
+                                elseif category == "Ring" then
+
+                                    model.Inventory.Summary.Rings =
+                                        model.Inventory.Summary.Rings + 1
+
+                                elseif category == "Amulet" then
+
+                                    model.Inventory.Summary.Amulets =
+                                        model.Inventory.Summary.Amulets + 1
+
+                                else
+
+                                    model.Inventory.Summary.Other =
+                                        model.Inventory.Summary.Other + 1
+
+                                end
+
+
+                                -- ====================================
+                                -- ADD ITEM
+                                -- ====================================
+
+                                table.insert(
+                                    model.Inventory.Items,
+                                    itemModel
+                                )
+
+                            end
+
+                        end
+
+                    end
+
+                end
 
             end
 
@@ -525,6 +895,140 @@ function ULF_EnemyDebugInspector.PrintModel(model)
         "  Items:       " ..
         tostring(#model.Inventory.Items)
     )
+
+    print("")
+    print("  [SUMMARY]")
+
+    print(
+        "    Weapons: " ..
+        tostring(model.Inventory.Summary.Weapons)
+    )
+
+    print(
+        "    Armor:   " ..
+        tostring(model.Inventory.Summary.Armor)
+    )
+
+    print(
+        "    Rings:   " ..
+        tostring(model.Inventory.Summary.Rings)
+    )
+
+    print(
+        "    Amulets: " ..
+        tostring(model.Inventory.Summary.Amulets)
+    )
+
+    print(
+        "    Other:   " ..
+        tostring(model.Inventory.Summary.Other)
+    )
+
+
+    -- ========================================================
+    -- INVENTORY ITEMS
+    -- ========================================================
+
+    if #model.Inventory.Items > 0 then
+
+        print("")
+        print("  [ITEMS]")
+
+        for i, item in ipairs(model.Inventory.Items) do
+
+            print(
+                "  [" .. i .. "] " ..
+                tostring(item.Name or "-")
+            )
+
+            print(
+                "      UUID:        " ..
+                tostring(item.UUID or "-")
+            )
+
+            print(
+                "      StatsId:     " ..
+                tostring(item.StatsId or "-")
+            )
+
+            print(
+                "      Category:    " ..
+                tostring(
+                    item.Equipment.Category or "-"
+                )
+            )
+
+            print(
+                "      Slot:        " ..
+                tostring(
+                    item.Equipment.Slot or "-"
+                )
+            )
+
+            print(
+                "      EquipmentID: " ..
+                tostring(
+                    item.Equipment.EquipmentTypeID or "-"
+                )
+            )
+
+            print(
+                "      Value:       " ..
+                tostring(
+                    item.Value.Value or "-"
+                )
+            )
+
+            print(
+                "      Rarity:      " ..
+                tostring(
+                    item.Value.Rarity or "-"
+                )
+            )
+
+            print(
+                "      Unique:      " ..
+                tostring(
+                    item.Value.Unique
+                )
+            )
+
+            print(
+                "      Weight:      " ..
+                tostring(item.Weight or "-")
+            )
+
+            print(
+                "      ItemType:    " ..
+                tostring(
+                    item.Server.ItemType or "-"
+                )
+            )
+
+            print(
+                "      StoryItem:   " ..
+                tostring(
+                    item.Server.StoryItem
+                )
+            )
+
+            print(
+                "      TreasureGen: " ..
+                tostring(
+                    item.Server.TreasureGenerated
+                )
+            )
+
+            print(
+                "      UnsoldGen:   " ..
+                tostring(
+                    item.Server.UnsoldGenerated
+                )
+            )
+
+        end
+
+    end
 
 
     -- ========================================================
