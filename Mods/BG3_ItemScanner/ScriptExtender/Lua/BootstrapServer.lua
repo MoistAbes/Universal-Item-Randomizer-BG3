@@ -92,9 +92,9 @@ Ext.Events.SessionLoaded:Subscribe(function()
     --             ULF_ItemDebugInspector.InspectStat("HAG_HagsRing")
     --                             ULF_ItemDebugInspector.InspectStat("WYR_MonkAmulet_Amulet_NoGhost")
     --                                                             ULF_ItemDebugInspector.InspectStat("OBJ_Potion_Of_Psychic_Resistance")
-    ULF_ItemDebugInspector.InspectStat("Mace_HeavensRage_Stats")
-    ULF_ItemDebugInspector.InspectStat("WPN_HeavyCrossbow_Rusty")
-        ULF_ItemDebugInspector.InspectStat("FATE_StoneKing_DwarfPlate")
+    -- ULF_ItemDebugInspector.InspectStat("Mace_HeavensRage_Stats")
+    -- ULF_ItemDebugInspector.InspectStat("WPN_HeavyCrossbow_Rusty")
+    --     ULF_ItemDebugInspector.InspectStat("FATE_StoneKing_DwarfPlate")
 
 
 

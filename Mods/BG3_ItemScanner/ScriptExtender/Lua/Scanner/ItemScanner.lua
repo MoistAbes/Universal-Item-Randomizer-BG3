@@ -69,6 +69,8 @@ local function CreateScanStats()
 
         WrongTemplateType = 0,
 
+        NotItemStats = 0,
+
         Categories = {
 
             Weapon = 0,
@@ -307,7 +309,6 @@ local function ClassifyItem(
 )
 
     local text =
-
         GetNameSignals(
             statName,
             displayName,
@@ -316,13 +317,37 @@ local function ClassifyItem(
 
 
     -- ========================================================
+    -- SAFE NATIVE PROPERTIES
+    -- ========================================================
+
+    local modifierList =
+        SafeGet(stat, "ModifierList")
+
+    local slot =
+        SafeGet(stat, "Slot")
+
+    local shield =
+        SafeGet(stat, "Shield")
+
+
+    -- ========================================================
+    -- SHIELD
+    -- ========================================================
+
+    if shield == "Yes" then
+
+        return "Armor", "Shield = Yes"
+
+    end
+
+
+    -- ========================================================
     -- WEAPON
     -- ========================================================
 
-    if StartsWith(statName, "WPN_")
-        or StartsWith(templateName, "WPN_") then
+    if modifierList == "Weapon" then
 
-        return "Weapon", "WPN prefix"
+        return "Weapon", "ModifierList = Weapon"
 
     end
 
@@ -331,10 +356,37 @@ local function ClassifyItem(
     -- ARMOR
     -- ========================================================
 
-    if StartsWith(statName, "ARM_")
-        or StartsWith(templateName, "ARM_") then
+    if modifierList == "Armor" then
 
-        return "Armor", "ARM prefix"
+        if slot == "Breast"
+            or slot == "Helmet"
+            or slot == "Gloves"
+            or slot == "Boots"
+            or slot == "Cloak"
+            or slot == "VanityBody"
+            or slot == "Underwear"
+            or slot == "VanityBoots" then
+
+            return "Armor",
+                "ModifierList = Armor, equipment slot"
+
+        end
+
+
+        if slot == "Ring"
+            or slot == "Amulet" then
+
+            return "Accessory",
+                "ModifierList = Armor, accessory slot"
+
+        end
+
+        if slot == "MusicalInstrument" then
+
+            return "Accessory",
+                "ModifierList = Armor, musical instrument slot"
+
+        end
 
     end
 
@@ -394,7 +446,8 @@ local function ClassifyItem(
         or Contains(text, "ELIXIR")
         or Contains(text, "ANTIDOTE")
         or Contains(text, "COATING")
-        or Contains(text, "POISON") then
+        or Contains(text, "POISON")
+        or Contains(text, "OIL") then
 
         return "Consumable",
             "consumable-related name"
@@ -439,7 +492,7 @@ local function ClassifyItem(
 
 
     -- ========================================================
-    -- ACCESSORY
+    -- NAME-BASED ACCESSORY FALLBACK
     -- ========================================================
 
     if Contains(text, "RING")
@@ -550,9 +603,7 @@ local function BuildItemRecord(statName)
 
 
     if errorCode then
-
-        return nil, "PropertyError"
-
+        return nil, "NotItemStat"
     end
 
 
@@ -684,26 +735,75 @@ local function BuildItemRecord(statName)
         or
         StartsWith(templateName, "QUEST_")
 
+    -- ============================================
+    -- NATIVE ITEM FEATURES
+    -- ============================================
+
+    local modifierList =
+        SafeGet(stat, "ModifierList")
+
+    local slot =
+        SafeGet(stat, "Slot")
+
+    local weaponProperties =
+        SafeGet(stat, "Weapon Properties")
+
+    local damageType =
+        SafeGet(stat, "Damage Type")
+
+    local armorType =
+        SafeGet(stat, "ArmorType")
+
+    local armorClass =
+        SafeGet(stat, "ArmorClass")
+
+    local armorClassAbility =
+        SafeGet(stat, "Armor Class Ability")
+
+    local abilityModifierCap =
+        SafeGet(stat, "Ability Modifier Cap")
+
+    local shield =
+        SafeGet(stat, "Shield")
+
     -- ========================================================
     -- RECORD
     -- ========================================================
 
-    local record = {
-        Category = category,
-        ClassificationReason =classificationReason,
-        DisplayName = displayName,
-        Icon = icon,
-        IsQuestItem = IsQuestItem,
-        Level = level,
-        ProficiencyGroup = proficiencyGroup,
-        Rarity = rarity,
-        RootTemplate = rootTemplate,
-        Stat = statName,
-        TemplateName = templateName,
-        TemplateType = templateType,
-        WeaponGroup = weaponGroup,
+local record = {
+    Category = category,
+    ClassificationReason = classificationReason,
 
-    }
+    DisplayName = displayName,
+    Icon = icon,
+    IsQuestItem = IsQuestItem,
+
+    Level = level,
+    Rarity = rarity,
+
+    RootTemplate = rootTemplate,
+    Stat = statName,
+    TemplateName = templateName,
+    TemplateType = templateType,
+
+    -- ============================================
+    -- NATIVE ITEM FEATURES
+    -- ============================================
+
+    ModifierList = modifierList,
+    Slot = slot,
+
+    WeaponGroup = weaponGroup,
+    ProficiencyGroup = proficiencyGroup,
+    WeaponProperties = weaponProperties,
+    DamageType = damageType,
+
+    ArmorType = armorType,
+    ArmorClass = armorClass,
+    ArmorClassAbility = armorClassAbility,
+    AbilityModifierCap = abilityModifierCap,
+    Shield = shield,
+}
 
 
     return record, nil
@@ -934,6 +1034,10 @@ local function ScanItems()
             scanStats.PropertyErrors =
                 scanStats.PropertyErrors + 1
 
+        elseif errorCode == "NotItemStat" then
+
+            scanStats.NotItemStats =
+                scanStats.NotItemStats + 1
 
         elseif errorCode == "NoRootTemplate" then
 

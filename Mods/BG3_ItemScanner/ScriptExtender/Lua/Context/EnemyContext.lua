@@ -102,27 +102,34 @@ function ULF_EnemyContext.Build(entity)
                             local itemType = nil
                             local equipped = false
                             local rarity = 0
-
+                            local slot = nil
 
                             -- ====================================
-                            -- ITEM TYPE
+                            -- ITEM TYPE / SLOT
                             -- ====================================
 
                             if itemEntity.Weapon then
 
                                 itemType = "Weapon"
 
+                                if itemEntity.Equipable then
+                                    slot =
+                                        itemEntity.Equipable.Slot
+                                end
+
                             elseif itemEntity.Equipable
                                 and itemEntity.Equipable.Slot == "Ring"
                             then
 
                                 itemType = "Ring"
+                                slot = "Ring"
 
                             elseif itemEntity.Equipable
                                 and itemEntity.Equipable.Slot == "Amulet"
                             then
 
                                 itemType = "Amulet"
+                                slot = "Amulet"
 
                             elseif itemEntity.Armor then
 
@@ -130,6 +137,11 @@ function ULF_EnemyContext.Build(entity)
                                     itemType = "Shield"
                                 else
                                     itemType = "Armor"
+                                end
+
+                                if itemEntity.Equipable then
+                                    slot =
+                                        itemEntity.Equipable.Slot
                                 end
 
                             end
@@ -147,6 +159,7 @@ function ULF_EnemyContext.Build(entity)
                                     itemEntity.Wielding.Owner == entity
 
                             end
+
 
                             -- ====================================
                             -- RARITY
@@ -172,6 +185,7 @@ function ULF_EnemyContext.Build(entity)
                                     items,
                                     {
                                         Type = itemType,
+                                        Slot = slot,
                                         Equipped = equipped,
                                         Rarity = rarity
                                     }
@@ -287,14 +301,12 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
 
         for i, item in ipairs(enemyContext.Items) do
 
-            print(
+              print(
                 "  [" .. tostring(i) .. "] " ..
-                "Type: " ..
-                tostring(item.Type) ..
-                " | Equipped: " ..
-                tostring(item.Equipped) ..
-                " | Rarity: " ..
-                tostring(item.Rarity)
+                "Type: " .. tostring(item.Type) ..
+                " | Slot: " .. tostring(item.Slot or "-") ..
+                " | Equipped: " .. tostring(item.Equipped) ..
+                " | Rarity: " .. tostring(item.Rarity)
             )
 
         end
