@@ -689,33 +689,19 @@ local function BuildItemRecord(statName)
     -- ========================================================
 
     local record = {
-
-        Stat = statName,
-
-        RootTemplate = rootTemplate,
-
-        TemplateName = templateName,
-
-        TemplateType = templateType,
-
-        DisplayName = displayName,
-
-        Icon = icon,
-
-        Rarity = rarity,
-
-        Level = level,
-
-        WeaponGroup = weaponGroup,
-
-        ProficiencyGroup = proficiencyGroup,
-
         Category = category,
-
-        ClassificationReason =
-            classificationReason,
-
-        IsQuestItem = IsQuestItem
+        ClassificationReason =classificationReason,
+        DisplayName = displayName,
+        Icon = icon,
+        IsQuestItem = IsQuestItem,
+        Level = level,
+        ProficiencyGroup = proficiencyGroup,
+        Rarity = rarity,
+        RootTemplate = rootTemplate,
+        Stat = statName,
+        TemplateName = templateName,
+        TemplateType = templateType,
+        WeaponGroup = weaponGroup,
 
     }
 
