@@ -27,7 +27,9 @@ if not ULF_LootConfigValidator.Validate() then
 end
 
 -- CONTEXT
+Ext.Require("Context/EnemyContext.lua")
 Ext.Require("Context/PartyContext.lua")
+Ext.Require("Context/LootContext.lua")
 
 -- LOOT - BASIC
 Ext.Require("Loot/LootEligibility.lua")
@@ -48,7 +50,6 @@ Ext.Require("Database/DatabaseInitializer.lua")
 
 -- SCANNER
 Ext.Require("Scanner/ItemScanner.lua")
-Ext.Require("Scanner/EnemyProfile.lua")
 Ext.Require("Scanner/EnemyDebugInspector.lua")
 
 

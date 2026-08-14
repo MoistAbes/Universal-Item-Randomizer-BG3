@@ -94,7 +94,7 @@ end
 -- BUILD PARTY LEVEL DATA
 -- ============================================================
 
-function ULF_PartyContext.GetData()
+function ULF_PartyContext.Build()
 
     local members =
         ULF_PartyContext.GetMembers()
@@ -130,12 +130,25 @@ function ULF_PartyContext.GetData()
 
     end
 
-    local averageLevel = nil
 
-    if validMembers > 0 then
-        averageLevel =
-            totalLevel / validMembers
+    -- ========================================================
+    -- VALIDATE PARTY CONTEXT
+    -- ========================================================
+
+    if validMembers <= 0 then
+
+        print(
+            "[ULF][PARTY] ERROR: No valid party members"
+        )
+
+        return nil
+
     end
+
+
+    local averageLevel =
+        totalLevel / validMembers
+
 
     return {
         Members = members,
@@ -144,6 +157,7 @@ function ULF_PartyContext.GetData()
         HighestLevel = highestLevel,
         LowestLevel = lowestLevel
     }
+
 end
 
 -- ============================================================

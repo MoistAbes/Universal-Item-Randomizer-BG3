@@ -28,7 +28,7 @@ local function DebugLootItem(record)
 
 end
 
-local function generateLoot(enemyProfile, victim, dropCount)
+local function generateLoot(lootContext, victim, dropCount)
 
         -- ========================================================
     -- GENERATE EACH DROP
@@ -50,7 +50,7 @@ local function generateLoot(enemyProfile, victim, dropCount)
 
         local maxRarity =
             ULF_LootTier.GetMaxRarity(
-                enemyProfile
+                lootContext
             )
 
         print(
@@ -96,6 +96,7 @@ local function generateLoot(enemyProfile, victim, dropCount)
 
         local itemRecord =
             ULF_LootItemResolver.Resolve(
+                lootContext,
                 resolvedRarity
             )
 
@@ -146,12 +147,67 @@ local function generateLoot(enemyProfile, victim, dropCount)
     end
 end
 
+local function buildLootContext(entity)
+
+    -- ====================================================
+    -- BUILD ENEMY CONTEXT
+    -- ====================================================
+
+    local enemyContext =
+        ULF_EnemyContext.Build(
+            entity
+        )
+
+    if not enemyContext then
+
+        print(
+            "[ULF][INJECTOR] ERROR: Failed to build enemy context"
+        )
+
+        return
+    end
+
+    -- ====================================================
+    -- Build Player context
+    -- ====================================================
+
+    ULF_EnemyContext.DebugPrint(enemyContext)
+
+    local partyContext =
+        ULF_PartyContext.Build()
+
+    if not partyContext then
+
+        print(
+            "[ULF][INJECTOR] ERROR: Failed to build party context"
+        )
+
+        return
+    end
+
+    -- ====================================================
+    -- Build LOOT context
+    -- ====================================================
+
+    local lootContext = ULF_LootContext.Build(enemyContext, partyContext)
+
+    return lootContext
+
+end
+
 
 -- ============================================================
 -- PROCESS ENEMY LOOT
 -- ============================================================
 
-local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
+local function ProcessEnemyLoot(victim, lootContext)
+
+    if not lootContext then
+        print(
+            "[ULF][LOOT] Missing loot context"
+        )
+        return
+    end
 
     -- ========================================================
     -- ENEMY ELIGIBILITY
@@ -159,7 +215,7 @@ local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
 
     local canGenerate =
         ULF_LootEligibility.CanGenerate(
-            enemyProfile
+            lootContext
         )
 
     print(
@@ -177,7 +233,7 @@ local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
     -- ========================================================
 
     local shouldDrop =
-        ULF_LootGeneration.ShouldGenerate(enemyProfile, partyContext)
+        ULF_LootGeneration.ShouldGenerate(lootContext)
 
     if not shouldDrop then
 
@@ -195,7 +251,7 @@ local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
 
     local dropCount =
         ULF_LootGeneration.GetDropCount(
-            enemyProfile
+            lootContext
         )
 
     print(
@@ -213,7 +269,7 @@ local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
         return
     end
 
-    generateLoot(enemyProfile, victim, dropCount);
+    generateLoot(lootContext, victim, dropCount);
 
 end
 
@@ -265,35 +321,18 @@ Ext.Osiris.RegisterListener(
         -- ====================================================
         -- ENEMY RESEARCH
         -- ====================================================
-        -- ULF_EnemyDebugInspector.Inspect(entity)
+        ULF_EnemyDebugInspector.Inspect(entity)
 
-        -- ====================================================
-        -- BUILD ENEMY PROFILE
-        -- ====================================================
+        local lootContext = buildLootContext(entity)
 
-        local enemyProfile =
-            ULF_EnemyProfile.Build(
-                entity
-            )
-
-        if not enemyProfile then
+        if not lootContext then
 
             print(
-                "[ULF][INJECTOR] ERROR: Failed to build enemy profile"
+                "[ULF][INJECTOR] Failed to build loot context"
             )
 
             return
         end
-
-
-        -- ====================================================
-        -- Build Player context
-        -- ====================================================
-
-        ULF_EnemyProfile.DebugPrint(enemyProfile)
-
-        local partyContext =
-            ULF_PartyContext.GetData()
 
         -- ====================================================
         -- PROCESS LOOT
@@ -301,8 +340,7 @@ Ext.Osiris.RegisterListener(
 
         ProcessEnemyLoot(
             victim,
-            enemyProfile,
-            partyContext
+            lootContext
         )
 
     end

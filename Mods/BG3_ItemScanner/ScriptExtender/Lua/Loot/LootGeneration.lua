@@ -29,15 +29,10 @@ end
 -- DETERMINE DROP COUNT
 -- ============================================================
 
-function ULF_LootGeneration.GetDropCount(profile)
-
-    if not profile then
-        return 0
-    end
+function ULF_LootGeneration.GetDropCount(lootContext)
 
     local level =
-        tonumber(profile.Level) or 1
-
+        lootContext.Enemy.Class.Level
 
     -- V1: simple level-based scaling.
     --
@@ -62,42 +57,13 @@ function ULF_LootGeneration.GetDropCount(profile)
 
 end
 
-function ULF_LootGeneration.CalculateDropChance(
-    enemyProfile,
-    partyContext
-)
+function ULF_LootGeneration.CalculateDropChance(lootContext)
 
     local baseChance =
         ULF_LootConfig.BaseDropChance
 
-    if not enemyProfile then
-        print("[ULF][LOOT] Missing enemy profile")
-        return 0
-    end
-
-    if not partyContext then
-        print("[ULF][LOOT] Missing party context")
-        return 0
-    end
-
-    local enemyLevel =
-        enemyProfile.ClassLevel
-
-    local partyLevel =
-        partyContext.AverageLevel
-
-    if not enemyLevel then
-        print("[ULF][LOOT] Missing enemy level")
-        return 0
-    end
-
-    if not partyLevel then
-        print("[ULF][LOOT] Missing party level")
-        return 0
-    end
-
     local levelDifference =
-        enemyLevel - partyLevel
+        lootContext.RelativeLevel
 
     local levelModifier =
         GetRelativeLevelModifier(
@@ -108,6 +74,7 @@ function ULF_LootGeneration.CalculateDropChance(
         baseChance + levelModifier
 
     -- Clamp chance to [0, 1]
+
     finalChance =
         math.max(
             0,
@@ -121,11 +88,7 @@ function ULF_LootGeneration.CalculateDropChance(
         "[ULF][LOOT] Drop chance calculation:" ..
         " base=" ..
         string.format("%.3f", baseChance) ..
-        " / enemyLevel=" ..
-        string.format("%.1f", enemyLevel) ..
-        " / partyLevel=" ..
-        string.format("%.1f", partyLevel) ..
-        " / levelDiff=" ..
+        " / relativeLevel=" ..
         string.format("%.1f", levelDifference) ..
         " / levelModifier=" ..
         string.format("%.3f", levelModifier) ..
@@ -136,16 +99,10 @@ function ULF_LootGeneration.CalculateDropChance(
     return finalChance
 end
 
-function ULF_LootGeneration.ShouldGenerate(
-    enemyProfile,
-    partyContext
-)
+function ULF_LootGeneration.ShouldGenerate(lootContext)
 
     local chance =
-        ULF_LootGeneration.CalculateDropChance(
-            enemyProfile,
-            partyContext
-        )
+        ULF_LootGeneration.CalculateDropChance(lootContext)
 
     local roll =
         math.random()

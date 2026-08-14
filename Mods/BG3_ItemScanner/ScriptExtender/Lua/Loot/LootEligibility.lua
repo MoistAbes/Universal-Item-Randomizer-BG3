@@ -2,20 +2,12 @@ ULF_LootEligibility = {}
 
 
 -- ============================================================
--- CHECK IF ENEMY CAN GENERATE BONUS LOOT
+-- CHECK IF ENEMY CAN GENERATE BONUS LOOT for example summons should not, party members, other examples
 -- ============================================================
 
-function ULF_LootEligibility.CanGenerate(profile)
+function ULF_LootEligibility.CanGenerate(lootContext)
 
-    if not profile then
-        return false
-    end
-
-
-    if not profile.EntityUuid then
-        return false
-    end
-
+    -- Gameplay / entity eligibility only.
 
     return true
 

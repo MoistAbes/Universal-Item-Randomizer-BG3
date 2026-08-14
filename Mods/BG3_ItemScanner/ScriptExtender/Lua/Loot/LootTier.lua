@@ -2,23 +2,22 @@ ULF_LootTier = {}
 
 
 -- ============================================================
+-- NOTE:
+-- This currently uses enemy level only.
+-- We do not yet have a reliable way to determine enemy power
+-- or boss status.
+--
+-- Once EnemyPower / boss classification is available,
+-- this logic can be expanded to use LootContext.
+-- ============================================================
+
+-- ============================================================
 -- GET MAXIMUM RARITY AVAILABLE TO ENEMY
 -- ============================================================
 
-function ULF_LootTier.GetMaxRarity(profile)
+function ULF_LootTier.GetMaxRarity(lootContext)
 
-    -- if we will find out how to corretly determine if enemy is strong or is a boss then we can change it for now lets leave it like this
-
-    if not profile then
-        return nil
-    end
-
-    local level =
-        tonumber(profile.ClassLevel)
-
-    if not level then
-        return nil
-    end
+    local level = lootContext.Enemy.Class.Level
 
     if level <= 2 then
         return "Uncommon"

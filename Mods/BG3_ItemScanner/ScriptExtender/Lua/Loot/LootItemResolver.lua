@@ -7,14 +7,15 @@ ULF_LootItemResolver = {}
 -- RESOLVE RANDOM ITEM BY RARITY
 -- ============================================================
 
-function ULF_LootItemResolver.Resolve(rarity)
+function ULF_LootItemResolver.Resolve(
+    lootContext,
+    rarity
+)
 
     if not rarity then
-
         print(
             "[ULF][LOOT] ERROR: Rarity is missing"
         )
-
         return nil
     end
 
@@ -30,7 +31,10 @@ function ULF_LootItemResolver.Resolve(rarity)
     for _, record in ipairs(candidates) do
 
         if ULF_LootItemEligibility.IsEligible(record) then
-            table.insert(eligible, record)
+            table.insert(
+                eligible,
+                record
+            )
         end
 
     end

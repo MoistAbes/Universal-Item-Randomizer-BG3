@@ -1,12 +1,12 @@
-print("[ULF] EnemyProfile.lua LOADED")
+print("[ULF] EnemyContext.lua LOADED")
 
-ULF_EnemyProfile = {}
+ULF_EnemyContext = {}
 
 -- ============================================================
 -- BUILD ENEMY PROFILE
 -- ============================================================
 
-function ULF_EnemyProfile.Build(entity)
+function ULF_EnemyContext.Build(entity)
 
     if not entity then
         print("[ULF][ENEMY] ERROR: Entity is nil")
@@ -206,8 +206,6 @@ function ULF_EnemyProfile.Build(entity)
 
         Archetype = archetype,
 
-        ClassLevel = classLevel,
-
         Items = items
 
     }
@@ -218,38 +216,38 @@ end
 -- DEBUG PRINT
 -- ============================================================
 
-function ULF_EnemyProfile.DebugPrint(profile)
+function ULF_EnemyContext.DebugPrint(enemyContext)
 
-    if not profile then
-        print("[ULF][ENEMY-PROFILE] ERROR: Profile is nil")
+    if not enemyContext then
+        print("[ULF][ENEMY-PROFILE] ERROR: enemyContext is nil")
         return
     end
 
-    print("[ULF][ENEMY-PROFILE] ========================================")
-    print("[ULF][ENEMY-PROFILE] ENEMY PROFILE")
-    print("[ULF][ENEMY-PROFILE] ========================================")
+    print("[ULF][ENEMY-CONTEXT] ========================================")
+    print("[ULF][ENEMY-CONTEXT] ENEMY CONTEXT")
+    print("[ULF][ENEMY-CONTEXT] ========================================")
 
     -- ========================================================
     -- IDENTITY
     -- ========================================================
 
-    print("[ULF][ENEMY-PROFILE] [IDENTITY]")
+    print("[ULF][ENEMY-CONTEXT] [IDENTITY]")
 
     print(
         "  Entity UUID:  " ..
-        tostring(profile.EntityUuid)
+        tostring(enemyContext.EntityUuid)
     )
 
     -- ========================================================
     -- CLASS
     -- ========================================================
 
-    print("[ULF][ENEMY-PROFILE] [CLASS]")
+    print("[ULF][ENEMY-CONTEXT] [CLASS]")
 
     local classLevel = nil
 
-    if profile.Class then
-        classLevel = profile.Class.Level
+    if enemyContext.Class then
+        classLevel = enemyContext.Class.Level
     end
 
     print(
@@ -261,23 +259,23 @@ function ULF_EnemyProfile.DebugPrint(profile)
     -- ARCHETYPE
     -- ========================================================
 
-    print("[ULF][ENEMY-PROFILE] [ARCHETYPE]")
+    print("[ULF][ENEMY-CONTEXT] [ARCHETYPE]")
 
     print(
         "  Archetype:     " ..
-        tostring(profile.Archetype or "-")
+        tostring(enemyContext.Archetype or "-")
     )
 
     -- ========================================================
     -- ITEMS
     -- ========================================================
 
-    print("[ULF][ENEMY-PROFILE] [ITEMS]")
+    print("[ULF][ENEMY-CONTEXT] [ITEMS]")
 
     local itemCount = 0
 
-    if profile.Items then
-        itemCount = #profile.Items
+    if enemyContext.Items then
+        itemCount = #enemyContext.Items
     end
 
     print(
@@ -287,7 +285,7 @@ function ULF_EnemyProfile.DebugPrint(profile)
 
     if itemCount > 0 then
 
-        for i, item in ipairs(profile.Items) do
+        for i, item in ipairs(enemyContext.Items) do
 
             print(
                 "  [" .. tostring(i) .. "] " ..
@@ -303,8 +301,8 @@ function ULF_EnemyProfile.DebugPrint(profile)
 
     end
 
-    print("[ULF][ENEMY-PROFILE] ========================================")
-    print("[ULF][ENEMY-PROFILE] END PROFILE")
-    print("[ULF][ENEMY-PROFILE] ========================================")
+    print("[ULF][ENEMY-CONTEXT] ========================================")
+    print("[ULF][ENEMY-CONTEXT] END CONTEXT")
+    print("[ULF][ENEMY-CONTEXT] ========================================")
 
 end
