@@ -28,75 +28,9 @@ local function DebugLootItem(record)
 
 end
 
+local function generateLoot(enemyProfile, victim, dropCount)
 
--- ============================================================
--- PROCESS ENEMY LOOT
--- ============================================================
-
-local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
-
-    -- ========================================================
-    -- ENEMY ELIGIBILITY
-    -- ========================================================
-
-    local canGenerate =
-        ULF_LootEligibility.CanGenerate(
-            enemyProfile
-        )
-
-    print(
-        "[ULF][LOOT] Eligibility: " ..
-        tostring(canGenerate)
-    )
-
-    if not canGenerate then
-        return
-    end
-
-
-    -- ========================================================
-    -- DROP CHANCE
-    -- ========================================================
-
-    local shouldDrop =
-        ULF_LootGeneration.ShouldGenerate(enemyProfile, partyContext)
-
-    if not shouldDrop then
-
-        print(
-            "[ULF][LOOT] Drop chance failed"
-        )
-
-        return
-    end
-
-
-    -- ========================================================
-    -- DROP COUNT
-    -- ========================================================
-
-    local dropCount =
-        ULF_LootGeneration.GetDropCount(
-            enemyProfile
-        )
-
-    print(
-        "[ULF][LOOT] Drop count: " ..
-        tostring(dropCount)
-    )
-
-    if not dropCount
-        or dropCount <= 0 then
-
-        print(
-            "[ULF][LOOT] Drop count is zero"
-        )
-
-        return
-    end
-
-
-    -- ========================================================
+        -- ========================================================
     -- GENERATE EACH DROP
     -- ========================================================
 
@@ -210,6 +144,76 @@ local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
         end
 
     end
+end
+
+
+-- ============================================================
+-- PROCESS ENEMY LOOT
+-- ============================================================
+
+local function ProcessEnemyLoot(victim, enemyProfile, partyContext)
+
+    -- ========================================================
+    -- ENEMY ELIGIBILITY
+    -- ========================================================
+
+    local canGenerate =
+        ULF_LootEligibility.CanGenerate(
+            enemyProfile
+        )
+
+    print(
+        "[ULF][LOOT] Eligibility: " ..
+        tostring(canGenerate)
+    )
+
+    if not canGenerate then
+        return
+    end
+
+
+    -- ========================================================
+    -- DROP CHANCE
+    -- ========================================================
+
+    local shouldDrop =
+        ULF_LootGeneration.ShouldGenerate(enemyProfile, partyContext)
+
+    if not shouldDrop then
+
+        print(
+            "[ULF][LOOT] Drop chance failed"
+        )
+
+        return
+    end
+
+
+    -- ========================================================
+    -- DROP COUNT
+    -- ========================================================
+
+    local dropCount =
+        ULF_LootGeneration.GetDropCount(
+            enemyProfile
+        )
+
+    print(
+        "[ULF][LOOT] Drop count: " ..
+        tostring(dropCount)
+    )
+
+    if not dropCount
+        or dropCount <= 0 then
+
+        print(
+            "[ULF][LOOT] Drop count is zero"
+        )
+
+        return
+    end
+
+    generateLoot(enemyProfile, victim, dropCount);
 
 end
 
@@ -242,7 +246,6 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-
         -- ====================================================
         -- GET ENTITY
         -- ====================================================
@@ -262,7 +265,7 @@ Ext.Osiris.RegisterListener(
         -- ====================================================
         -- ENEMY RESEARCH
         -- ====================================================
-        ULF_EnemyDebugInspector.Inspect(entity)
+        -- ULF_EnemyDebugInspector.Inspect(entity)
 
         -- ====================================================
         -- BUILD ENEMY PROFILE
@@ -291,10 +294,6 @@ Ext.Osiris.RegisterListener(
 
         local partyContext =
             ULF_PartyContext.GetData()
-
-        ULF_PartyContext.DebugPrint(
-            partyContext
-        )
 
         -- ====================================================
         -- PROCESS LOOT

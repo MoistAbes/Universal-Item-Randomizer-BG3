@@ -45,19 +45,19 @@ function ULF_LootGeneration.GetDropCount(profile)
     -- Rarity and item selection will be handled separately.
 
     if level <= 2 then
-        return 1
-
-    elseif level <= 4 then
         return 2
 
-    elseif level <= 6 then
+    elseif level <= 4 then
         return 3
 
-    elseif level <= 8 then
+    elseif level <= 6 then
         return 4
 
-    else
+    elseif level <= 8 then
         return 5
+
+    else
+        return 6
     end
 
 end

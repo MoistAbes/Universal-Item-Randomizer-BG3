@@ -7,6 +7,8 @@ ULF_LootTier = {}
 
 function ULF_LootTier.GetMaxRarity(profile)
 
+    -- if we will find out how to corretly determine if enemy is strong or is a boss then we can change it for now lets leave it like this
+
     if not profile then
         return nil
     end

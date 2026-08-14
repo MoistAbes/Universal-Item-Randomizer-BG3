@@ -26,6 +26,9 @@ if not ULF_LootConfigValidator.Validate() then
     return
 end
 
+-- CONTEXT
+Ext.Require("Context/PartyContext.lua")
+
 -- LOOT - BASIC
 Ext.Require("Loot/LootEligibility.lua")
 Ext.Require("Loot/LootItemEligibility.lua")
@@ -56,10 +59,6 @@ Ext.Require("Loot/LootSpawner.lua")
 
 -- LOOT - INJECTION
 Ext.Require("Loot/LootInjector.lua")
-
--- CONTEXT
-Ext.Require("Context/PartyContext.lua")
-
 
 
 -- ============================================================
