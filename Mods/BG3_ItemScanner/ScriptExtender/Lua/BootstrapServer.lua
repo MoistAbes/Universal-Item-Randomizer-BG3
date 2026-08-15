@@ -54,6 +54,7 @@ Ext.Require("Scanner/EnemyDebugInspector.lua")
 Ext.Require("Scanner/ItemDebugInspector.lua")
 
 -- LOOT - RESOLUTION / SPAWNING
+Ext.Require("Loot/LootAffinity.lua")
 Ext.Require("Loot/LootItemResolver.lua")
 Ext.Require("Loot/LootSpawner.lua")
 

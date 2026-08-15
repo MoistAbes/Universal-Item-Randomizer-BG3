@@ -4,11 +4,11 @@ ULF_LootItemResolver = {}
 
 
 -- ============================================================
--- RESOLVE RANDOM ITEM BY RARITY
+-- RESOLVE RANDOM ITEM BY RARITY AND AFFINITY
 -- ============================================================
 
 function ULF_LootItemResolver.Resolve(
-    lootContext,
+    affinity,
     rarity
 )
 
@@ -43,8 +43,55 @@ function ULF_LootItemResolver.Resolve(
         return nil
     end
 
-    return eligible[
-        math.random(#eligible)
+
+    -- ========================================================
+    -- FILTER BY AFFINITY
+    -- ========================================================
+
+    local affinityEligible = {}
+
+    for _, record in ipairs(eligible) do
+
+        if affinity == "Random"
+            or ULF_LootAffinity.HasAffinity(
+                record,
+                affinity
+            )
+        then
+
+            table.insert(
+                affinityEligible,
+                record
+            )
+
+        end
+
+    end
+
+
+    if #affinityEligible == 0 then
+
+        print(
+            "[ULF][LOOT] No items found for affinity: " ..
+            tostring(affinity)
+        )
+
+        return nil
+
+    end
+
+
+    -- ========================================================
+    -- RANDOM ITEM
+    -- ========================================================
+
+    print(
+        "[ULF][AFFINITY] Matching items: " ..
+        tostring(#affinityEligible)
+    )
+
+    return affinityEligible[
+        math.random(#affinityEligible)
     ]
 
 end

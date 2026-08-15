@@ -30,6 +30,8 @@ end
 
 local function generateLoot(lootContext, victim, dropCount)
 
+    local affinities = ULF_LootAffinity.Calculate(lootContext)
+
         -- ========================================================
     -- GENERATE EACH DROP
     -- ========================================================
@@ -94,9 +96,11 @@ local function generateLoot(lootContext, victim, dropCount)
         -- RESOLVE ITEM
         -- ====================================================
 
+        local resolvedAffinity = ULF_LootAffinity.ResolveAffinity(affinities);
+
         local itemRecord =
             ULF_LootItemResolver.Resolve(
-                lootContext,
+                resolvedAffinity,
                 resolvedRarity
             )
 
