@@ -137,6 +137,10 @@ local function buildLootContext(entity)
 
     ULF_EnemyContext.DebugPrint(enemyContext)
 
+    local enemyThreat = ULF_EnemyThreatCalculator.Calculate(enemyContext);
+
+    ULF_EnemyThreatCalculator.DebugPrint(enemyThreat);
+
     -- ====================================================
     -- Build Player context
     -- ====================================================

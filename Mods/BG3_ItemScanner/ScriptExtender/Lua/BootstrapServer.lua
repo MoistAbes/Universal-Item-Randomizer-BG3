@@ -8,6 +8,8 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 -- CONFIG
 Ext.Require("Config/ModSettings.lua")
 Ext.Require("Config/LootConfig.lua")
+Ext.Require("Config/EnemyThreatConfig.lua")
+
 
 -- DEBUG
 Ext.Require("Debug/ULF_Debug.lua")
@@ -43,6 +45,8 @@ Ext.Require("Loot/LootGeneration.lua")
 Ext.Require("Loot/LootTier.lua")
 Ext.Require("Loot/LootRarityResolver.lua")
 
+-- THREAT
+Ext.Require("Enemy/ULF_EnemyThreatCalculator.lua")
 
 -- DATABASE
 Ext.Require("Database/ULF_Database.lua")
