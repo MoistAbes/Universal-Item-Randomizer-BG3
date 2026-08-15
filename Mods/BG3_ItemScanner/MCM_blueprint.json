@@ -1,0 +1,45 @@
+{
+  "SchemaVersion": 1,
+  "ModName": "Universal Item Randomizer",
+  "Tabs": [
+    {
+      "TabId": "General",
+      "TabName": "General",
+      "Sections": [
+        {
+          "SectionId": "GeneralSettings",
+          "SectionName": "General Settings",
+          "Settings": [
+            {
+              "Id": "Enabled",
+              "Name": "Enable Mod",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Enable or disable the Universal Item Randomizer."
+            },
+            {
+              "Id": "Debug",
+              "Name": "Debug Mode",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Enable debug logging."
+            }
+          ]
+        },
+        {
+          "SectionId": "LootSettings",
+          "SectionName": "Loot",
+          "Settings": [
+            {
+              "Id": "BaseDropChance",
+              "Name": "Base Drop Chance",
+              "Type": "float",
+              "Default": 0.7,
+              "Description": "Base chance for an enemy to generate bonus loot."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
