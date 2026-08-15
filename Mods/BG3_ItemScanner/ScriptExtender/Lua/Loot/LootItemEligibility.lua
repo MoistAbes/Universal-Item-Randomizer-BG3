@@ -1,5 +1,3 @@
-print("[ULF] LootItemEligibility.lua LOADED")
-
 ULF_LootItemEligibility = {}
 
 -- ============================================================
@@ -26,11 +24,3 @@ function ULF_LootItemEligibility.IsEligible(record)
     return
         ULF_LootConfig.AllowedCategories[category] == true
 end
-
--- ============================================================
--- API EXPORT
--- ============================================================
-
-print(
-    "[ULF][LOOT] Item Eligibility API exported"
-)

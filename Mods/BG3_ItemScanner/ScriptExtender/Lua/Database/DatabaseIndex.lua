@@ -1,5 +1,3 @@
-print("[ULF] DatabaseIndex.lua LOADED")
-
 ULF_DatabaseIndex = {}
 
 -- ============================================================
@@ -8,12 +6,12 @@ ULF_DatabaseIndex = {}
 
 function ULF_DatabaseIndex.BuildCategoryIndex(database)
 
-    print("[ULF][INDEX] Building Category index...")
+    ULF_Debug.Print("[DATABASE INDEX] Building Category index...")
 
     if not database or not database.Items then
 
-        print(
-            "[ULF][INDEX] ERROR: Database.Items is missing"
+        ULF_Debug.Error(
+            "[DATABASE INDEX] Database.Items is missing"
         )
 
         return nil
@@ -39,14 +37,14 @@ function ULF_DatabaseIndex.BuildCategoryIndex(database)
         end
     end
 
-    print(
-        "[ULF][INDEX] Category index built"
+    ULF_Debug.Print(
+        "[DATABASE INDEX] Category index built"
     )
 
     for category, items in pairs(index) do
 
-        print(
-            "[ULF][INDEX] " ..
+        ULF_Debug.Print(
+            "[DATABASE INDEX] " ..
             tostring(category) ..
             ": " ..
             tostring(#items)
@@ -64,12 +62,12 @@ end
 
 function ULF_DatabaseIndex.BuildRarityIndex(database)
 
-    print("[ULF][INDEX] Building Rarity index...")
+    ULF_Debug.Print("[DATABASE INDEX] Building Rarity index...")
 
     if not database or not database.Items then
 
-        print(
-            "[ULF][INDEX] ERROR: Database.Items is missing"
+        ULF_Debug.Error(
+            "[DATABASE INDEX] Database.Items is missing"
         )
 
         return nil
@@ -95,14 +93,14 @@ function ULF_DatabaseIndex.BuildRarityIndex(database)
         end
     end
 
-    print(
-        "[ULF][INDEX] Rarity index built"
+    ULF_Debug.Print(
+        "[DATABASE INDEX] Rarity index built"
     )
 
     for rarity, items in pairs(index) do
 
-        print(
-            "[ULF][INDEX] " ..
+        ULF_Debug.Print(
+            "[DATABASE INDEX] " ..
             tostring(rarity) ..
             ": " ..
             tostring(#items)
@@ -120,15 +118,13 @@ end
 
 function ULF_DatabaseIndex.Build(database)
 
-    print("")
-    print("[ULF][INDEX] ========================================")
-    print("[ULF][INDEX] BUILDING DATABASE INDEXES")
-    print("[ULF][INDEX] ========================================")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[DATABASE INDEX] BUILDING DATABASE INDEXES")
 
     if not database or not database.Items then
 
-        print(
-            "[ULF][INDEX] ERROR: Database.Items is missing"
+        ULF_Debug.Error(
+            "[DATABASE INDEX] Database.Items is missing"
         )
 
         return nil
@@ -161,14 +157,8 @@ function ULF_DatabaseIndex.Build(database)
     -- FINISHED
     -- ========================================================
 
-    print("")
-    print(
-        "[ULF][INDEX] All indexes built"
-    )
-
-    print(
-        "[ULF][INDEX] ========================================"
-    )
+    ULF_Debug.Print("[DATABASE INDEX] All indexes built")
+    ULF_Debug.Print("")
 
     return indexes
 end

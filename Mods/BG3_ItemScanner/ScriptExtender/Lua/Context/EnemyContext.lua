@@ -1,5 +1,3 @@
-print("[ULF] EnemyContext.lua LOADED")
-
 ULF_EnemyContext = {}
 
 -- ============================================================
@@ -9,7 +7,7 @@ ULF_EnemyContext = {}
 function ULF_EnemyContext.Build(entity)
 
     if not entity then
-        print("[ULF][ENEMY] ERROR: Entity is nil")
+        ULF_Debug.Error("[ENEMY CONTEXT] Entity is nil")
         return nil
     end
 
@@ -257,19 +255,17 @@ end
 function ULF_EnemyContext.DebugPrint(enemyContext)
 
     if not enemyContext then
-        print("[ULF][ENEMY-PROFILE] ERROR: enemyContext is nil")
+        ULF_Debug.Print("[ENEMY CONTEXT] enemyContext is nil")
         return
     end
 
-    print("[ULF][ENEMY-CONTEXT] ========================================")
-    print("[ULF][ENEMY-CONTEXT] ENEMY CONTEXT")
-    print("[ULF][ENEMY-CONTEXT] ========================================")
+    ULF_Debug.Print("[ENEMY CONTEXT] ------------------------------------------------")
 
     -- ========================================================
     -- IDENTITY
     -- ========================================================
 
-    print("[ULF][ENEMY-CONTEXT] [IDENTITY]")
+    ULF_Debug.Print("[ENEMY-CONTEXT] [IDENTITY]")
 
     print(
         "  Entity UUID:  " ..
@@ -280,7 +276,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
     -- CLASS
     -- ========================================================
 
-    print("[ULF][ENEMY-CONTEXT] [CLASS]")
+    ULF_Debug.Print("[ENEMY-CONTEXT] [CLASS]")
 
     local classLevel = nil
 
@@ -288,7 +284,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
         classLevel = enemyContext.Class.Level
     end
 
-    print(
+    ULF_Debug.Print(
         "  Class Level:   " ..
         tostring(classLevel or "-")
     )
@@ -297,9 +293,9 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
     -- ARCHETYPE
     -- ========================================================
 
-    print("[ULF][ENEMY-CONTEXT] [ARCHETYPE]")
+    ULF_Debug.Print("[ENEMY-CONTEXT] [ARCHETYPE]")
 
-    print(
+    ULF_Debug.Print(
         "  Archetype:     " ..
         tostring(enemyContext.Archetype or "-")
     )
@@ -308,7 +304,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
     -- PROFICIENCY
     -- ========================================================
 
-    print("[ULF][ENEMY-CONTEXT] [PROFICIENCY]")
+    ULF_Debug.Print("[ENEMY-CONTEXT] [PROFICIENCY]")
 
     if enemyContext.ProficiencyGroup
         and #enemyContext.ProficiencyGroup > 0
@@ -318,7 +314,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
             enemyContext.ProficiencyGroup
         ) do
 
-            print(
+            ULF_Debug.Print(
                 "  " .. tostring(proficiency)
             )
 
@@ -326,7 +322,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
 
     else
 
-        print("  -")
+        ULF_Debug.Print("  - ")
 
     end
 
@@ -334,7 +330,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
     -- ITEMS
     -- ========================================================
 
-    print("[ULF][ENEMY-CONTEXT] [ITEMS]")
+    ULF_Debug.Print("[ENEMY-CONTEXT] [ITEMS]")
 
     local itemCount = 0
 
@@ -342,7 +338,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
         itemCount = #enemyContext.Items
     end
 
-    print(
+    ULF_Debug.Print(
         "  Items:         " ..
         tostring(itemCount)
     )
@@ -351,7 +347,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
 
         for i, item in ipairs(enemyContext.Items) do
 
-              print(
+              ULF_Debug.Print(
                 "  [" .. tostring(i) .. "] " ..
                 "Type: " .. tostring(item.Type) ..
                 " | Slot: " .. tostring(item.Slot or "-") ..
@@ -363,8 +359,7 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
 
     end
 
-    print("[ULF][ENEMY-CONTEXT] ========================================")
-    print("[ULF][ENEMY-CONTEXT] END CONTEXT")
-    print("[ULF][ENEMY-CONTEXT] ========================================")
+    ULF_Debug.Print("[ULF][ENEMY-CONTEXT] END CONTEXT ---------------------------")
+    ULF_Debug.Print("")
 
 end

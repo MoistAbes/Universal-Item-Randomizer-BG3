@@ -1,5 +1,3 @@
-print("[ULF] LootGenerator.lua LOADED")
-
 ULF_LootGeneration = {}
 
 local function GetRelativeLevelModifier(levelDifference)
@@ -84,8 +82,8 @@ function ULF_LootGeneration.CalculateDropChance(lootContext)
             )
         )
 
-    print(
-        "[ULF][LOOT] Drop chance calculation:" ..
+    ULF_Debug.Print(
+        "[LOOT] Drop chance calculation:" ..
         " base=" ..
         string.format("%.3f", baseChance) ..
         " / relativeLevel=" ..
@@ -110,8 +108,8 @@ function ULF_LootGeneration.ShouldGenerate(lootContext)
     local success =
         roll <= chance
 
-    print(
-        "[ULF][LOOT] Drop roll: " ..
+    ULF_Debug.Print(
+        "[LOOT] Drop roll: " ..
         string.format("%.3f", roll) ..
         " / chance: " ..
         string.format("%.3f", chance) ..
@@ -121,8 +119,3 @@ function ULF_LootGeneration.ShouldGenerate(lootContext)
 
     return success
 end
-
-
-print(
-    "[ULF][LOOT] Generator API exported"
-)

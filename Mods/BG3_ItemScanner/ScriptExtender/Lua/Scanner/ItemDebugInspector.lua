@@ -1,5 +1,3 @@
-print("[ULF] ItemDebugInspector.lua LOADED")
-
 ULF_ItemDebugInspector = {}
 
 local function SafeGet(object, property)
@@ -22,16 +20,16 @@ end
 local function PrintValue(name, value)
 
     if value == nil then
-        print(
-            "[ULF][ITEM-RESEARCH] "
+        ULF_Debug.ULF_Debug.Print(
+            "[ITEM-RESEARCH] "
             .. name
             .. " = <nil>"
         )
         return
     end
 
-    print(
-        "[ULF][ITEM-RESEARCH] "
+    ULF_Debug.ULF_Debug.Print(
+        "[ITEM-RESEARCH] "
         .. name
         .. " = "
         .. tostring(value)
@@ -43,16 +41,16 @@ end
 local function PrintTable(name, value)
 
     if value == nil then
-        print(
-            "[ULF][ITEM-RESEARCH] "
+        ULF_Debug.Print(
+            "[ITEM-RESEARCH] "
             .. name
             .. " = <nil>"
         )
         return
     end
 
-    print(
-        "[ULF][ITEM-RESEARCH] "
+    ULF_Debug.Print(
+        "[ITEM-RESEARCH] "
         .. name
         .. " = "
         .. tostring(value)
@@ -61,8 +59,8 @@ local function PrintTable(name, value)
     if type(value) == "table" then
 
         for i, v in pairs(value) do
-            print(
-                "[ULF][ITEM-RESEARCH] "
+            ULF_Debug.Print(
+                "[ITEM-RESEARCH] "
                 .. name
                 .. "["
                 .. tostring(i)
@@ -78,27 +76,27 @@ end
 
 function ULF_ItemDebugInspector.InspectStat(statName)
 
-    print("")
-    print("================================================")
-    print("[ULF][ITEM-RESEARCH] " .. tostring(statName))
-    print("================================================")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("================================================")
+    ULF_Debug.Print("[ITEM-RESEARCH] " .. tostring(statName))
+    ULF_Debug.Print("================================================")
 
     local stat = Ext.Stats.Get(statName)
 
     if not stat then
-        print("[ULF][ITEM-RESEARCH] Stat NOT FOUND")
+        ULF_Debug.Print("[ITEM-RESEARCH] Stat NOT FOUND")
         return
     end
 
-    print("[ULF][ITEM-RESEARCH] Stat found")
+    ULF_Debug.Print("[ITEM-RESEARCH] Stat found")
 
 
     -- ========================================================
     -- IDENTITY
     -- ========================================================
 
-    print("")
-    print("[ULF][ITEM-RESEARCH] IDENTITY")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM-RESEARCH] IDENTITY")
 
     PrintValue(
         "Name",
@@ -130,8 +128,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
     -- GENERAL
     -- ========================================================
 
-    print("")
-    print("[ULF][ITEM-RESEARCH] GENERAL")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM-RESEARCH] GENERAL")
 
     PrintValue(
         "Level",
@@ -178,8 +176,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
     -- WEAPON
     -- ========================================================
 
-    print("")
-    print("[ULF][ITEM-RESEARCH] WEAPON")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM-RESEARCH] WEAPON")
 
     PrintValue(
         "Weapon Group",
@@ -221,8 +219,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
     -- ARMOR
     -- ========================================================
 
-    print("")
-    print("[ULF][ITEM-RESEARCH] ARMOR")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM-RESEARCH] ARMOR")
 
     PrintValue(
         "ArmorType",
@@ -259,8 +257,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
     -- EFFECTS
     -- ========================================================
 
-    print("")
-    print("[ULF][ITEM-RESEARCH] EFFECTS")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM-RESEARCH] EFFECTS")
 
     PrintValue(
         "DefaultBoosts",
@@ -317,8 +315,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
     -- OTHER
     -- ========================================================
 
-    print("")
-    print("[ULF][ITEM-RESEARCH] OTHER")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM-RESEARCH] OTHER")
 
     PrintValue(
         "Tags",
@@ -355,11 +353,11 @@ function ULF_ItemDebugInspector.InspectStat(statName)
 
     if rootTemplate then
 
-        print("")
-        print("[ULF][ITEM-RESEARCH] ROOT TEMPLATE")
+        ULF_Debug.Print("")
+        ULF_Debug.Print("[ITEM-RESEARCH] ROOT TEMPLATE")
 
-        print(
-            "[ULF][ITEM-RESEARCH] UUID = "
+        ULF_Debug.Print(
+            "[ITEM-RESEARCH] UUID = "
             .. tostring(rootTemplate)
         )
 
@@ -368,8 +366,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
 
         if template then
 
-            print(
-                "[ULF][ITEM-RESEARCH] Template found"
+            ULF_Debug.Print(
+                "[ITEM-RESEARCH] Template found"
             )
 
             PrintValue(
@@ -394,8 +392,8 @@ function ULF_ItemDebugInspector.InspectStat(statName)
 
         else
 
-            print(
-                "[ULF][ITEM-RESEARCH] Template NOT FOUND"
+            ULF_Debug.Print(
+                "[ITEM-RESEARCH] Template NOT FOUND"
             )
 
         end
@@ -403,9 +401,9 @@ function ULF_ItemDebugInspector.InspectStat(statName)
     end
 
 
-    print("================================================")
-    print("[ULF][ITEM-RESEARCH] END")
-    print("================================================")
-    print("")
+    ULF_Debug.Print("================================================")
+    ULF_Debug.Print("[ITEM-RESEARCH] END")
+    ULF_Debug.Print("================================================")
+    ULF_Debug.Print("")
 
 end

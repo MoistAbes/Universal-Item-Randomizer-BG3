@@ -4,7 +4,7 @@ function ULF_DatabaseInitializer.Initialize()
 
     ULF_Database.Ready = false
 
-    print("[ULF] Initializing item database")
+    ULF_Debug.Print("Initializing item database")
 
     -- ========================================================
     -- TRY LOAD CACHE
@@ -15,7 +15,7 @@ function ULF_DatabaseInitializer.Initialize()
 
     if cachedDatabase then
 
-        print("[ULF] Loading item database from cache")
+        ULF_Debug.Print("Loading item database from cache")
 
         ULF_Database.Meta =
             cachedDatabase.Meta or {}
@@ -28,8 +28,8 @@ function ULF_DatabaseInitializer.Initialize()
                 ULF_Database
             )
 
-        print(
-            "[ULF] Database loaded from cache: " ..
+        ULF_Debug.Print(
+            " Database loaded from cache: " ..
             tostring(
                 ULF_Database.Meta.ItemCount
             ) ..
@@ -45,12 +45,12 @@ function ULF_DatabaseInitializer.Initialize()
     -- NO CACHE
     -- ========================================================
 
-    print(
-        "[ULF] Database cache not available"
+    ULF_Debug.Print(
+        " Database cache not available"
     )
 
-    print(
-        "[ULF] Starting full item scan..."
+    ULF_Debug.Print(
+        " Starting full item scan..."
     )
 
     -- ========================================================
@@ -79,8 +79,8 @@ function ULF_DatabaseInitializer.Initialize()
 
     if not scanResult then
 
-        print(
-            "[ULF] ERROR: Item scan returned nil"
+        ULF_Debug.Error(
+            " Item scan returned nil"
         )
 
         return false
@@ -112,14 +112,14 @@ function ULF_DatabaseInitializer.Initialize()
 
     if saved then
 
-        print(
-            "[ULF] Item database cached successfully"
+        ULF_Debug.Print(
+            " Item database cached successfully"
         )
 
     else
 
-        print(
-            "[ULF] WARNING: Failed to cache item database"
+        ULF_Debug.Warn(
+            " Failed to cache item database"
         )
 
     end

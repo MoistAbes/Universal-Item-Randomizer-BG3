@@ -1,5 +1,3 @@
-print("[ULF] DatabaseQuery.lua LOADED")
-
 ULF_DatabaseQuery = {}
 
 
@@ -11,9 +9,7 @@ local function GetRandomFromIndex(index, value)
 
     if not index then
 
-        print(
-            "[ULF][QUERY] ERROR: Index is missing"
-        )
+        ULF_Debug.Error("[DATABASE QUERY] Index is missing")
 
         return nil
     end
@@ -25,8 +21,8 @@ local function GetRandomFromIndex(index, value)
 
     if not items or #items == 0 then
 
-        print(
-            "[ULF][QUERY] No items found for value: " ..
+        ULF_Debug.Print(
+            "[DATABASE QUERY] No items found for value: " ..
             tostring(value)
         )
 
@@ -56,8 +52,8 @@ local record =
 
 if not record then
 
-    print(
-        "[ULF][QUERY] ERROR: Indexed item not found: " ..
+    ULF_Debug.Error(
+        "[DATABASE QUERY] Indexed item not found: " ..
         tostring(rootTemplate)
     )
 
@@ -81,8 +77,8 @@ local categoryIndex =
 
 if not categoryIndex then
 
-    print(
-        "[ULF][QUERY] ERROR: Category index is missing"
+    ULF_Debug.Error(
+        "[DATABASE QUERY] Category index is missing"
     )
 
     return nil
@@ -150,11 +146,8 @@ function ULF_DatabaseQuery.ScanCategories()
     end
 
 
-    print("")
-    print("[ULF][QUERY] ===============================")
-    print("[ULF][QUERY] ITEM CATEGORIES")
-    print("[ULF][QUERY] ===============================")
-
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[DATABASE QUERY] ITEM CATEGORIES")
 
     local count = 0
     local total = 0
@@ -164,8 +157,8 @@ function ULF_DatabaseQuery.ScanCategories()
         count = count + 1
         total = total + amount
 
-        print(
-            "[ULF][QUERY] " ..
+        ULF_Debug.Print(
+            "[DATABASE QUERY] " ..
             tostring(category) ..
             " -> " ..
             tostring(amount)
@@ -174,22 +167,22 @@ function ULF_DatabaseQuery.ScanCategories()
     end
 
 
-    print(
-        "[ULF][QUERY] Unique categories: " ..
+    ULF_Debug.Print(
+        "[DATABASE QUERY] Unique categories: " ..
         tostring(count)
     )
 
-    print(
-        "[ULF][QUERY] Categorized items: " ..
+    ULF_Debug.Print(
+        "[DATABASE QUERY] Categorized items: " ..
         tostring(total)
     )
 
-    print(
-        "[ULF][QUERY] Total database items: " ..
+    ULF_Debug.Print(
+        "[DATABASE QUERY] Total database items: " ..
         tostring(#ULF_Database.Items)
     )
 
-    print("[ULF][QUERY] ===============================")
+    ULF_Debug.Print("[DATABASE QUERY] ===============================")
 
 end
 
@@ -277,40 +270,40 @@ function ULF_DatabaseQuery.ScanOtherStatPrefixes()
 
 
     print("")
-    print("[ULF][QUERY] ===============================")
-    print("[ULF][QUERY] OTHER STAT RESEARCH")
-    print("[ULF][QUERY] ===============================")
+    print("[DATABASE QUERY] ===============================")
+    print("[DATABASE QUERY] OTHER STAT RESEARCH")
+    print("[DATABASE QUERY] ===============================")
 
 
     print(
-        "[ULF][QUERY] WPN-like: " ..
+        "[DATABASE QUERY] WPN-like: " ..
         tostring(otherStats.WPN)
     )
 
     print(
-        "[ULF][QUERY] ALCH-like: " ..
+        "[DATABASE QUERY] ALCH-like: " ..
         tostring(otherStats.ALCH)
     )
 
     print(
-        "[ULF][QUERY] OBJ-like: " ..
+        "[DATABASE QUERY] OBJ-like: " ..
         tostring(otherStats.OBJ)
     )
 
     print(
-        "[ULF][QUERY] UNI-like: " ..
+        "[DATABASE QUERY] UNI-like: " ..
         tostring(otherStats.UNI)
     )
 
     print(
-        "[ULF][QUERY] Other: " ..
+        "[DATABASE QUERY] Other: " ..
         tostring(otherStats.Other)
     )
 
 
     print("")
-    print("[ULF][QUERY] PREFIX BREAKDOWN")
-    print("[ULF][QUERY] ===============================")
+    print("[DATABASE QUERY] PREFIX BREAKDOWN")
+    print("[DATABASE QUERY] ===============================")
 
 
     local count = 0
@@ -320,7 +313,7 @@ function ULF_DatabaseQuery.ScanOtherStatPrefixes()
         count = count + 1
 
         print(
-            "[ULF][QUERY] " ..
+            "[DATABASE QUERY] " ..
             tostring(prefix) ..
             " -> " ..
             tostring(amount)
@@ -330,16 +323,16 @@ function ULF_DatabaseQuery.ScanOtherStatPrefixes()
 
 
     print(
-        "[ULF][QUERY] Unique prefixes: " ..
+        "[DATABASE QUERY] Unique prefixes: " ..
         tostring(count)
     )
 
-    print("[ULF][QUERY] ===============================")
+    print("[DATABASE QUERY] ===============================")
 
 end
 
 -- ============================================================
--- LOOT ELIGIBILITY SIGNAL SCAN
+-- DEBUG: LOOT ELIGIBILITY SIGNAL SCAN
 -- ============================================================
 
 function ULF_DatabaseQuery.ScanLootEligibilitySignals()
@@ -508,8 +501,7 @@ function ULF_DatabaseQuery.ScanLootEligibilitySignals()
     }
 
 
-    local MAX_EXAMPLES =
-        5
+    local MAX_EXAMPLES = 5
 
 
     local scanned = 0
@@ -582,24 +574,24 @@ function ULF_DatabaseQuery.ScanLootEligibilitySignals()
     -- ========================================================
 
     print(
-        "[ULF][QUERY] ==============================="
+        "[DATABASE QUERY] ==============================="
     )
 
     print(
-        "[ULF][QUERY] LOOT ELIGIBILITY SIGNAL SUMMARY"
+        "[DATABASE QUERY] LOOT ELIGIBILITY SIGNAL SUMMARY"
     )
 
     print(
-        "[ULF][QUERY] ==============================="
+        "[DATABASE QUERY] ==============================="
     )
 
     print(
-        "[ULF][QUERY] Items scanned: " ..
+        "[DATABASE QUERY] Items scanned: " ..
         tostring(scanned)
     )
 
     print(
-        "[ULF][QUERY] Items matched: " ..
+        "[DATABASE QUERY] Items matched: " ..
         tostring(matched)
     )
 
@@ -611,7 +603,7 @@ function ULF_DatabaseQuery.ScanLootEligibilitySignals()
     for signal, count in pairs(counts) do
 
         print(
-            "[ULF][QUERY] " ..
+            "[DATABASE QUERY] " ..
             tostring(signal) ..
             ": " ..
             tostring(count)
@@ -629,11 +621,11 @@ function ULF_DatabaseQuery.ScanLootEligibilitySignals()
         if #items > 0 then
 
             print(
-                "[ULF][QUERY] --------------------------------"
+                "[DATABASE QUERY] --------------------------------"
             )
 
             print(
-                "[ULF][QUERY] SIGNAL: " ..
+                "[DATABASE QUERY] SIGNAL: " ..
                 tostring(signal)
             )
 
@@ -641,37 +633,37 @@ function ULF_DatabaseQuery.ScanLootEligibilitySignals()
             for _, item in ipairs(items) do
 
                 print(
-                    "[ULF][QUERY] RootTemplate: " ..
+                    "[DATABASE QUERY] RootTemplate: " ..
                     tostring(item.RootTemplate)
                 )
 
                 print(
-                    "[ULF][QUERY] Category: " ..
+                    "[DATABASE QUERY] Category: " ..
                     tostring(item.Category)
                 )
 
                 print(
-                    "[ULF][QUERY] Rarity: " ..
+                    "[DATABASE QUERY] Rarity: " ..
                     tostring(item.Rarity)
                 )
 
                 print(
-                    "[ULF][QUERY] Stat: " ..
+                    "[DATABASE QUERY] Stat: " ..
                     tostring(item.Stat)
                 )
 
                 print(
-                    "[ULF][QUERY] DisplayName: " ..
+                    "[DATABASE QUERY] DisplayName: " ..
                     tostring(item.DisplayName)
                 )
 
                 print(
-                    "[ULF][QUERY] Source: " ..
+                    "[DATABASE QUERY] Source: " ..
                     tostring(item.Source)
                 )
 
                 print(
-                    "[ULF][QUERY] ~"
+                    "[DATABASE QUERY] ~"
                 )
 
             end
@@ -682,7 +674,7 @@ function ULF_DatabaseQuery.ScanLootEligibilitySignals()
 
 
     print(
-        "[ULF][QUERY] ==============================="
+        "[DATABASE QUERY] ==============================="
     )
 
 
@@ -706,7 +698,7 @@ local function ResearchValue(object, property)
 
     if errorCode then
         print(
-            "[ULF][RESEARCH] "
+            "[RESEARCH] "
             .. property
             .. " = <"
             .. tostring(errorCode)
@@ -717,7 +709,7 @@ local function ResearchValue(object, property)
 
     if value == nil then
         print(
-            "[ULF][RESEARCH] "
+            "[RESEARCH] "
             .. property
             .. " = <nil>"
         )
@@ -730,14 +722,14 @@ local function ResearchValue(object, property)
 
     if ok then
         print(
-            "[ULF][RESEARCH] "
+            "[RESEARCH] "
             .. property
             .. " = "
             .. text
         )
     else
         print(
-            "[ULF][RESEARCH] "
+            "[RESEARCH] "
             .. property
             .. " = <unprintable>"
         )
@@ -768,19 +760,19 @@ end
 function ULF_DatabaseQuery.ResearchItem(statName)
 
     print("")
-    print("[ULF][RESEARCH] ========================================")
-    print("[ULF][RESEARCH] ITEM: " .. tostring(statName))
-    print("[ULF][RESEARCH] ========================================")
+    print("[RESEARCH] ========================================")
+    print("[RESEARCH] ITEM: " .. tostring(statName))
+    print("[RESEARCH] ========================================")
 
     local stat = Ext.Stats.Get(statName)
 
     if not stat then
-        print("[ULF][RESEARCH] STAT NOT FOUND")
+        print("[RESEARCH] STAT NOT FOUND")
         return
     end
 
     print("")
-    print("[ULF][RESEARCH] --- STAT ---")
+    print("[RESEARCH] --- STAT ---")
 
     local statProperties = {
         "RootTemplate",
@@ -814,19 +806,19 @@ function ULF_DatabaseQuery.ResearchItem(statName)
     local rootTemplate = SafeGet(stat, "RootTemplate")
 
     if not rootTemplate or rootTemplate == "" then
-        print("[ULF][RESEARCH] NO ROOT TEMPLATE")
+        print("[RESEARCH] NO ROOT TEMPLATE")
         return
     end
 
     local template = Ext.Template.GetRootTemplate(rootTemplate)
 
     if not template then
-        print("[ULF][RESEARCH] TEMPLATE NOT FOUND")
+        print("[RESEARCH] TEMPLATE NOT FOUND")
         return
     end
 
     print("")
-    print("[ULF][RESEARCH] --- TEMPLATE ---")
+    print("[RESEARCH] --- TEMPLATE ---")
 
     local templateProperties = {
         "Name",
@@ -850,27 +842,27 @@ function ULF_DatabaseQuery.ResearchItem(statName)
     end
 
     print("")
-    print("[ULF][RESEARCH] --- TAGS ---")
+    print("[RESEARCH] --- TAGS ---")
     if template.Tags then
-        print("[ULF][RESEARCH] Tag container structure:")
+        print("[RESEARCH] Tag container structure:")
         for key, value in pairs(template.Tags) do
-            print("[ULF][RESEARCH] " .. tostring(key) .. " => " .. type(value))
+            print("[RESEARCH] " .. tostring(key) .. " => " .. type(value))
             
             -- Jeśli to tablica/kontener, iteruj po nim
             if type(value) == "table" then
                 for tagName in pairs(value) do
-                    print("[ULF][RESEARCH]   └─ " .. tostring(tagName))
+                    print("[RESEARCH]   └─ " .. tostring(tagName))
                 end
             end
         end
     else
-        print("[ULF][RESEARCH] Tags: <nil>")
+        print("[RESEARCH] Tags: <nil>")
     end
 
     print("")
-    print("[ULF][RESEARCH] ========================================")
-    print("[ULF][RESEARCH] END")
-    print("[ULF][RESEARCH] ========================================")
+    print("[RESEARCH] ========================================")
+    print("[RESEARCH] END")
+    print("[RESEARCH] ========================================")
 end
 
 -- ============================================================
@@ -1055,24 +1047,24 @@ function ULF_DatabaseQuery.FindSuspiciousLootItems()
     -- ========================================================
 
     print(
-        "[ULF][QUERY] ==============================="
+        "[DATABASE QUERY] ==============================="
     )
 
     print(
-        "[ULF][QUERY] SUSPICIOUS LOOT ITEMS"
+        "[DATABASE QUERY] SUSPICIOUS LOOT ITEMS"
     )
 
     print(
-        "[ULF][QUERY] ==============================="
+        "[DATABASE QUERY] ==============================="
     )
 
     print(
-        "[ULF][QUERY] Scanned loot-category items: " ..
+        "[DATABASE QUERY] Scanned loot-category items: " ..
         tostring(scanned)
     )
 
     print(
-        "[ULF][QUERY] Suspicious matches: " ..
+        "[DATABASE QUERY] Suspicious matches: " ..
         tostring(suspicious)
     )
 
@@ -1080,36 +1072,36 @@ function ULF_DatabaseQuery.FindSuspiciousLootItems()
     for _, item in ipairs(results) do
 
         print(
-            "[ULF][QUERY] --------------------------------"
+            "[DATABASE QUERY] --------------------------------"
         )
 
         print(
-            "[ULF][QUERY] RootTemplate: " ..
+            "[DATABASE QUERY] RootTemplate: " ..
             tostring(item.RootTemplate)
         )
 
         print(
-            "[ULF][QUERY] Category: " ..
+            "[DATABASE QUERY] Category: " ..
             tostring(item.Category)
         )
 
         print(
-            "[ULF][QUERY] Rarity: " ..
+            "[DATABASE QUERY] Rarity: " ..
             tostring(item.Rarity)
         )
 
         print(
-            "[ULF][QUERY] Stat: " ..
+            "[DATABASE QUERY] Stat: " ..
             tostring(item.Stat)
         )
 
         print(
-            "[ULF][QUERY] DisplayName: " ..
+            "[DATABASE QUERY] DisplayName: " ..
             tostring(item.DisplayName)
         )
 
         print(
-            "[ULF][QUERY] Type: " ..
+            "[DATABASE QUERY] Type: " ..
             tostring(item.Type)
         )
 
@@ -1117,7 +1109,7 @@ function ULF_DatabaseQuery.FindSuspiciousLootItems()
         if item.StatMatch then
 
             print(
-                "[ULF][QUERY] Stat match: " ..
+                "[DATABASE QUERY] Stat match: " ..
                 tostring(item.StatMatch)
             )
 
@@ -1127,7 +1119,7 @@ function ULF_DatabaseQuery.FindSuspiciousLootItems()
         if item.NameMatch then
 
             print(
-                "[ULF][QUERY] Name match: " ..
+                "[DATABASE QUERY] Name match: " ..
                 tostring(item.NameMatch)
             )
 
@@ -1137,7 +1129,7 @@ function ULF_DatabaseQuery.FindSuspiciousLootItems()
 
 
     print(
-        "[ULF][QUERY] ==============================="
+        "[DATABASE QUERY] ==============================="
     )
 
 
@@ -1298,13 +1290,13 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
     -- ========================================================
 
     print("")
-    print("[ULF][QUERY] ===============================")
-    print("[ULF][QUERY] LOOT DATA QUALITY")
-    print("[ULF][QUERY] ===============================")
+    print("[DATABASE QUERY] ===============================")
+    print("[DATABASE QUERY] LOOT DATA QUALITY")
+    print("[DATABASE QUERY] ===============================")
 
 
     print(
-        "[ULF][QUERY] Total items: " ..
+        "[DATABASE QUERY] Total items: " ..
         tostring(total)
     )
 
@@ -1314,15 +1306,15 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
     -- ========================================================
 
     print("")
-    print("[ULF][QUERY] Category")
+    print("[DATABASE QUERY] Category")
 
     print(
-        "[ULF][QUERY]   Present: " ..
+        "[DATABASE QUERY]   Present: " ..
         tostring(categoryPresent)
     )
 
     print(
-        "[ULF][QUERY]   Missing: " ..
+        "[DATABASE QUERY]   Missing: " ..
         tostring(categoryMissing)
     )
 
@@ -1332,15 +1324,15 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
     -- ========================================================
 
     print("")
-    print("[ULF][QUERY] Stat")
+    print("[DATABASE QUERY] Stat")
 
     print(
-        "[ULF][QUERY]   Present: " ..
+        "[DATABASE QUERY]   Present: " ..
         tostring(statPresent)
     )
 
     print(
-        "[ULF][QUERY]   Missing: " ..
+        "[DATABASE QUERY]   Missing: " ..
         tostring(statMissing)
     )
 
@@ -1350,15 +1342,15 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
     -- ========================================================
 
     print("")
-    print("[ULF][QUERY] RootTemplate")
+    print("[DATABASE QUERY] RootTemplate")
 
     print(
-        "[ULF][QUERY]   Present: " ..
+        "[DATABASE QUERY]   Present: " ..
         tostring(rootTemplatePresent)
     )
 
     print(
-        "[ULF][QUERY]   Missing: " ..
+        "[DATABASE QUERY]   Missing: " ..
         tostring(rootTemplateMissing)
     )
 
@@ -1368,15 +1360,15 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
     -- ========================================================
 
     print("")
-    print("[ULF][QUERY] Rarity")
+    print("[DATABASE QUERY] Rarity")
 
     print(
-        "[ULF][QUERY]   Present: " ..
+        "[DATABASE QUERY]   Present: " ..
         tostring(rarityPresent)
     )
 
     print(
-        "[ULF][QUERY]   Missing: " ..
+        "[DATABASE QUERY]   Missing: " ..
         tostring(rarityMissing)
     )
 
@@ -1396,14 +1388,14 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
 
         print("")
         print(
-            "[ULF][QUERY] " ..
+            "[DATABASE QUERY] " ..
             label
         )
 
         for _, value in ipairs(list) do
 
             print(
-                "[ULF][QUERY]   - " ..
+                "[DATABASE QUERY]   - " ..
                 tostring(value)
             )
 
@@ -1434,10 +1426,9 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
 
 
     print("")
-    print("[ULF][QUERY] ===============================")
+    print("[DATABASE QUERY] ===============================")
 
 end
-
 
 
 -- ============================================================
@@ -1449,13 +1440,3 @@ function ULF_DatabaseQuery.Test()
     return "QUERY_OK"
 
 end
-
-
--- ============================================================
--- API EXPORT
--- ============================================================
-
-print(
-    "[ULF][QUERY] API exported: " ..
-    tostring(type(ULF_DatabaseQuery))
-)

@@ -1,5 +1,3 @@
-print("[ULF] EnemyDebugInspector.lua LOADED")
-
 ULF_EnemyDebugInspector = {}
 
 -- ============================================================
@@ -651,26 +649,25 @@ end
 
 
 -- ============================================================
--- PRINT MODEL
+-- ULF_Debug.Print MODEL
 -- ============================================================
 
 function ULF_EnemyDebugInspector.PrintModel(model)
-
     if not model then
         return
     end
 
-    print("")
-    print(
-        "[ULF][ENEMY-RESEARCH] ========================================"
+    ULF_Debug.Print("")
+    ULF_Debug.Print(
+        "[ENEMY-RESEARCH] ========================================"
     )
 
-    print(
-        "[ULF][ENEMY-RESEARCH] ENEMY INSPECTOR"
+    ULF_Debug.Print(
+        "[ENEMY-RESEARCH] ENEMY INSPECTOR"
     )
 
-    print(
-        "[ULF][ENEMY-RESEARCH] ========================================"
+    ULF_Debug.Print(
+        "[ENEMY-RESEARCH] ========================================"
     )
 
 
@@ -678,35 +675,35 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- IDENTITY
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [IDENTITY]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [IDENTITY]")
 
-    print(
+    ULF_Debug.Print(
         "  UUID:        " ..
         tostring(model.Identity.UUID or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Name:        " ..
         tostring(model.Identity.Name or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Title:       " ..
         tostring(model.Identity.Title or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Race UUID:   " ..
         tostring(model.Identity.RaceUUID or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Level:       " ..
         tostring(model.Identity.Level or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  World Level: " ..
         tostring(model.Identity.WorldLevelName or "-")
     )
@@ -716,30 +713,30 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- CLASSES
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [CLASSES]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [CLASSES]")
 
     if #model.Classes == 0 then
 
-        print("  None")
+        ULF_Debug.Print("  None")
 
     else
 
         for i, classInfo in ipairs(model.Classes) do
 
-            print("  [" .. i .. "]")
+            ULF_Debug.Print("  [" .. i .. "]")
 
-            print(
+            ULF_Debug.Print(
                 "    Class UUID:    " ..
                 tostring(classInfo.ClassUUID or "-")
             )
 
-            print(
+            ULF_Debug.Print(
                 "    Class Level:   " ..
                 tostring(classInfo.Level or "-")
             )
 
-            print(
+            ULF_Debug.Print(
                 "    Subclass UUID: " ..
                 tostring(classInfo.SubClassUUID or "-")
             )
@@ -753,20 +750,20 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- DATA
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [DATA]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [DATA]")
 
-    print(
+    ULF_Debug.Print(
         "  Stats ID:    " ..
         tostring(model.Data.StatsId or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Steps Type:  " ..
         tostring(model.Data.StepsType or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Weight:      " ..
         tostring(model.Data.Weight or "-")
     )
@@ -776,24 +773,24 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- HEALTH
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [HEALTH]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [HEALTH]")
 
-    print(
+    ULF_Debug.Print(
         "  HP:           " ..
         tostring(model.Health.HP or 0) ..
         " / " ..
         tostring(model.Health.MaxHP or 0)
     )
 
-    print(
+    ULF_Debug.Print(
         "  Temporary HP: " ..
         tostring(model.Health.TemporaryHP or 0) ..
         " / " ..
         tostring(model.Health.MaxTemporaryHP or 0)
     )
 
-    print(
+    ULF_Debug.Print(
         "  Invulnerable: " ..
         tostring(model.Health.Invulnerable)
     )
@@ -803,25 +800,25 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- COMBAT
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [COMBAT]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [COMBAT]")
 
-    print(
+    ULF_Debug.Print(
         "  AC:               " ..
         tostring(model.Combat.AC or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Proficiency:      " ..
         tostring(model.Combat.ProficiencyBonus or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Armor Type:       " ..
         tostring(model.Combat.ArmorType or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Armor Type 2:     " ..
         tostring(model.Combat.ArmorType2 or "-")
     )
@@ -831,18 +828,18 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- ABILITIES
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [ABILITIES]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [ABILITIES]")
 
     if #model.Abilities.Values == 0 then
 
-        print("  None")
+        ULF_Debug.Print("  None")
 
     else
 
         for i, value in ipairs(model.Abilities.Values) do
 
-            print(
+            ULF_Debug.Print(
                 "  [" .. i .. "] Value: " ..
                 tostring(value) ..
                 " Modifier: " ..
@@ -860,20 +857,20 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- ATTACK / SPELL CONFIG
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [ATTACK / SPELL CONFIG]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [ATTACK / SPELL CONFIG]")
 
-    print(
+    ULF_Debug.Print(
         "  Ranged Ability:       " ..
         tostring(model.Attack.RangedAbility or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Unarmed Ability:     " ..
         tostring(model.Attack.UnarmedAbility or "-")
     )
 
-    print(
+    ULF_Debug.Print(
         "  Spellcasting Ability: " ..
         tostring(model.Attack.SpellcastingAbility or "-")
     )
@@ -883,43 +880,43 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- INVENTORY
     -- ========================================================
 
-    print("")
-    print("[ULF][ENEMY-RESEARCH] [INVENTORY]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ENEMY-RESEARCH] [INVENTORY]")
 
-    print(
+    ULF_Debug.Print(
         "  Inventories: " ..
         tostring(#model.Inventory.Inventories)
     )
 
-    print(
+    ULF_Debug.Print(
         "  Items:       " ..
         tostring(#model.Inventory.Items)
     )
 
-    print("")
-    print("  [SUMMARY]")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("  [SUMMARY]")
 
-    print(
+    ULF_Debug.Print(
         "    Weapons: " ..
         tostring(model.Inventory.Summary.Weapons)
     )
 
-    print(
+    ULF_Debug.Print(
         "    Armor:   " ..
         tostring(model.Inventory.Summary.Armor)
     )
 
-    print(
+    ULF_Debug.Print(
         "    Rings:   " ..
         tostring(model.Inventory.Summary.Rings)
     )
 
-    print(
+    ULF_Debug.Print(
         "    Amulets: " ..
         tostring(model.Inventory.Summary.Amulets)
     )
 
-    print(
+    ULF_Debug.Print(
         "    Other:   " ..
         tostring(model.Inventory.Summary.Other)
     )
@@ -931,95 +928,95 @@ function ULF_EnemyDebugInspector.PrintModel(model)
 
     if #model.Inventory.Items > 0 then
 
-        print("")
-        print("  [ITEMS]")
+        ULF_Debug.Print("")
+        ULF_Debug.Print("  [ITEMS]")
 
         for i, item in ipairs(model.Inventory.Items) do
 
-            print(
+            ULF_Debug.Print(
                 "  [" .. i .. "] " ..
                 tostring(item.Name or "-")
             )
 
-            print(
+            ULF_Debug.Print(
                 "      UUID:        " ..
                 tostring(item.UUID or "-")
             )
 
-            print(
+            ULF_Debug.Print(
                 "      StatsId:     " ..
                 tostring(item.StatsId or "-")
             )
 
-            print(
+            ULF_Debug.Print(
                 "      Category:    " ..
                 tostring(
                     item.Equipment.Category or "-"
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      Slot:        " ..
                 tostring(
                     item.Equipment.Slot or "-"
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      EquipmentID: " ..
                 tostring(
                     item.Equipment.EquipmentTypeID or "-"
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      Value:       " ..
                 tostring(
                     item.Value.Value or "-"
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      Rarity:      " ..
                 tostring(
                     item.Value.Rarity or "-"
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      Unique:      " ..
                 tostring(
                     item.Value.Unique
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      Weight:      " ..
                 tostring(item.Weight or "-")
             )
 
-            print(
+            ULF_Debug.Print(
                 "      ItemType:    " ..
                 tostring(
                     item.Server.ItemType or "-"
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      StoryItem:   " ..
                 tostring(
                     item.Server.StoryItem
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      TreasureGen: " ..
                 tostring(
                     item.Server.TreasureGenerated
                 )
             )
 
-            print(
+            ULF_Debug.Print(
                 "      UnsoldGen:   " ..
                 tostring(
                     item.Server.UnsoldGenerated
@@ -1035,17 +1032,17 @@ function ULF_EnemyDebugInspector.PrintModel(model)
     -- END
     -- ========================================================
 
-    print("")
-    print(
-        "[ULF][ENEMY-RESEARCH] ========================================"
+    ULF_Debug.Print("")
+    ULF_Debug.Print(
+        "[ENEMY-RESEARCH] ========================================"
     )
 
-    print(
-        "[ULF][ENEMY-RESEARCH] END INSPECTOR"
+    ULF_Debug.Print(
+        "[ENEMY-RESEARCH] END INSPECTOR"
     )
 
-    print(
-        "[ULF][ENEMY-RESEARCH] ========================================"
+    ULF_Debug.Print(
+        "[ENEMY-RESEARCH] ========================================"
     )
 
 end
@@ -1058,8 +1055,8 @@ end
 function ULF_EnemyDebugInspector.Inspect(entity)
 
     if not entity then
-        print(
-            "[ULF][ENEMY-RESEARCH] Inspect called with nil entity"
+        ULF_Debug.Print(
+            "[ENEMY-RESEARCH] Inspect called with nil entity"
         )
         return nil
     end
@@ -1067,13 +1064,8 @@ function ULF_EnemyDebugInspector.Inspect(entity)
     local model =
         ULF_EnemyDebugInspector.CreateModel(entity)
 
-    ULF_EnemyDebugInspector.PrintModel(model)
+    ULF_EnemyDebugInspector.ULF_Debug.PrintModel(model)
 
     return model
 
 end
-
-
-print(
-    "[ULF][ENEMY-RESEARCH] Inspector API exported"
-)

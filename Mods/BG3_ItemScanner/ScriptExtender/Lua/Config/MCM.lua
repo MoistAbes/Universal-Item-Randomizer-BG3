@@ -13,9 +13,10 @@ ULF_MCM = {}
 function ULF_MCM.ApplySettings()
 
     if not MCM then
-        print("[ULF][MCM] MCM API not available")
+        ULF_Debug.Error("[MCM] MCM API not available")
         return false
     end
+
 
     -- --------------------------------------------------------
     -- MOD SETTINGS
@@ -33,6 +34,7 @@ function ULF_MCM.ApplySettings()
         ULF_ModSettings.Debug = debug
     end
 
+
     -- --------------------------------------------------------
     -- LOOT CONFIG
     -- --------------------------------------------------------
@@ -43,23 +45,39 @@ function ULF_MCM.ApplySettings()
         ULF_LootConfig.BaseDropChance = baseDropChance
     end
 
-    print(
-        "[ULF][MCM] Settings applied"
-    )
+    -- --------------------------------------------------------
+    -- LOG
+    -- --------------------------------------------------------
 
-    print(
-        "[ULF][MCM] Enabled = "
+    ULF_Debug.Print("[MCM] Settings applied")
+
+
+    ULF_Debug.Print(
+        "[MCM] Enabled = "
         .. tostring(ULF_ModSettings.Enabled)
     )
 
-    print(
-        "[ULF][MCM] Debug = "
+    ULF_Debug.Print(
+        "[MCM] Debug = "
         .. tostring(ULF_ModSettings.Debug)
     )
 
-    print(
-        "[ULF][MCM] BaseDropChance = "
+    ULF_Debug.Print(
+        "[MCM] BaseDropChance = "
         .. tostring(ULF_LootConfig.BaseDropChance)
+    )
+
+    ULF_Debug.Print(
+        "[MCM] RarityWeights = "
+        .. tostring(ULF_LootConfig.RarityWeights.Common)
+        .. "/"
+        .. tostring(ULF_LootConfig.RarityWeights.Uncommon)
+        .. "/"
+        .. tostring(ULF_LootConfig.RarityWeights.Rare)
+        .. "/"
+        .. tostring(ULF_LootConfig.RarityWeights.VeryRare)
+        .. "/"
+        .. tostring(ULF_LootConfig.RarityWeights.Legendary)
     )
 
     return true
@@ -84,26 +102,60 @@ function ULF_MCM.OnSettingSaved(payload)
         return
     end
 
-    print(
-        "[ULF][MCM] Setting saved: "
+    ULF_Debug.Print(
+        "[MCM] Setting saved: "
         .. tostring(payload.settingId)
         .. " = "
         .. tostring(payload.value)
     )
 
+
+    -- --------------------------------------------------------
+    -- MOD SETTINGS
+    -- --------------------------------------------------------
+
     if payload.settingId == "Enabled" then
 
         ULF_ModSettings.Enabled = payload.value
 
-    elseif payload.settingId == "Debug" then
+        ULF_Debug.Print(
+            "[MCM] Runtime Enabled = "
+            .. tostring(ULF_ModSettings.Enabled)
+        )
+
+        return
+    end
+
+
+    if payload.settingId == "Debug" then
 
         ULF_ModSettings.Debug = payload.value
 
-    elseif payload.settingId == "BaseDropChance" then
+        ULF_Debug.Print(
+            "[MCM] Runtime Debug = "
+            .. tostring(ULF_ModSettings.Debug)
+        )
+
+        return
+    end
+
+
+    -- --------------------------------------------------------
+    -- LOOT CONFIG
+    -- --------------------------------------------------------
+
+    if payload.settingId == "BaseDropChance" then
 
         ULF_LootConfig.BaseDropChance = payload.value
 
+        ULF_Debug.Print(
+            "[MCM] Runtime BaseDropChance = "
+            .. tostring(ULF_LootConfig.BaseDropChance)
+        )
+
+        return
     end
+
 end
 
 
@@ -119,19 +171,19 @@ if Ext.ModEvents
         ULF_MCM.OnSettingSaved
     )
 
-    print(
+    ULF_Debug.Print(
         "[ULF][MCM] MCM_Setting_Saved listener registered"
     )
 
 else
 
-    print(
+    ULF_Debug.Print(
         "[ULF][MCM] WARNING: MCM event API not available"
     )
 
 end
 
 
-print(
+ULF_Debug.Print(
     "[ULF][MCM] MCM integration loaded"
 )

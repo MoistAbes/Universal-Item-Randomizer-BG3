@@ -35,7 +35,190 @@
               "Name": "Base Drop Chance",
               "Type": "float",
               "Default": 0.7,
+              "Min": 0.0,
+              "Max": 1.0,
               "Description": "Base chance for an enemy to generate bonus loot."
+            }
+          ]
+        },
+        {
+          "SectionId": "ItemCategories",
+          "SectionName": "Item Categories",
+          "Settings": [
+            {
+              "Id": "CategoryWeapon",
+              "Name": "Weapon",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Allow Weapon items."
+            },
+            {
+              "Id": "CategoryArmor",
+              "Name": "Armor",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Allow Armor items."
+            },
+            {
+              "Id": "CategoryAccessory",
+              "Name": "Accessory",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Allow Accessory items."
+            },
+            {
+              "Id": "CategoryConsumable",
+              "Name": "Consumable",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Allow Consumable items."
+            },
+            {
+              "Id": "CategoryScroll",
+              "Name": "Scroll",
+              "Type": "checkbox",
+              "Default": true,
+              "Description": "Allow Scroll items."
+            },
+            {
+              "Id": "CategoryFood",
+              "Name": "Food",
+              "Type": "checkbox",
+              "Default": false,
+              "Description": "Allow Food items."
+            },
+            {
+              "Id": "CategoryBook",
+              "Name": "Book",
+              "Type": "checkbox",
+              "Default": false,
+              "Description": "Allow Book items."
+            },
+            {
+              "Id": "CategoryMaterial",
+              "Name": "Material",
+              "Type": "checkbox",
+              "Default": false,
+              "Description": "Allow Material items."
+            },
+            {
+              "Id": "CategoryOther",
+              "Name": "Other",
+              "Type": "checkbox",
+              "Default": false,
+              "Description": "Allow Other item categories."
+            },
+            {
+              "Id": "CategoryGrenade",
+              "Name": "Grenade",
+              "Type": "checkbox",
+              "Default": false,
+              "Description": "Allow Grenade items."
+            }
+          ]
+        },
+        {
+          "SectionId": "RelativeLevelModifiers",
+          "SectionName": "Relative Level Modifiers",
+          "Settings": [
+            {
+              "Id": "RelativeLevelMinus5",
+              "Name": "Level -5",
+              "Type": "float",
+              "Default": -0.3,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 5 levels below the player."
+            },
+            {
+              "Id": "RelativeLevelMinus4",
+              "Name": "Level -4",
+              "Type": "float",
+              "Default": -0.25,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 4 levels below the player."
+            },
+            {
+              "Id": "RelativeLevelMinus3",
+              "Name": "Level -3",
+              "Type": "float",
+              "Default": -0.2,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 3 levels below the player."
+            },
+            {
+              "Id": "RelativeLevelMinus2",
+              "Name": "Level -2",
+              "Type": "float",
+              "Default": -0.15,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 2 levels below the player."
+            },
+            {
+              "Id": "RelativeLevelMinus1",
+              "Name": "Level -1",
+              "Type": "float",
+              "Default": -0.05,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 1 level below the player."
+            },
+            {
+              "Id": "RelativeLevel0",
+              "Name": "Same Level",
+              "Type": "float",
+              "Default": 0.0,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies at the same level."
+            },
+            {
+              "Id": "RelativeLevelPlus1",
+              "Name": "Level +1",
+              "Type": "float",
+              "Default": 0.05,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 1 level above the player."
+            },
+            {
+              "Id": "RelativeLevelPlus2",
+              "Name": "Level +2",
+              "Type": "float",
+              "Default": 0.1,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 2 levels above the player."
+            },
+            {
+              "Id": "RelativeLevelPlus3",
+              "Name": "Level +3",
+              "Type": "float",
+              "Default": 0.15,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 3 levels above the player."
+            },
+            {
+              "Id": "RelativeLevelPlus4",
+              "Name": "Level +4",
+              "Type": "float",
+              "Default": 0.2,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 4 levels above the player."
+            },
+            {
+              "Id": "RelativeLevelPlus5",
+              "Name": "Level +5",
+              "Type": "float",
+              "Default": 0.25,
+              "Min": -1.0,
+              "Max": 1.0,
+              "Description": "Drop chance modifier for enemies 5 levels above the player."
             }
           ]
         }

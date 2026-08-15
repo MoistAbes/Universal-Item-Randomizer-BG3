@@ -1,5 +1,3 @@
-print("[ULF] LootSpawner.lua LOADED")
-
 ULF_LootSpawner = {}
 
 -- ============================================================
@@ -29,8 +27,8 @@ local function AddItemToEntity(victim, rootTemplate, amount)
 
     if not success then
 
-        print(
-            "[ULF][LOOT] TemplateAddTo failed: " ..
+        ULF_Debug.Print(
+            "[LOOT SPAWNER] TemplateAddTo failed: " ..
             tostring(result)
         )
 
@@ -70,8 +68,8 @@ function ULF_LootSpawner.AddItem(victim, record)
 
     if not victim then
 
-        print(
-            "[ULF][LOOT] ERROR: Victim is nil"
+        ULF_Debug.Error(
+            "[LOOT SPAWNER] Victim is nil"
         )
 
         return false
@@ -80,8 +78,8 @@ function ULF_LootSpawner.AddItem(victim, record)
 
     if not record then
 
-        print(
-            "[ULF][LOOT] ERROR: Item record is nil"
+        ULF_Debug.Error(
+            "[LOOT SPAWNER] Item record is nil"
         )
 
         return false
@@ -94,8 +92,8 @@ function ULF_LootSpawner.AddItem(victim, record)
 
     if not rootTemplate then
 
-        print(
-            "[ULF][LOOT] ERROR: RootTemplate could not be resolved"
+        ULF_Debug.Error(
+            "[LOOT SPAWNER] RootTemplate could not be resolved"
         )
 
         return false
@@ -112,8 +110,8 @@ function ULF_LootSpawner.AddItem(victim, record)
 
     if success then
 
-        print(
-            "[ULF][LOOT] Added: " ..
+        ULF_Debug.Print(
+            "[LOOT SPAWNER] Added: " ..
             tostring(record.Stat) ..
             " -> " ..
             tostring(record.DisplayName)
@@ -124,15 +122,10 @@ function ULF_LootSpawner.AddItem(victim, record)
     end
 
 
-    print(
-        "[ULF][LOOT] Failed to add item"
+    ULF_Debug.Error(
+        "[LOOT SPAWNER] Failed to add item"
     )
 
     return false
 
 end
-
-
-print(
-    "[ULF][LOOT] Spawner API exported"
-)

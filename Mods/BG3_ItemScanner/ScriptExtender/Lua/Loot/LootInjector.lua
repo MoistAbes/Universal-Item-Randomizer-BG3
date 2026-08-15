@@ -1,11 +1,11 @@
-print("[ULF] LootInjector.lua LOADED")
+print(" LootInjector.lua LOADED")
 
 -- ============================================================
 -- DEBUG: LOOT ITEM
 -- ============================================================
 
 local function DebugLootItem(record)
-    print("[ULF][LOOT] Dropped Item Category=" .. tostring(record.Category) .. " | Type=" .. tostring(record.Type) .. " | Stat=" .. tostring(record.Stat) .. " | DisplayName=" .. tostring(record.DisplayName))
+    ULF_Debug.Print("[LOOT INJECTOR] Dropped Item Category=" .. tostring(record.Category) .. " | Type=" .. tostring(record.Type) .. " | Stat=" .. tostring(record.Stat) .. " | DisplayName=" .. tostring(record.DisplayName))
 end
 
 local function generateLoot(lootContext, victim, dropCount)
@@ -18,8 +18,8 @@ local function generateLoot(lootContext, victim, dropCount)
 
     for i = 1, dropCount do
 
-        print(
-            "[ULF][LOOT] Generating drop " ..
+        ULF_Debug.Print(
+            "[LOOT INJECTOR] Generating drop " ..
             tostring(i) ..
             "/" ..
             tostring(dropCount)
@@ -35,15 +35,15 @@ local function generateLoot(lootContext, victim, dropCount)
                 lootContext
             )
 
-        print(
-            "[ULF][LOOT] Max rarity: " ..
+        ULF_Debug.Print(
+            "[LOOT INJECTOR] Max rarity: " ..
             tostring(maxRarity)
         )
 
         if not maxRarity then
 
-            print(
-                "[ULF][LOOT] Failed to resolve max rarity"
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Failed to resolve max rarity"
             )
 
             return
@@ -58,15 +58,15 @@ local function generateLoot(lootContext, victim, dropCount)
                 maxRarity
             )
 
-        print(
-            "[ULF][LOOT] Resolved rarity: " ..
+        ULF_Debug.Print(
+            "[LOOT INJECTOR] Resolved rarity: " ..
             tostring(resolvedRarity)
         )
 
         if not resolvedRarity then
 
-            print(
-                "[ULF][LOOT] Failed to resolve rarity"
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Failed to resolve rarity"
             )
 
             return
@@ -86,8 +86,8 @@ local function generateLoot(lootContext, victim, dropCount)
 
         if not itemRecord then
 
-            print(
-                "[ULF][LOOT] Item resolution failed"
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Item resolution failed"
             )
 
         else
@@ -128,8 +128,8 @@ local function buildLootContext(entity)
 
     if not enemyContext then
 
-        print(
-            "[ULF][INJECTOR] ERROR: Failed to build enemy context"
+        ULF_Debug.Error(
+            "[LOOT INJECTOR] Failed to build enemy context"
         )
 
         return
@@ -146,8 +146,8 @@ local function buildLootContext(entity)
 
     if not partyContext then
 
-        print(
-            "[ULF][INJECTOR] ERROR: Failed to build party context"
+        ULF_Debug.Error(
+            "[LOOT INJECTOR] Failed to build party context"
         )
 
         return
@@ -171,8 +171,8 @@ end
 local function ProcessEnemyLoot(victim, lootContext)
 
     if not lootContext then
-        print(
-            "[ULF][LOOT] Missing loot context"
+        ULF_Debug.Error(
+            "[LOOT INJECTOR] Missing loot context"
         )
         return
     end
@@ -186,8 +186,8 @@ local function ProcessEnemyLoot(victim, lootContext)
             lootContext
         )
 
-    print(
-        "[ULF][LOOT] Eligibility (Can this enemy drop item): " ..
+    ULF_Debug.Print(
+        "[LOOT INJECTOR] Eligibility (Can this enemy drop item): " ..
         tostring(canGenerate)
     )
 
@@ -215,16 +215,16 @@ local function ProcessEnemyLoot(victim, lootContext)
             lootContext
         )
 
-    print(
-        "[ULF][LOOT] Drop count: " ..
+    ULF_Debug.Print(
+        "[LOOT INJECTOR] Drop count: " ..
         tostring(dropCount)
     )
 
     if not dropCount
         or dropCount <= 0 then
 
-        print(
-            "[ULF][LOOT] Drop count is zero"
+        ULF_Debug.Print(
+            "[LOOT INJECTOR] Drop count is zero"
         )
 
         return
@@ -249,15 +249,15 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        print(
-            "[ULF][INJECTOR] Died event: " ..
+        ULF_Debug.Print(
+            "[LOOT INJECTOR] Died event: " ..
             tostring(victim)
         )
 
         if not ULF_Database.Ready then
 
-            print(
-                "[ULF][INJECTOR] Database is not ready"
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Database is not ready"
             )
 
             return
@@ -272,8 +272,8 @@ Ext.Osiris.RegisterListener(
 
         if not entity then
 
-            print(
-                "[ULF][INJECTOR] ERROR: Victim entity not found"
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Victim entity not found"
             )
 
             return
@@ -288,8 +288,8 @@ Ext.Osiris.RegisterListener(
 
         if not lootContext then
 
-            print(
-                "[ULF][INJECTOR] Failed to build loot context"
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Failed to build loot context"
             )
 
             return
@@ -304,9 +304,8 @@ Ext.Osiris.RegisterListener(
             lootContext
         )
 
-        print("[ULF][INJECTOR] FINISHED INJECTING ITEM")
-        print("")
-
+        ULF_Debug.Print("[LOOT INJECTOR] FINISHED INJECTING ITEM")
+        ULF_Debug.Print("")
 
     end
 )

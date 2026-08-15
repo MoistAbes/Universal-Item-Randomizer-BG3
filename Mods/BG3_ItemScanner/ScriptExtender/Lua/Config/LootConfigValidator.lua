@@ -23,11 +23,7 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
 )
 
     if type(rarityWeights) ~= "table" then
-
-        print(
-            "[ULF][CONFIG] ERROR: RarityWeights must be a table"
-        )
-
+        ULF_Debug.Error("[CONFIG] ERROR: RarityWeights must be a table")
         return false
     end
 
@@ -42,12 +38,7 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
 
 
         if weight == nil then
-
-            print(
-                "[ULF][CONFIG] ERROR: Missing rarity weight: " ..
-                rarity
-            )
-
+            ULF_Debug.Error("[CONFIG] Missing rarity weight: " + rarity)
             return false
         end
 
@@ -55,11 +46,7 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
         if type(weight) ~= "number"
             or weight % 1 ~= 0 then
 
-            print(
-                "[ULF][CONFIG] ERROR: Rarity weight must be an integer: " ..
-                rarity
-            )
-
+            ULF_Debug.Error("[CONFIG] Rarity weight must be an integert: " + rarity)
             return false
         end
 
@@ -67,11 +54,7 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
         if weight < 0
             or weight > 100 then
 
-            print(
-                "[ULF][CONFIG] ERROR: Rarity weight out of range: " ..
-                rarity
-            )
-
+            ULF_Debug.Error("[CONFIG] Rarity weight out of range: " + rarity)
             return false
         end
 
@@ -83,30 +66,18 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
 
 
     if total ~= 100 then
-
-        print(
-            "[ULF][CONFIG] ERROR: Rarity weights must total 100. Total: " ..
-            tostring(total)
-        )
-
+        ULF_Debug.Error("[CONFIG] Rarity weights must total 100. Total: " + tostring(total))
         return false
     end
-
 
     return true
 
 end
 
-function ULF_LootConfigValidator.ValidateBaseDropChance(
-    chance
-)
+function ULF_LootConfigValidator.ValidateBaseDropChance(chance)
 
     if type(chance) ~= "number" then
-
-        print(
-            "[ULF][CONFIG] ERROR: BaseDropChance must be a number"
-        )
-
+        ULF_Debug.Error("[CONFIG] BaseDropChance must be a number")
         return false
     end
 
@@ -114,28 +85,19 @@ function ULF_LootConfigValidator.ValidateBaseDropChance(
     if chance < 0
         or chance > 1 then
 
-        print(
-            "[ULF][CONFIG] ERROR: BaseDropChance must be between 0 and 1"
-        )
-
+        ULF_Debug.Error("[CONFIG] BaseDropChance must be between 0 and 1")
         return false
     end
-
 
     return true
 
 end
 
-function ULF_LootConfigValidator.ValidateAllowedCategories(
-    allowedCategories
-)
+function ULF_LootConfigValidator.ValidateAllowedCategories(allowedCategories)
 
     if type(allowedCategories) ~= "table" then
 
-        print(
-            "[ULF][CONFIG] ERROR: AllowedCategories must be a table"
-        )
-
+        ULF_Debug.Error("[CONFIG] AllowedCategories must be a table")
         return false
     end
 
@@ -148,22 +110,14 @@ function ULF_LootConfigValidator.ValidateAllowedCategories(
 
         if enabled == nil then
 
-            print(
-                "[ULF][CONFIG] ERROR: Missing category: " ..
-                category
-            )
-
+            ULF_Debug.Error("[CONFIG] Missing category: " + category)
             return false
         end
 
 
         if type(enabled) ~= "boolean" then
 
-            print(
-                "[ULF][CONFIG] ERROR: Category value must be boolean: " ..
-                category
-            )
-
+            ULF_Debug.Error("[CONFIG] Category value must be boolean: " + category)
             return false
         end
 
@@ -185,14 +139,9 @@ function ULF_LootConfigValidator.ValidateAllowedCategories(
 
         end
 
-
         if not known then
 
-            print(
-                "[ULF][CONFIG] ERROR: Unknown category: " ..
-                tostring(category)
-            )
-
+            ULF_Debug.Error("[CONFIG] Unknown category: " + tostring(category))
             return false
         end
 

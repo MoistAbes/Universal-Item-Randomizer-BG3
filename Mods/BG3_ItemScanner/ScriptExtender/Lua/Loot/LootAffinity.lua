@@ -1,10 +1,7 @@
-print("[ULF] LootAffinity.lua LOADED")
-
 ULF_LootAffinity = {}
 
 local DEFAULT_RANDOM_WEIGHT = 100
 local PROFICIENCY_WEIGHT = 70
-
 
 -- ============================================================
 -- CALCULATE AFFINITIES
@@ -40,11 +37,11 @@ function ULF_LootAffinity.Calculate(
     -- DEBUG
     -- ========================================================
 
-    print("[ULF][AFFINITY] Calculated affinities:")
+    ULF_Debug.Print("[LOOT AFFINITY] Calculated affinities:")
 
     for affinityType, weight in pairs(affinities) do
 
-        print(
+        ULF_Debug.Print(
             "  " ..
             tostring(affinityType) ..
             " | Weight: " ..
@@ -73,15 +70,15 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
     end
 
-    print(
-        "[ULF][AFFINITY] Total weight: " ..
+    ULF_Debug.Print(
+        "[LOOT AFFINITY] Total weight: " ..
         tostring(totalWeight)
     )
 
     if totalWeight <= 0 then
 
-        print(
-            "[ULF][AFFINITY] Invalid total weight -> Random"
+        ULF_Debug.Error(
+            "[LOOT AFFINITY] Invalid total weight -> Random"
         )
 
         return "Random"
@@ -91,8 +88,8 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
     local roll =
         math.random() * totalWeight
 
-    print(
-        "[ULF][AFFINITY] Roll: " ..
+    ULF_Debug.Print(
+        "[LOOT AFFINITY] Roll: " ..
         tostring(roll)
     )
 
@@ -105,8 +102,8 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
         if roll <= cumulative then
 
-            print(
-                "[ULF][AFFINITY] Selected: " ..
+            ULF_Debug.Print(
+                "[LOOT AFFINITY] Selected: " ..
                 tostring(affinityType)
             )
 
@@ -116,8 +113,8 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
     end
 
-    print(
-        "[ULF][AFFINITY] Roll failed -> Random"
+    ULF_Debug.Print(
+        "[LOOT AFFINITY] Roll failed -> Random"
     )
 
     return "Random"
@@ -172,8 +169,3 @@ function ULF_LootAffinity.HasAffinity(
     )
 
 end
-
-
-print(
-    "[ULF][LOOT] Loot Affinity API exported"
-)

@@ -1,5 +1,3 @@
-print("[ULF] DatabaseCache.lua LOADED")
-
 ULF_DatabaseCache = {}
 
 ULF_DatabaseCache.VERSION = 1
@@ -11,10 +9,10 @@ ULF_DatabaseCache.FILE_NAME = "ULF_ItemDatabase.json"
 
 function ULF_DatabaseCache.Save(database)
 
-    print("[ULF][CACHE] Saving database...")
+    ULF_Debug.Print("[CACHE] Saving database...")
 
     if not database then
-        print("[ULF][CACHE] ERROR: database is nil")
+        ULF_Debug.Error("[CACHE] database is nil")
         return false
     end
 
@@ -31,8 +29,8 @@ function ULF_DatabaseCache.Save(database)
     end)
 
     if not ok then
-        print("[ULF][CACHE] ERROR: JSON serialization failed")
-        print("[ULF][CACHE] " .. tostring(json))
+        ULF_Debug.Error("[CACHE] JSON serialization failed")
+        ULF_Debug.Print("[CACHE] " .. tostring(json))
         return false
     end
 
@@ -46,12 +44,12 @@ function ULF_DatabaseCache.Save(database)
     end)
 
     if not saveOk then
-        print("[ULF][CACHE] ERROR: SaveFile failed")
-        print("[ULF][CACHE] " .. tostring(saveResult))
+        ULF_Debug.Error("[CACHE] SaveFile failed")
+        ULF_Debug.Print("[CACHE] " .. tostring(saveResult))
         return false
     end
 
-    print("[ULF][CACHE] Database saved successfully")
+    ULF_Debug.Print("[CACHE] Database saved successfully")
 
     return true
 end
@@ -63,7 +61,7 @@ end
 
 function ULF_DatabaseCache.Load()
 
-    print("[ULF][CACHE] Loading database...")
+    ULF_Debug.Print("[CACHE] Loading database...")
 
     local ok, content = pcall(function()
 
@@ -75,15 +73,15 @@ function ULF_DatabaseCache.Load()
 
     if not ok then
 
-        print("[ULF][CACHE] ERROR: LoadFile failed")
-        print("[ULF][CACHE] " .. tostring(content))
+        ULF_Debug.Error("[CACHE] LoadFile failed")
+        ULF_Debug.Error("[CACHE] " .. tostring(content))
 
         return nil
     end
 
     if not content then
 
-        print("[ULF][CACHE] No cache file found")
+        ULF_Debug.Error("[CACHE] No cache file found")
 
         return nil
     end
@@ -97,15 +95,15 @@ function ULF_DatabaseCache.Load()
 
     if not jsonOk then
 
-        print("[ULF][CACHE] ERROR: JSON parsing failed")
-        print("[ULF][CACHE] " .. tostring(data))
+        ULF_Debug.Error("[CACHE] JSON parsing failed")
+        ULF_Debug.Error("[CACHE] " .. tostring(data))
 
         return nil
     end
 
     if not data then
 
-        print("[ULF][CACHE] ERROR: Parsed cache is nil")
+        ULF_Debug.Error("[CACHE] Parsed cache is nil")
 
         return nil
     end
@@ -117,8 +115,8 @@ function ULF_DatabaseCache.Load()
 
     if data.Version ~= ULF_DatabaseCache.VERSION then
 
-        print(
-            "[ULF][CACHE] Version mismatch: " ..
+        ULF_Debug.Error(
+            "[CACHE] Version mismatch: " ..
             tostring(data.Version) ..
             " != " ..
             tostring(ULF_DatabaseCache.VERSION)
@@ -130,16 +128,16 @@ function ULF_DatabaseCache.Load()
 
     if not data.Items then
 
-        print(
-            "[ULF][CACHE] ERROR: Cache contains no Items"
+        ULF_Debug.Error(
+            "[CACHE] Cache contains no Items"
         )
 
         return nil
     end
 
 
-    print(
-        "[ULF][CACHE] Database loaded successfully"
+    ULF_Debug.Print(
+        "[CACHE] Database loaded successfully"
     )
 
 

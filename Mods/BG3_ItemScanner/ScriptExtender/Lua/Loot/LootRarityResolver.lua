@@ -1,5 +1,3 @@
-print("[ULF] LootRarityResolver.lua LOADED")
-
 ULF_LootRarityResolver = {}
 
 -- ============================================================
@@ -84,8 +82,3 @@ function ULF_LootRarityResolver.Resolve(maxRarity)
     return nil
 
 end
-
-
-print(
-    "[ULF][LOOT] Rarity Resolver API exported"
-)

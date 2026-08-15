@@ -1,5 +1,3 @@
-print("[ULF] LootContext.lua LOADED")
-
 ULF_LootContext = {}
 
 -- ============================================================
@@ -31,8 +29,3 @@ function ULF_LootContext.Build(
     }
 
 end
-
-
-print(
-    "[ULF][LOOT_CONTEXT] Context API exported"
-)

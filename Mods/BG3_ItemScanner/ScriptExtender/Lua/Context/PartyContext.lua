@@ -1,5 +1,3 @@
-print("[ULF] PartyContext.lua LOADED")
-
 ULF_PartyContext = {}
 
 local function IsSummon(character)
@@ -37,14 +35,14 @@ function ULF_PartyContext.GetMembers()
     if not Osi
         or not Osi.DB_PartyMembers
     then
-        print("[ULF][PARTY] ERROR: DB_PartyMembers is unavailable")
+        ULF_Debug.Error("[PARTY CONTEXT] DB_PartyMembers is unavailable")
         return members
     end
 
     local rows = Osi.DB_PartyMembers:Get(nil)
 
     if not rows then
-        print("[ULF][PARTY] No party members found")
+        ULF_Debug.Error("[PARTY CONTEXT] No party members found")
         return members
     end
 
@@ -137,8 +135,8 @@ function ULF_PartyContext.Build()
 
     if validMembers <= 0 then
 
-        print(
-            "[ULF][PARTY] ERROR: No valid party members"
+        ULF_Debug.Error(
+            "[PARTY CONTEXT] ERROR: No valid party members"
         )
 
         return nil
@@ -167,27 +165,25 @@ end
 function ULF_PartyContext.DebugPrint(data)
 
     if not data then
-        print("[ULF][PARTY] ERROR: Party data is nil")
+        ULF_Debug.Error("[PARTY CONTEXT] Party data is nil")
         return
     end
 
-    print("[ULF][PARTY] ========================================")
-    print("[ULF][PARTY] PARTY CONTEXT")
-    print("[ULF][PARTY] ========================================")
+    ULF_Debug.Print("[PARTY CONTEXT] -------------------------------------")
 
-    print("[ULF][PARTY] [SUMMARY]")
-    print("  Members:       " .. tostring(data.MemberCount))
-    print("  Average Level: " .. tostring(data.AverageLevel or "-"))
-    print("  Highest Level: " .. tostring(data.HighestLevel or "-"))
-    print("  Lowest Level:  " .. tostring(data.LowestLevel or "-"))
+    ULF_Debug.Print("[PARTY CONTEXT] [SUMMARY]")
+    ULF_Debug.Print("  Members:       " .. tostring(data.MemberCount))
+    ULF_Debug.Print("  Average Level: " .. tostring(data.AverageLevel or "-"))
+    ULF_Debug.Print("  Highest Level: " .. tostring(data.HighestLevel or "-"))
+    ULF_Debug.Print("  Lowest Level:  " .. tostring(data.LowestLevel or "-"))
 
-    print("[ULF][PARTY] [MEMBERS]")
+    print("[PARTY CONTEXT] [MEMBERS]")
 
     if data.Members then
 
         for i, member in ipairs(data.Members) do
 
-            print(
+            ULF_Debug.Print(
                 "  [" .. tostring(i) .. "] " ..
                 "Character: " .. tostring(member.Character) ..
                 " | Level: " .. tostring(member.Level or "-")
@@ -197,8 +193,7 @@ function ULF_PartyContext.DebugPrint(data)
 
     end
 
-    print("[ULF][PARTY] ========================================")
-    print("[ULF][PARTY] END PARTY CONTEXT")
-    print("[ULF][PARTY] ========================================")
+    ULF_Debug.Print("[PARTY CONTEXT] END PARTY CONTEXT")
+    ULF_Debug.Print("")
 
 end

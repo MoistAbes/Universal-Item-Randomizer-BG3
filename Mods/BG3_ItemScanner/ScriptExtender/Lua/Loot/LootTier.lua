@@ -33,8 +33,3 @@ function ULF_LootTier.GetMaxRarity(lootContext)
     end
 
 end
-
-
-print(
-    "[ULF][LOOT] Tier API exported"
-)

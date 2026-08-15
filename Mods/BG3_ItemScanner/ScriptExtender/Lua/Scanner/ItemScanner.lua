@@ -1,4 +1,4 @@
-print("[ULF] ItemScanner.lua LOADED")
+ULF_Debug.Print("[ITEM SCANNER] ItemScanner.lua LOADED")
 
 -- ============================================================
 -- ITEM SCANNER
@@ -24,22 +24,6 @@ print("[ULF] ItemScanner.lua LOADED")
 -- ============================================================
 
 local MAX_SAMPLES_PER_CATEGORY = 10
-
-local CATEGORY_ORDER = {
-
-    "Weapon",
-    "Armor",
-    "Accessory",
-    "Consumable",
-    "Scroll",
-    "Food",
-    "Grenade",
-    "Book",
-    "Material",
-    "Other"
-
-}
-
 
 -- ============================================================
 -- CREATE SCAN STATISTICS
@@ -820,43 +804,40 @@ local function PrintScanSummary(
     itemCount
 )
 
-    print("")
-    print("[ULF] ========================================")
-    print("[ULF] SCAN FINISHED")
-    print("[ULF] ========================================")
+    ULF_Debug.Print("[ITEM SCANNER] SCAN FINISHED -------------------------------------")
 
 
-    print(
-        "[ULF] Stats scanned: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Stats scanned: " ..
         tostring(scanStats.StatsTotal)
     )
 
 
-    print(
-        "[ULF] Stats with RootTemplate: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Stats with RootTemplate: " ..
         tostring(scanStats.StatsWithRootTemplate)
     )
 
 
-    print(
-        "[ULF] RootTemplates resolved: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] RootTemplates resolved: " ..
         tostring(scanStats.RootTemplatesResolved)
     )
 
 
-    print(
-        "[ULF] Physical item records: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Physical item records: " ..
         tostring(scanStats.PhysicalItems)
     )
 
 
-    print(
-        "[ULF] Unique physical items: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Unique physical items: " ..
         tostring(itemCount)
     )
 
-    print(
-        "[ULF] Quest items: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Quest items: " ..
         tostring(scanStats.QuestItems)
     )
 
@@ -865,36 +846,36 @@ local function PrintScanSummary(
     -- ERRORS
     -- ========================================================
 
-    print("")
-    print("[ULF] --- SKIPPED / ERRORS ---")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM SCANNER] --- SKIPPED / ERRORS ---")
 
 
-    print(
-        "[ULF] No RootTemplate: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] No RootTemplate: " ..
         tostring(scanStats.NoRootTemplate)
     )
 
 
-    print(
-        "[ULF] Template not found: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Template not found: " ..
         tostring(scanStats.TemplateNotFound)
     )
 
 
-    print(
-        "[ULF] Wrong TemplateType: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Wrong TemplateType: " ..
         tostring(scanStats.WrongTemplateType)
     )
 
 
-    print(
-        "[ULF] Property errors: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Property errors: " ..
         tostring(scanStats.PropertyErrors)
     )
 
 
-    print(
-        "[ULF] Duplicate RootTemplates: " ..
+    ULF_Debug.Print(
+        "[ITEM SCANNER] Duplicate RootTemplates: " ..
         tostring(scanStats.DuplicateTemplates)
     )
 
@@ -906,10 +887,10 @@ end
 
 local function ScanItems()
 
-    print("")
-    print("[ULF] ========================================")
-    print("[ULF] STARTING UNIVERSAL ITEM SCAN")
-    print("[ULF] ========================================")
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM SCANNER] ========================================")
+    ULF_Debug.Print("[ITEM SCANNER] STARTING UNIVERSAL ITEM SCAN")
+    ULF_Debug.Print("[ITEM SCANNER] ========================================")
 
 
     local stats =
@@ -918,8 +899,8 @@ local function ScanItems()
 
     if not stats then
 
-        print(
-            "[ULF] ERROR: Ext.Stats.GetStats() returned nil"
+        ULF_Debug.Print(
+            "[ITEM SCANNER] ERROR: Ext.Stats.GetStats() returned nil"
         )
 
         return nil
@@ -1085,10 +1066,9 @@ local function ScanItems()
     )
 
 
-    print("")
-    print("[ULF] ========================================")
-    print("[ULF] END OF Scan items")
-    print("[ULF] ========================================")
+    ULF_Debug.Print("[ITEM SCANNER] END OF Scan items")
+    ULF_Debug.Print("")
+
 
 
     -- ========================================================
@@ -1116,14 +1096,14 @@ end
 
 function PrintTestRecord(statName)
 
-    print("")
-    print("[ULF][TEST] ========================================")
-    print("[ULF][TEST] TEST RECORD")
-    print("[ULF][TEST] ========================================")
-    print("[ULF][TEST] Searching Stat: " .. tostring(statName))
+    ULF_Debug.Print("")
+    ULF_Debug.Print("[ITEM SCANNER][TEST] ========================================")
+    ULF_Debug.Print("[ITEM SCANNER][TEST] TEST RECORD")
+    ULF_Debug.Print("[ITEM SCANNER][TEST] ========================================")
+    ULF_Debug.Print("[ITEM SCANNER][TEST] Searching Stat: " .. tostring(statName))
 
     if not statName or statName == "" then
-        print("[ULF][TEST] ERROR: Missing Stat")
+        ULF_Debug.Print("[ITEM SCANNER][TEST] ERROR: Missing Stat")
         return nil
     end
 
@@ -1137,25 +1117,25 @@ function PrintTestRecord(statName)
 
             found = item
 
-            print("")
-            print("[ULF][TEST] MATCH FOUND")
-            print("[ULF][TEST] Database Key: " .. tostring(key))
-            print("[ULF][TEST] ----------------------------------------")
+            ULF_Debug.Print("")
+            ULF_Debug.Print("[ITEM SCANNER][TEST] MATCH FOUND")
+            ULF_Debug.Print("[ITEM SCANNER][TEST] Database Key: " .. tostring(key))
+            ULF_Debug.Print("[ITEM SCANNER][TEST] ----------------------------------------")
 
             for field, value in pairs(item) do
 
                 if type(value) == "table" then
 
-                    print(
-                        "[ULF][TEST] "
+                    ULF_Debug.Print(
+                        "[ITEM SCANNER][TEST] "
                         .. tostring(field)
                         .. " = <table>"
                     )
 
                 else
 
-                    print(
-                        "[ULF][TEST] "
+                    ULF_Debug.Print(
+                        "[ITEM SCANNER][TEST] "
                         .. tostring(field)
                         .. " = "
                         .. tostring(value)
@@ -1169,10 +1149,10 @@ function PrintTestRecord(statName)
     end
 
     if not found then
-        print("[ULF][TEST] NO MATCH FOUND")
+        ULF_Debug.Print("[ITEM SCANNER][TEST] NO MATCH FOUND")
     end
 
-    print("[ULF][TEST] ========================================")
+    ULF_Debug.Print("[ITEM SCANNER][TEST] ========================================")
 
     return found
 end

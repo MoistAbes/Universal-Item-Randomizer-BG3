@@ -8,6 +8,10 @@ print("[ItemScanner] BootstrapServer.lua LOADED")
 -- CONFIG
 Ext.Require("Config/ModSettings.lua")
 Ext.Require("Config/LootConfig.lua")
+
+-- DEBUG
+Ext.Require("Debug/ULF_Debug.lua")
+
 Ext.Require("Loot/LootDefinitions.lua")
 Ext.Require("Config/MCM.lua")
 
@@ -19,8 +23,8 @@ Ext.Require("Config/LootConfigValidator.lua")
 
 if not ULF_LootConfigValidator.Validate() then
 
-    print(
-        "[ULF] ERROR: Loot configuration is invalid"
+    ULF_Debug.Error(
+        "[BOOTSTRAP SERVER] Loot configuration is invalid"
     )
 
     return
@@ -69,7 +73,7 @@ Ext.Require("Loot/LootInjector.lua")
 
 Ext.Events.SessionLoaded:Subscribe(function()
 
-    print("[ULF] SESSION LOADED")
+    ULF_Debug.Print("[BOOTSTRAP SERVER] SESSION LOADED")
 
     local success =
         ULF_DatabaseInitializer.Initialize()
@@ -77,8 +81,8 @@ Ext.Events.SessionLoaded:Subscribe(function()
     if not success
         or not ULF_Database.Ready then
 
-        print(
-            "[ULF] ERROR: Database is not ready"
+        ULF_Debug.Error(
+            "[BOOTSTRAP SERVER] Database is not ready"
         )
 
         return

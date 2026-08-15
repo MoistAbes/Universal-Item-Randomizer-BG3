@@ -1,7 +1,4 @@
-print("[ULF] LootItemResolver.lua LOADED")
-
 ULF_LootItemResolver = {}
-
 
 -- ============================================================
 -- RESOLVE RANDOM ITEM BY RARITY AND AFFINITY
@@ -13,8 +10,8 @@ function ULF_LootItemResolver.Resolve(
 )
 
     if not rarity then
-        print(
-            "[ULF][LOOT] ERROR: Rarity is missing"
+        ULF_Debug.Error(
+            "[LOOT ITEM RESOLVER] Rarity is missing"
         )
         return nil
     end
@@ -71,8 +68,8 @@ function ULF_LootItemResolver.Resolve(
 
     if #affinityEligible == 0 then
 
-        print(
-            "[ULF][LOOT] No items found for affinity: " ..
+        ULF_Debug.Print(
+            "[LOOT ITEM RESOLVER] No items found for affinity: " ..
             tostring(affinity)
         )
 
@@ -85,8 +82,8 @@ function ULF_LootItemResolver.Resolve(
     -- RANDOM ITEM
     -- ========================================================
 
-    print(
-        "[ULF][AFFINITY] Matching items: " ..
+    ULF_Debug.Print(
+        "[AFFINITY] Matching items: " ..
         tostring(#affinityEligible)
     )
 
@@ -95,8 +92,3 @@ function ULF_LootItemResolver.Resolve(
     ]
 
 end
-
-
-print(
-    "[ULF][LOOT] Item Resolver API exported"
-)

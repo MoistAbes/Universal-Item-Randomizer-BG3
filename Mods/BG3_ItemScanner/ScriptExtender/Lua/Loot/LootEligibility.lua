@@ -12,8 +12,3 @@ function ULF_LootEligibility.CanGenerate(lootContext)
     return true
 
 end
-
-
-print(
-    "[ULF][LOOT] Eligibility API exported"
-)
