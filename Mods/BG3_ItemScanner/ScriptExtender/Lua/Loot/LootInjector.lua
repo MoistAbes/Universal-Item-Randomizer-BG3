@@ -30,7 +30,7 @@ end
 
 local function generateLoot(lootContext, victim, dropCount)
 
-    local affinities = ULF_LootAffinity.Calculate(lootContext)
+    local affinities = ULF_LootAffinity.Calculate(lootContext.Enemy)
 
         -- ========================================================
     -- GENERATE EACH DROP
@@ -325,7 +325,7 @@ Ext.Osiris.RegisterListener(
         -- ====================================================
         -- ENEMY RESEARCH
         -- ====================================================
-        ULF_EnemyDebugInspector.Inspect(entity)
+        -- ULF_EnemyDebugInspector.Inspect(entity)
 
         local lootContext = buildLootContext(entity)
 

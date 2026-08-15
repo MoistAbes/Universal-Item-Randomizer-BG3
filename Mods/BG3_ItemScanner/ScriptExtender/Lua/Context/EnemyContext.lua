@@ -65,6 +65,32 @@ function ULF_EnemyContext.Build(entity)
 
     end
 
+    print("[ULF][DEBUG] ServerBaseProficiency: " .. tostring(entity.ServerBaseProficiency))
+    print("[ULF][DEBUG] Components ServerBaseProficiency: " .. tostring(components.ServerBaseProficiency))
+    print("[ULF][DEBUG] Has ServerBaseProficiency: " .. tostring(components.ServerBaseProficiency ~= nil))
+
+    -- ========================================================
+    -- PROFICIENCY
+    -- ========================================================
+
+    local proficiencyGroups = {}
+
+    if entity.ServerBaseProficiency
+        and entity.ServerBaseProficiency.ProficiencyGroup
+    then
+
+        for _, proficiency in ipairs(
+            entity.ServerBaseProficiency.ProficiencyGroup
+        ) do
+
+            table.insert(
+                proficiencyGroups,
+                proficiency
+            )
+
+        end
+
+    end
 
 -- ========================================================
 -- ITEMS
@@ -220,6 +246,8 @@ function ULF_EnemyContext.Build(entity)
 
         Archetype = archetype,
 
+        ProficiencyGroup = proficiencyGroups,
+
         Items = items
 
     }
@@ -279,6 +307,32 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
         "  Archetype:     " ..
         tostring(enemyContext.Archetype or "-")
     )
+
+    -- ========================================================
+    -- PROFICIENCY
+    -- ========================================================
+
+    print("[ULF][ENEMY-CONTEXT] [PROFICIENCY]")
+
+    if enemyContext.ProficiencyGroup
+        and #enemyContext.ProficiencyGroup > 0
+    then
+
+        for _, proficiency in ipairs(
+            enemyContext.ProficiencyGroup
+        ) do
+
+            print(
+                "  " .. tostring(proficiency)
+            )
+
+        end
+
+    else
+
+        print("  -")
+
+    end
 
     -- ========================================================
     -- ITEMS

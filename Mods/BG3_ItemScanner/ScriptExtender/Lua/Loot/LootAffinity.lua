@@ -3,108 +3,40 @@ print("[ULF] LootAffinity.lua LOADED")
 ULF_LootAffinity = {}
 
 local DEFAULT_RANDOM_WEIGHT = 100
-local ARCHETYPE_WEIGHT = 70
-local EQUIPPED_WEIGHT = 30
+local PROFICIENCY_WEIGHT = 70
 
-local function ResolveArchetypeAffinities(archetype)
 
-    local result = {}
-
-    if string.find(archetype, "melee", 1, true) then
-        table.insert(result, "Melee")
-    end
-
-    if string.find(archetype, "ranged", 1, true) then
-        table.insert(result, "Ranged")
-    end
-
-    if string.find(archetype, "mage", 1, true)
-        or string.find(archetype, "magic", 1, true)
-    then
-        table.insert(result, "Magic")
-    end
-
-    if string.find(archetype, "rogue", 1, true) then
-        table.insert(result, "Rogue")
-    end
-
-    return result
-end
+-- ============================================================
+-- CALCULATE AFFINITIES
+-- ============================================================
 
 function ULF_LootAffinity.Calculate(
-    lootContext
+    enemyContext
 )
 
     local affinities = {
         Random = DEFAULT_RANDOM_WEIGHT
     }
 
-    if not lootContext
-        or not lootContext.Enemy
-    then
-        return affinities
-    end
-
-    local enemyContext =
-        lootContext.Enemy
-
-
     -- ========================================================
-    -- ARCHETYPE
+    -- PROFICIENCY AFFINITIES
     -- ========================================================
 
-    if enemyContext.Archetype then
+    if enemyContext.ProficiencyGroup then
 
-        local archetypeAffinities =
-            ResolveArchetypeAffinities(
-                enemyContext.Archetype
-            )
-
-        for _, affinityType in ipairs(
-            archetypeAffinities
+        for _, proficiency in ipairs(
+            enemyContext.ProficiencyGroup
         ) do
 
-            affinities[affinityType] =
-                (affinities[affinityType] or 0) +
-                ARCHETYPE_WEIGHT
+            affinities[proficiency] =
+                (affinities[proficiency] or 0) +
+                PROFICIENCY_WEIGHT
 
         end
 
     end
 
     -- ========================================================
-    -- EQUIPPED ITEMS
-    -- ========================================================
-
-    if enemyContext.Items then
-
-        for _, enemyItem in ipairs(
-            enemyContext.Items
-        ) do
-
-            if enemyItem.Equipped then
-
-                if enemyItem.Slot == "MeleeMainHand" then
-
-                    affinities.Melee =
-                        (affinities.Melee or 0) +
-                        EQUIPPED_WEIGHT
-
-                elseif enemyItem.Slot == "RangedMainHand" then
-
-                    affinities.Ranged =
-                        (affinities.Ranged or 0) +
-                        EQUIPPED_WEIGHT
-
-                end
-
-            end
-
-        end
-
-    end
-
-        -- ========================================================
     -- DEBUG
     -- ========================================================
 
@@ -121,18 +53,24 @@ function ULF_LootAffinity.Calculate(
 
     end
 
-
     return affinities
 
 end
+
+
+-- ============================================================
+-- RESOLVE FINAL AFFINITY
+-- ============================================================
 
 function ULF_LootAffinity.ResolveAffinity(affinities)
 
     local totalWeight = 0
 
     for _, weight in pairs(affinities) do
+
         totalWeight =
             totalWeight + weight
+
     end
 
     print(
@@ -141,10 +79,13 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
     )
 
     if totalWeight <= 0 then
+
         print(
             "[ULF][AFFINITY] Invalid total weight -> Random"
         )
+
         return "Random"
+
     end
 
     local roll =
@@ -170,6 +111,7 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
             )
 
             return affinityType
+
         end
 
     end
@@ -182,7 +124,15 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
 end
 
-local function Contains(list, value)
+
+-- ============================================================
+-- UTILITY
+-- ============================================================
+
+local function Contains(
+    list,
+    value
+)
 
     if not list then
         return false
@@ -197,8 +147,13 @@ local function Contains(list, value)
     end
 
     return false
+
 end
 
+
+-- ============================================================
+-- ITEM AFFINITY MATCHING
+-- ============================================================
 
 function ULF_LootAffinity.HasAffinity(
     itemRecord,
@@ -211,72 +166,10 @@ function ULF_LootAffinity.HasAffinity(
         return false
     end
 
-
-    -- ========================================================
-    -- MELEE
-    -- ========================================================
-
-    if affinity == "Melee" then
-
-        return Contains(
-            itemRecord.WeaponProperties,
-            "Melee"
-        )
-
-    end
-
-
-    -- ========================================================
-    -- RANGED
-    -- ========================================================
-
-    if affinity == "Ranged" then
-
-        if itemRecord.Category ~= "Weapon" then
-            return false
-        end
-
-        return itemRecord.Slot ==
-            "Ranged Main Weapon"
-
-    end
-
-
-    -- ========================================================
-    -- MAGIC
-    -- ========================================================
-
-    if affinity == "Magic" then
-
-        if Contains(
-            itemRecord.WeaponProperties,
-            "Magical"
-        ) then
-            return true
-        end
-
-        -- Scrolls are inherently magical loot
-        if itemRecord.Category == "Scroll" then
-            return true
-        end
-
-        return false
-
-    end
-
-
-    -- ========================================================
-    -- DEFENSIVE
-    -- ========================================================
-
-    if affinity == "Defensive" then
-
-        return itemRecord.Category == "Armor"
-
-    end
-
-
-    return false
+    return Contains(
+        itemRecord.ProficiencyGroup,
+        affinity
+    )
 
 end
 
