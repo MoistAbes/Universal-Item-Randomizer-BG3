@@ -65,10 +65,6 @@ function ULF_EnemyContext.Build(entity)
 
     end
 
-    print("[ULF][DEBUG] ServerBaseProficiency: " .. tostring(entity.ServerBaseProficiency))
-    print("[ULF][DEBUG] Components ServerBaseProficiency: " .. tostring(components.ServerBaseProficiency))
-    print("[ULF][DEBUG] Has ServerBaseProficiency: " .. tostring(components.ServerBaseProficiency ~= nil))
-
     -- ========================================================
     -- PROFICIENCY
     -- ========================================================

@@ -5,27 +5,7 @@ print("[ULF] LootInjector.lua LOADED")
 -- ============================================================
 
 local function DebugLootItem(record)
-
-    print(
-        "[ULF][LOOT] Item Category: " ..
-        tostring(record.Category)
-    )
-
-    print(
-        "[ULF][LOOT] Item Type: " ..
-        tostring(record.Type)
-    )
-
-    print(
-        "[ULF][LOOT] Item Stat: " ..
-        tostring(record.Stat)
-    )
-
-    print(
-        "[ULF][LOOT] Item DisplayName: " ..
-        tostring(record.DisplayName)
-    )
-
+    print("[ULF][LOOT] Dropped Item Category=" .. tostring(record.Category) .. " | Type=" .. tostring(record.Type) .. " | Stat=" .. tostring(record.Stat) .. " | DisplayName=" .. tostring(record.DisplayName))
 end
 
 local function generateLoot(lootContext, victim, dropCount)
@@ -112,16 +92,6 @@ local function generateLoot(lootContext, victim, dropCount)
 
         else
 
-            print(
-                "[ULF][LOOT] Item resolved successfully"
-            )
-
-            print(
-                "[ULF][LOOT] Item UUID: " ..
-                tostring(itemRecord.RootTemplate)
-            )
-
-
             -- ================================================
             -- SPAWN ITEM
             -- ================================================
@@ -131,12 +101,6 @@ local function generateLoot(lootContext, victim, dropCount)
                     victim,
                     itemRecord
                 )
-
-            print(
-                "[ULF][LOOT] Spawn result: " ..
-                tostring(success)
-            )
-
 
             -- ================================================
             -- DEBUG ITEM
@@ -171,11 +135,11 @@ local function buildLootContext(entity)
         return
     end
 
+    ULF_EnemyContext.DebugPrint(enemyContext)
+
     -- ====================================================
     -- Build Player context
     -- ====================================================
-
-    ULF_EnemyContext.DebugPrint(enemyContext)
 
     local partyContext =
         ULF_PartyContext.Build()
@@ -223,14 +187,13 @@ local function ProcessEnemyLoot(victim, lootContext)
         )
 
     print(
-        "[ULF][LOOT] Eligibility: " ..
+        "[ULF][LOOT] Eligibility (Can this enemy drop item): " ..
         tostring(canGenerate)
     )
 
     if not canGenerate then
         return
     end
-
 
     -- ========================================================
     -- DROP CHANCE
@@ -240,14 +203,8 @@ local function ProcessEnemyLoot(victim, lootContext)
         ULF_LootGeneration.ShouldGenerate(lootContext)
 
     if not shouldDrop then
-
-        print(
-            "[ULF][LOOT] Drop chance failed"
-        )
-
         return
     end
-
 
     -- ========================================================
     -- DROP COUNT
@@ -346,6 +303,10 @@ Ext.Osiris.RegisterListener(
             victim,
             lootContext
         )
+
+        print("[ULF][INJECTOR] FINISHED INJECTING ITEM")
+        print("")
+
 
     end
 )
