@@ -67,19 +67,6 @@ function ULF_MCM.ApplySettings()
         .. tostring(ULF_LootConfig.BaseDropChance)
     )
 
-    ULF_Debug.Print(
-        "[MCM] RarityWeights = "
-        .. tostring(ULF_LootConfig.RarityWeights.Common)
-        .. "/"
-        .. tostring(ULF_LootConfig.RarityWeights.Uncommon)
-        .. "/"
-        .. tostring(ULF_LootConfig.RarityWeights.Rare)
-        .. "/"
-        .. tostring(ULF_LootConfig.RarityWeights.VeryRare)
-        .. "/"
-        .. tostring(ULF_LootConfig.RarityWeights.Legendary)
-    )
-
     return true
 end
 

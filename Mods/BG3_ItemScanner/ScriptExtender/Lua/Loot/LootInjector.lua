@@ -239,11 +239,7 @@ end
 -- OSIRIS: DIED
 -- ============================================================
 
-Ext.Osiris.RegisterListener(
-    "Died",
-    1,
-    "after",
-    function(victim)
+Ext.Osiris.RegisterListener("Died",1,"after", function(victim)
 
         if not ULF_ModSettings.Enabled then
             return
