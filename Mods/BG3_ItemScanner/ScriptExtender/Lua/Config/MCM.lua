@@ -17,7 +17,6 @@ function ULF_MCM.ApplySettings()
         return false
     end
 
-
     -- --------------------------------------------------------
     -- MOD SETTINGS
     -- --------------------------------------------------------
@@ -28,13 +27,11 @@ function ULF_MCM.ApplySettings()
         ULF_ModSettings.Enabled = enabled
     end
 
-
     local debug = MCM.Get("Debug")
 
     if debug ~= nil then
         ULF_ModSettings.Debug = debug
     end
-
 
     -- --------------------------------------------------------
     -- LOOT CONFIG
@@ -45,7 +42,6 @@ function ULF_MCM.ApplySettings()
     if baseDropChance ~= nil then
         ULF_LootConfig.BaseDropChance = baseDropChance
     end
-
 
     print(
         "[ULF][MCM] Settings applied"
@@ -88,14 +84,12 @@ function ULF_MCM.OnSettingSaved(payload)
         return
     end
 
-
     print(
         "[ULF][MCM] Setting saved: "
         .. tostring(payload.settingId)
         .. " = "
         .. tostring(payload.value)
     )
-
 
     if payload.settingId == "Enabled" then
 
@@ -110,7 +104,6 @@ function ULF_MCM.OnSettingSaved(payload)
         ULF_LootConfig.BaseDropChance = payload.value
 
     end
-
 end
 
 
@@ -137,21 +130,6 @@ else
     )
 
 end
-
-function ULF_MCM.Refresh()
-    print("[ULF][MCM] Enabled from MCM = " .. tostring(MCM.Get("Enabled")))
-end
-
-Ext.ModEvents.BG3MCM["MCM_Setting_Saved"]:Subscribe(function(payload)
-
-    print(
-        "[ULF][MCM] EVENT:"
-        .. " modUUID=" .. tostring(payload.modUUID)
-        .. " settingId=" .. tostring(payload.settingId)
-        .. " value=" .. tostring(payload.value)
-    )
-
-end)
 
 
 print(

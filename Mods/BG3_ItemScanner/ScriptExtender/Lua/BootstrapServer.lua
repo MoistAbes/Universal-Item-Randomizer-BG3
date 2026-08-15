@@ -84,7 +84,4 @@ Ext.Events.SessionLoaded:Subscribe(function()
         return
     end
 
-
-    ULF_MCM.Refresh()
-
 end)
