@@ -313,6 +313,124 @@ local function CalculateEquipmentThreat(enemyContext)
 
 end
 
+-- ============================================================
+-- RESISTANCES
+-- ============================================================
+--
+-- Each damage type occupies one entry in the Resistances table.
+--
+-- Magical + NonMagical variants inside the SAME entry count
+-- as ONE resistance.
+--
+-- Example:
+--
+-- { "ResistantToMagical", "ResistantToNonMagical" }
+--
+-- = 1x Resistant
+--
+-- Vulnerable decreases threat.
+-- Resistant increases threat.
+-- Immune increases threat significantly.
+-- ============================================================
+
+local function CalculateResistanceThreat(enemyContext)
+
+    if not enemyContext
+        or not enemyContext.Resistances
+        or not enemyContext.Resistances.PerDamageType
+    then
+        return 0
+    end
+
+
+    local resistantCount = 0
+    local immuneCount = 0
+    local vulnerableCount = 0
+
+
+    for _, resistanceEntry in ipairs(
+        enemyContext.Resistances.PerDamageType
+    ) do
+
+        if type(resistanceEntry) == "table" then
+
+            local isResistant = false
+            local isImmune = false
+            local isVulnerable = false
+
+
+            for _, resistance in ipairs(
+                resistanceEntry
+            ) do
+
+                if resistance == "ResistantToMagical"
+                    or resistance == "ResistantToNonMagical"
+                then
+
+                    isResistant = true
+
+                elseif resistance == "ImmuneToMagical"
+                    or resistance == "ImmuneToNonMagical"
+                then
+
+                    isImmune = true
+
+                elseif resistance == "VulnerableToMagical"
+                    or resistance == "VulnerableToNonMagical"
+                then
+
+                    isVulnerable = true
+
+                end
+
+            end
+
+
+            if isImmune then
+
+                immuneCount =
+                    immuneCount + 1
+
+            elseif isResistant then
+
+                resistantCount =
+                    resistantCount + 1
+
+            elseif isVulnerable then
+
+                vulnerableCount =
+                    vulnerableCount + 1
+
+            end
+
+        end
+
+    end
+
+
+    local score =
+        (
+            resistantCount *
+            CONFIG.ResistantThreat
+        )
+        +
+        (
+            immuneCount *
+            CONFIG.ImmuneThreat
+        )
+        +
+        (
+            vulnerableCount *
+            CONFIG.VulnerableThreat
+        )
+
+
+    return
+        score *
+        CONFIG.ResistanceWeight
+
+end
+
 
 -- ============================================================
 -- CALCULATE
@@ -368,6 +486,11 @@ function ULF_EnemyThreatCalculator.Calculate(
             enemyContext
         )
 
+    local resistanceScore =
+            CalculateResistanceThreat(
+                enemyContext
+            )
+
 
     local total =
         levelScore
@@ -376,6 +499,7 @@ function ULF_EnemyThreatCalculator.Calculate(
         + abilityScore
         + proficiencyScore
         + equipmentScore
+        + resistanceScore
 
 
     return {
@@ -395,6 +519,8 @@ function ULF_EnemyThreatCalculator.Calculate(
             Proficiency = proficiencyScore,
 
             Equipment = equipmentScore,
+
+            Resistance = resistanceScore,
 
         },
 
@@ -467,6 +593,11 @@ function ULF_EnemyThreatCalculator.DebugPrint(
         ULF_Debug.Print(
             "  Equipment:    " ..
             tostring(result.Components.Equipment)
+        )
+
+        ULF_Debug.Print(
+            "  Resistance:   " ..
+            tostring(result.Components.Resistance)
         )
 
     end

@@ -137,7 +137,20 @@ local function buildLootContext(entity)
 
     ULF_EnemyContext.DebugPrint(enemyContext)
 
+    -- ====================================================
+    -- CALCULATE ENEMY THREAT
+    -- ====================================================
+
     local enemyThreat = ULF_EnemyThreatCalculator.Calculate(enemyContext);
+
+     if not enemyThreat then
+
+        ULF_Debug.Error(
+            "[LOOT INJECTOR] Failed to calculate enemyThreat"
+        )
+
+        return
+    end
 
     ULF_EnemyThreatCalculator.DebugPrint(enemyThreat);
 
@@ -161,7 +174,7 @@ local function buildLootContext(entity)
     -- Build LOOT context
     -- ====================================================
 
-    local lootContext = ULF_LootContext.Build(enemyContext, partyContext)
+    local lootContext = ULF_LootContext.Build(enemyContext, partyContext, enemyThreat.Score)
 
     return lootContext
 

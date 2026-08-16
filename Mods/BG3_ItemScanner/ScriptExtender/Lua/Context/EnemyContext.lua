@@ -336,6 +336,43 @@ function ULF_EnemyContext.Build(entity)
 
     end
 
+    -- ========================================================
+    -- RESISTANCES
+    -- ========================================================
+
+    local resistances = {
+        PerDamageType = {}
+    }
+
+    if entity.Resistances
+        and entity.Resistances.Resistances
+    then
+
+        for i, damageTypeResistance in ipairs(
+            entity.Resistances.Resistances
+        ) do
+
+            resistances.PerDamageType[i] = {}
+
+            if damageTypeResistance then
+
+                for _, resistance in ipairs(
+                    damageTypeResistance
+                ) do
+
+                    table.insert(
+                        resistances.PerDamageType[i],
+                        resistance
+                    )
+
+                end
+
+            end
+
+        end
+
+    end
+
 
     -- ========================================================
     -- PROFILE
@@ -398,7 +435,13 @@ function ULF_EnemyContext.Build(entity)
         -- ITEMS
         -- ====================================================
 
-        Items = items
+        Items = items,
+
+        -- ====================================================
+        -- RESISTANCES
+        -- ====================================================
+
+        Resistances = resistances,
 
     }
 
@@ -714,6 +757,63 @@ function ULF_EnemyContext.DebugPrint(enemyContext)
             )
 
         end
+
+    end
+
+    -- ========================================================
+    -- RESISTANCES
+    -- ========================================================
+
+    ULF_Debug.Print(
+        "[ENEMY-CONTEXT] [RESISTANCES]"
+    )
+
+    local perDamageType = nil
+
+    if enemyContext.Resistances then
+
+        perDamageType =
+            enemyContext.Resistances.PerDamageType
+
+    end
+
+    if perDamageType
+        and #perDamageType > 0
+    then
+
+        for i, resistanceData in ipairs(perDamageType) do
+
+            if resistanceData
+                and #resistanceData > 0
+            then
+
+                ULF_Debug.Print(
+                    "  [" ..
+                    tostring(i) ..
+                    "] " ..
+                    table.concat(
+                        resistanceData,
+                        ", "
+                    )
+                )
+
+            else
+
+                ULF_Debug.Print(
+                    "  [" ..
+                    tostring(i) ..
+                    "] -"
+                )
+
+            end
+
+        end
+
+    else
+
+        ULF_Debug.Print(
+            "  -"
+        )
 
     end
 

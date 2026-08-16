@@ -16,6 +16,7 @@ ULF_EnemyThreatConfig = {
 
     EquipmentWeight = 3.0,
 
+    ResistanceWeight = 1.0,
 
     -- ========================================================
     -- HEALTH
@@ -55,5 +56,15 @@ ULF_EnemyThreatConfig = {
         [4] = 5.0,
 
     },
+
+    -- ========================================================
+    -- RESISTANCES
+    -- ========================================================
+
+    ResistantThreat = 5.0,
+
+    ImmuneThreat = 10.0,
+
+    VulnerableThreat = -5.0,
 
 }

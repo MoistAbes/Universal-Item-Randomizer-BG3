@@ -6,7 +6,8 @@ ULF_LootContext = {}
 
 function ULF_LootContext.Build(
     enemyContext,
-    partyContext
+    partyContext,
+    enemyThreatScore
 )
 
     if not enemyContext then
@@ -25,7 +26,9 @@ function ULF_LootContext.Build(
         Enemy = enemyContext,
         Party = partyContext,
 
-        RelativeLevel = relativeLevel
+        RelativeLevel = relativeLevel,
+
+        EnemyThreatScore = enemyThreatScore
     }
 
 end
