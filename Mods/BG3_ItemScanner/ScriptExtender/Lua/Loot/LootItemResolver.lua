@@ -10,31 +10,44 @@ function ULF_LootItemResolver.Resolve(
 )
 
     if not rarity then
+
         ULF_Debug.Error(
             "[LOOT ITEM RESOLVER] Rarity is missing"
         )
+
         return nil
     end
+
 
     local candidates =
-        ULF_DatabaseQuery.GetByRarity(rarity)
+        ULF_DatabaseQuery.GetByRarity(
+            rarity
+        )
 
-    if not candidates or #candidates == 0 then
+    if not candidates
+        or #candidates == 0
+    then
         return nil
     end
+
 
     local eligible = {}
 
     for _, record in ipairs(candidates) do
 
-        if ULF_LootItemEligibility.IsEligible(record) then
+        if ULF_LootItemEligibility.IsEligible(
+            record
+        ) then
+
             table.insert(
                 eligible,
                 record
             )
+
         end
 
     end
+
 
     if #eligible == 0 then
         return nil
@@ -69,7 +82,7 @@ function ULF_LootItemResolver.Resolve(
     if #affinityEligible == 0 then
 
         ULF_Debug.Print(
-            "[LOOT ITEM RESOLVER] No items found for affinity: " ..
+            "[LOOT ITEM] No candidates for affinity=" ..
             tostring(affinity)
         )
 
@@ -83,12 +96,23 @@ function ULF_LootItemResolver.Resolve(
     -- ========================================================
 
     ULF_Debug.Print(
-        "[AFFINITY] Matching items: " ..
+        "[LOOT ITEM] Candidates=" ..
         tostring(#affinityEligible)
     )
 
-    return affinityEligible[
-        math.random(#affinityEligible)
-    ]
+
+    local selected =
+        affinityEligible[
+            math.random(#affinityEligible)
+        ]
+
+
+    ULF_Debug.Print(
+        "[LOOT ITEM] Selected=" ..
+        tostring(selected.Stat)
+    )
+
+
+    return selected
 
 end

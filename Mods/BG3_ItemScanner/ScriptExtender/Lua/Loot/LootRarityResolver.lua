@@ -301,7 +301,14 @@ function ULF_LootRarityResolver.Resolve(
 
 
         if roll <= accumulated then
+
+            ULF_Debug.Print(
+                "[LOOT RARITY] Result=" ..
+                tostring(rarity)
+            )
+
             return rarity
+
         end
 
     end

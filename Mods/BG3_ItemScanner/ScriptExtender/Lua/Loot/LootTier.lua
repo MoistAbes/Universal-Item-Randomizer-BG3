@@ -166,20 +166,20 @@ function ULF_LootTier.GetMaxRarity(lootContext)
         RARITY_ORDER[finalIndex]
 
 
-    -- ========================================================
+ -- ========================================================
     -- DEBUG
     -- ========================================================
 
     ULF_Debug.Print(
-        "[LOOT TIER] Level: " ..
+        "[LOOT TIER] Level=" ..
         tostring(level) ..
-        " / Base: " ..
+        " | Base=" ..
         tostring(baseRarity) ..
-        " / Threat: " ..
+        " | Threat=" ..
         string.format("%.2f", threatScore) ..
-        " / ThreatBonus: +" ..
+        " | Bonus=+" ..
         tostring(threatBonus) ..
-        " / Max: " ..
+        " | Max=" ..
         tostring(finalRarity)
     )
 

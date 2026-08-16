@@ -15,6 +15,7 @@ function ULF_LootAffinity.Calculate(
         Random = DEFAULT_RANDOM_WEIGHT
     }
 
+
     -- ========================================================
     -- PROFICIENCY AFFINITIES
     -- ========================================================
@@ -33,22 +34,32 @@ function ULF_LootAffinity.Calculate(
 
     end
 
+
     -- ========================================================
     -- DEBUG
     -- ========================================================
 
-    ULF_Debug.Print("[LOOT AFFINITY] Calculated affinities:")
+    local debugParts = {}
 
     for affinityType, weight in pairs(affinities) do
 
-        ULF_Debug.Print(
-            "  " ..
+        table.insert(
+            debugParts,
             tostring(affinityType) ..
-            " | Weight: " ..
+            "=" ..
             tostring(weight)
         )
 
     end
+
+    ULF_Debug.Print(
+        "[LOOT AFFINITY] Weights: " ..
+        table.concat(
+            debugParts,
+            " | "
+        )
+    )
+
 
     return affinities
 
@@ -70,10 +81,6 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
     end
 
-    ULF_Debug.Print(
-        "[LOOT AFFINITY] Total weight: " ..
-        tostring(totalWeight)
-    )
 
     if totalWeight <= 0 then
 
@@ -85,15 +92,12 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
     end
 
+
     local roll =
         math.random() * totalWeight
 
-    ULF_Debug.Print(
-        "[LOOT AFFINITY] Roll: " ..
-        tostring(roll)
-    )
-
     local cumulative = 0
+
 
     for affinityType, weight in pairs(affinities) do
 
@@ -103,7 +107,7 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
         if roll <= cumulative then
 
             ULF_Debug.Print(
-                "[LOOT AFFINITY] Selected: " ..
+                "[LOOT AFFINITY] Selected=" ..
                 tostring(affinityType)
             )
 
@@ -113,7 +117,8 @@ function ULF_LootAffinity.ResolveAffinity(affinities)
 
     end
 
-    ULF_Debug.Print(
+
+    ULF_Debug.Error(
         "[LOOT AFFINITY] Roll failed -> Random"
     )
 

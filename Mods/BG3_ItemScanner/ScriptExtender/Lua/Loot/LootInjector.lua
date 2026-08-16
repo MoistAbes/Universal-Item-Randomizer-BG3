@@ -8,18 +8,26 @@ local function DebugLootItem(record)
     ULF_Debug.Print("[LOOT INJECTOR] Dropped Item Category=" .. tostring(record.Category) .. " | Type=" .. tostring(record.Type) .. " | Stat=" .. tostring(record.Stat) .. " | DisplayName=" .. tostring(record.DisplayName))
 end
 
-local function generateLoot(lootContext, victim, dropCount)
+local function generateLoot(
+    lootContext,
+    victim,
+    dropCount
+)
 
-    local affinities = ULF_LootAffinity.Calculate(lootContext.Enemy)
+    local affinities =
+        ULF_LootAffinity.Calculate(
+            lootContext.Enemy
+        )
 
-        -- ========================================================
+
+    -- ========================================================
     -- GENERATE EACH DROP
     -- ========================================================
 
     for i = 1, dropCount do
 
         ULF_Debug.Print(
-            "[LOOT INJECTOR] Generating drop " ..
+            "[LOOT] Drop " ..
             tostring(i) ..
             "/" ..
             tostring(dropCount)
@@ -34,11 +42,6 @@ local function generateLoot(lootContext, victim, dropCount)
             ULF_LootTier.GetMaxRarity(
                 lootContext
             )
-
-        ULF_Debug.Print(
-            "[LOOT INJECTOR] Max rarity: " ..
-            tostring(maxRarity)
-        )
 
         if not maxRarity then
 
@@ -57,7 +60,7 @@ local function generateLoot(lootContext, victim, dropCount)
             ULF_LootRarityResolver.Resolve(
                 lootContext,
                 maxRarity
-        )
+            )
 
         if not resolvedRarity then
 
@@ -68,11 +71,20 @@ local function generateLoot(lootContext, victim, dropCount)
             return
         end
 
+
+        -- ====================================================
+        -- RESOLVE AFFINITY
+        -- ====================================================
+
+        local resolvedAffinity =
+            ULF_LootAffinity.ResolveAffinity(
+                affinities
+            )
+
+
         -- ====================================================
         -- RESOLVE ITEM
         -- ====================================================
-
-        local resolvedAffinity = ULF_LootAffinity.ResolveAffinity(affinities);
 
         local itemRecord =
             ULF_LootItemResolver.Resolve(
@@ -86,29 +98,31 @@ local function generateLoot(lootContext, victim, dropCount)
                 "[LOOT INJECTOR] Item resolution failed"
             )
 
-        else
+            return
+        end
 
-            -- ================================================
-            -- SPAWN ITEM
-            -- ================================================
 
-            local success =
-                ULF_LootSpawner.AddItem(
-                    victim,
-                    itemRecord
-                )
+        -- ====================================================
+        -- SPAWN ITEM
+        -- ====================================================
 
-            -- ================================================
-            -- DEBUG ITEM
-            -- ================================================
-
-            DebugLootItem(
+        local success =
+            ULF_LootSpawner.AddItem(
+                victim,
                 itemRecord
             )
 
+        if not success then
+
+            ULF_Debug.Error(
+                "[LOOT INJECTOR] Failed to spawn item"
+            )
+
+            return
         end
 
     end
+
 end
 
 local function buildLootContext(entity)
@@ -131,7 +145,7 @@ local function buildLootContext(entity)
         return
     end
 
-    ULF_EnemyContext.DebugPrint(enemyContext)
+    -- ULF_EnemyContext.DebugPrint(enemyContext)
 
     -- ====================================================
     -- CALCULATE ENEMY THREAT
@@ -236,10 +250,6 @@ local function ProcessEnemyLoot(victim, lootContext)
     if not dropCount
         or dropCount <= 0 then
 
-        ULF_Debug.Print(
-            "[LOOT INJECTOR] Drop count is zero"
-        )
-
         return
     end
 
@@ -312,9 +322,6 @@ Ext.Osiris.RegisterListener("Died",1,"after", function(victim)
             victim,
             lootContext
         )
-
-        ULF_Debug.Print("[LOOT INJECTOR] FINISHED INJECTING ITEM")
-        ULF_Debug.Print("")
 
     end
 )

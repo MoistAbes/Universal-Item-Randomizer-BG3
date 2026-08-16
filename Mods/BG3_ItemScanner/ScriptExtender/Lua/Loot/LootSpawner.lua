@@ -93,7 +93,8 @@ function ULF_LootSpawner.AddItem(victim, record)
     if not rootTemplate then
 
         ULF_Debug.Error(
-            "[LOOT SPAWNER] RootTemplate could not be resolved"
+            "[LOOT SPAWNER] RootTemplate could not be resolved: " ..
+            tostring(record.Stat)
         )
 
         return false
@@ -123,7 +124,8 @@ function ULF_LootSpawner.AddItem(victim, record)
 
 
     ULF_Debug.Error(
-        "[LOOT SPAWNER] Failed to add item"
+        "[LOOT SPAWNER] Failed to add item: " ..
+        tostring(record.Stat)
     )
 
     return false
