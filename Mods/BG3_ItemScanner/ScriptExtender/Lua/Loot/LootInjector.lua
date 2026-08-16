@@ -55,12 +55,8 @@ local function generateLoot(lootContext, victim, dropCount)
 
         local resolvedRarity =
             ULF_LootRarityResolver.Resolve(
+                lootContext,
                 maxRarity
-            )
-
-        ULF_Debug.Print(
-            "[LOOT INJECTOR] Resolved rarity: " ..
-            tostring(resolvedRarity)
         )
 
         if not resolvedRarity then
