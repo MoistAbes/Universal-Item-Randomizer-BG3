@@ -20,18 +20,11 @@ ULF_LootConfig = {
 
     BaseDropChance = 0.7,
 
+    ThreatForGuaranteedDrop = 150,
+
     -- ========================================================
     -- RARITY
     -- ========================================================
-
-    -- These are intentionally conservative V1 values.
-    --
-    -- IMPORTANT:
-    -- Legendary items are NOT currently allowed to appear
-    -- from every enemy.
-    --
-    -- LootGenerator will later apply level/tier restrictions
-    -- before using these weights.
 
     RarityWeights = {
 
@@ -45,6 +38,27 @@ ULF_LootConfig = {
 
         Legendary = 1
 
+    },
+
+
+    RarityThreatShift = {
+        Common = -30,
+        Uncommon = -10,
+        Rare = 20,
+        VeryRare = 15,
+        Legendary = 5
+    },
+
+
+    RarityThreatPressure = {
+        { Threshold = 0,   Pressure = 0.00 },
+        { Threshold = 50,  Pressure = 0.05 },
+        { Threshold = 100, Pressure = 0.15 },
+        { Threshold = 150, Pressure = 0.30 },
+        { Threshold = 200, Pressure = 0.50 },
+        { Threshold = 250, Pressure = 0.70 },
+        { Threshold = 300, Pressure = 0.85 },
+        { Threshold = 400, Pressure = 1.00 },
     },
 
     -- ============================================================
@@ -65,18 +79,38 @@ ULF_LootConfig = {
         Grenade = false
     },
 
-    RelativeLevelModifiers = {
-        [-5] = -0.30,
-        [-4] = -0.25,
-        [-3] = -0.20,
-        [-2] = -0.15,
-        [-1] = -0.05,
-        [0]  =  0.00,
-        [1]  =  0.05,
-        [2]  =  0.10,
-        [3]  =  0.15,
-        [4]  =  0.20,
-        [5]  =  0.25
+
+    -- ========================================================
+    -- DROP COUNT
+    -- ========================================================
+
+    DropCountByLevel = {
+        { MaxLevel = 2, Count = 2 },
+        { MaxLevel = 4, Count = 3 },
+        { MaxLevel = 6, Count = 4 },
+        { MaxLevel = 8, Count = 5 },
+        { MaxLevel = math.huge, Count = 6 },
+    },
+
+    DropCountThreatThresholds = {
+        { Threshold = 100, Bonus = 1 },
+        { Threshold = 150, Bonus = 1 },
+        { Threshold = 200, Bonus = 1 },
+        { Threshold = 250, Bonus = 1 },
+    },
+
+
+    MaxRarityByLevel = {
+        { MaxLevel = 2, Rarity = "Uncommon" },
+        { MaxLevel = 4, Rarity = "Rare" },
+        { MaxLevel = 6, Rarity = "VeryRare" },
+        { MaxLevel = math.huge, Rarity = "Legendary" },
+    },
+
+    MaxRarityThreatThresholds = {
+        { Threshold = 100, Bonus = 1 },
+        { Threshold = 150, Bonus = 1 },
+        { Threshold = 200, Bonus = 1 },
     },
 
 }

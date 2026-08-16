@@ -1,57 +1,95 @@
 ULF_LootGeneration = {}
 
-local function GetRelativeLevelModifier(levelDifference)
-
-    local modifiers =
-        ULF_LootConfig.RelativeLevelModifiers
-
-    if not modifiers then
-        return 0
-    end
-
-    local roundedDifference =
-        math.floor(levelDifference + 0.5)
-
-    if roundedDifference <= -5 then
-        return modifiers[-5] or 0
-    end
-
-    if roundedDifference >= 5 then
-        return modifiers[5] or 0
-    end
-
-    return modifiers[roundedDifference] or 0
-end
-
 -- ============================================================
 -- DETERMINE DROP COUNT
 -- ============================================================
 
+local function GetBaseDropCount(level)
+
+    for _, entry in ipairs(
+        ULF_LootConfig.DropCountByLevel
+    ) do
+
+        if level <= entry.MaxLevel then
+            return entry.Count
+        end
+
+    end
+
+    return 0
+
+end
+
+
+local function GetThreatDropBonus(threatScore)
+
+    local bonus = 0
+
+    for _, entry in ipairs(
+        ULF_LootConfig.DropCountThreatThresholds
+    ) do
+
+        if threatScore >= entry.Threshold then
+
+            bonus =
+                bonus +
+                entry.Bonus
+
+        end
+
+    end
+
+    return bonus
+
+end
+
+
 function ULF_LootGeneration.GetDropCount(lootContext)
 
-    local level =
-        lootContext.Enemy.Class.Level
-
-    -- V1: simple level-based scaling.
-    --
-    -- This is intentionally conservative.
-    -- Rarity and item selection will be handled separately.
-
-    if level <= 2 then
-        return 2
-
-    elseif level <= 4 then
-        return 3
-
-    elseif level <= 6 then
-        return 4
-
-    elseif level <= 8 then
-        return 5
-
-    else
-        return 6
+    if not lootContext
+        or not lootContext.Enemy
+    then
+        return 0
     end
+
+
+    local level =
+        lootContext.Enemy.Class.Level or 0
+
+
+    local threatScore =
+        lootContext.EnemyThreatScore or 0
+
+
+    local baseCount =
+        GetBaseDropCount(level)
+
+
+    local threatBonus =
+        GetThreatDropBonus(threatScore)
+
+
+    local finalCount =
+        baseCount +
+        threatBonus
+
+
+    ULF_Debug.Print(
+        "[LOOT] Drop count calculation:" ..
+        " level=" ..
+        tostring(level) ..
+        " / base=" ..
+        tostring(baseCount) ..
+        " / threat=" ..
+        string.format("%.2f", threatScore) ..
+        " / threatBonus=" ..
+        tostring(threatBonus) ..
+        " / final=" ..
+        tostring(finalCount)
+    )
+
+
+    return finalCount
 
 end
 
@@ -60,18 +98,34 @@ function ULF_LootGeneration.CalculateDropChance(lootContext)
     local baseChance =
         ULF_LootConfig.BaseDropChance
 
-    local levelDifference =
-        lootContext.RelativeLevel
+    local threatScore =
+        lootContext.EnemyThreatScore or 0
 
-    local levelModifier =
-        GetRelativeLevelModifier(
-            levelDifference
-        )
+    local threatForGuaranteedDrop =
+        ULF_LootConfig.ThreatForGuaranteedDrop
+
+    local threatModifier = 0
+
+    if threatForGuaranteedDrop
+        and threatForGuaranteedDrop > 0
+    then
+
+        local threatRatio =
+            threatScore /
+            threatForGuaranteedDrop
+
+        threatModifier =
+            threatRatio *
+            (
+                1 -
+                baseChance
+            )
+
+    end
 
     local finalChance =
-        baseChance + levelModifier
-
-    -- Clamp chance to [0, 1]
+        baseChance +
+        threatModifier
 
     finalChance =
         math.max(
@@ -86,15 +140,16 @@ function ULF_LootGeneration.CalculateDropChance(lootContext)
         "[LOOT] Drop chance calculation:" ..
         " base=" ..
         string.format("%.3f", baseChance) ..
-        " / relativeLevel=" ..
-        string.format("%.1f", levelDifference) ..
-        " / levelModifier=" ..
-        string.format("%.3f", levelModifier) ..
+        " / threatScore=" ..
+        string.format("%.3f", threatScore) ..
+        " / threatModifier=" ..
+        string.format("%.3f", threatModifier) ..
         " / final=" ..
         string.format("%.3f", finalChance)
     )
 
     return finalChance
+
 end
 
 function ULF_LootGeneration.ShouldGenerate(lootContext)
