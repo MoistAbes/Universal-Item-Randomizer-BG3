@@ -48,12 +48,19 @@ Ext.Require("Loot/LootRarityResolver.lua")
 -- THREAT
 Ext.Require("Enemy/ULF_EnemyThreatCalculator.lua")
 
+-- MODELS
+Ext.Require("Models/ItemStatModel.lua")
+Ext.Require("Models/ItemRecordModel.lua")
+Ext.Require("Models/ItemIndexEntryModel.lua")
+Ext.Require("Models/LootItemQueryResultModel.lua")
+
 -- DATABASE
 Ext.Require("Database/ULF_Database.lua")
 Ext.Require("Database/DatabaseCache.lua")
 Ext.Require("Database/DatabaseIndex.lua")
 Ext.Require("Database/DatabaseQuery.lua")
 Ext.Require("Database/DatabaseInitializer.lua")
+
 
 
 -- SCANNER

@@ -530,19 +530,6 @@ end
 -- ============================================================
 -- SCAN ONE ITEM / BUILD ITEM RECORD
 -- ============================================================
---
--- This is the actual single-item scanner.
---
--- Input:
---     statName
---
--- Returns:
---     record, nil
---
--- or:
---     nil, errorCode
---
--- ============================================================
 
 local function BuildItemRecord(statName)
 
@@ -569,7 +556,9 @@ local function BuildItemRecord(statName)
 
 
     if errorCode then
+
         return nil, "NotItemStat"
+
     end
 
 
@@ -626,7 +615,7 @@ local function BuildItemRecord(statName)
 
 
     -- ========================================================
-    -- TEMPLATE INFORMATION
+    -- COMMON ROOT TEMPLATE DATA
     -- ========================================================
 
     local displayName =
@@ -649,8 +638,18 @@ local function BuildItemRecord(statName)
         )
 
 
+    local isStoryItem =
+        SafeGet(
+            template,
+            "StoryItem"
+        ) == true
+
+
     -- ========================================================
-    -- STAT INFORMATION
+    -- STAT-SPECIFIC DATA
+    --
+    -- Wszystko poniżej może potencjalnie różnić się
+    -- pomiędzy statami należącymi do tego samego RootTemplate.
     -- ========================================================
 
     local rarity =
@@ -697,84 +696,122 @@ local function BuildItemRecord(statName)
         )
 
 
-   local isStoryItem =
-        SafeGet(
-            template,
-            "StoryItem"
-        ) == true
-
-    -- ============================================
+    -- ========================================================
     -- NATIVE ITEM FEATURES
-    -- ============================================
+    -- ========================================================
 
     local modifierList =
-        SafeGet(stat, "ModifierList")
+        SafeGet(
+            stat,
+            "ModifierList"
+        )
+
 
     local slot =
-        SafeGet(stat, "Slot")
+        SafeGet(
+            stat,
+            "Slot"
+        )
+
 
     local weaponProperties =
-        SafeGet(stat, "Weapon Properties")
+        SafeGet(
+            stat,
+            "Weapon Properties"
+        )
+
 
     local damageType =
-        SafeGet(stat, "Damage Type")
+        SafeGet(
+            stat,
+            "Damage Type"
+        )
+
 
     local armorType =
-        SafeGet(stat, "ArmorType")
+        SafeGet(
+            stat,
+            "ArmorType"
+        )
+
 
     local armorClass =
-        SafeGet(stat, "ArmorClass")
+        SafeGet(
+            stat,
+            "ArmorClass"
+        )
+
 
     local armorClassAbility =
-        SafeGet(stat, "Armor Class Ability")
+        SafeGet(
+            stat,
+            "Armor Class Ability"
+        )
+
 
     local abilityModifierCap =
-        SafeGet(stat, "Ability Modifier Cap")
+        SafeGet(
+            stat,
+            "Ability Modifier Cap"
+        )
+
 
     local shield =
-        SafeGet(stat, "Shield")
+        SafeGet(
+            stat,
+            "Shield"
+        )
+
 
     -- ========================================================
-    -- RECORD
+    -- RESULT
     -- ========================================================
 
-local record = {
-    Category = category,
-    ClassificationReason = classificationReason,
+    return {
 
-    DisplayName = displayName,
-    Icon = icon,
-    isStoryItem = isStoryItem,
+        -- ====================================================
+        -- COMMON ROOT TEMPLATE DATA
+        -- ====================================================
 
-    Level = level,
-    Rarity = rarity,
+        RootTemplate = rootTemplate,
 
-    RootTemplate = rootTemplate,
-    Stat = statName,
-    TemplateName = templateName,
-    TemplateType = templateType,
+        DisplayName = displayName,
+        Icon = icon,
 
-    -- ============================================
-    -- NATIVE ITEM FEATURES
-    -- ============================================
+        TemplateName = templateName,
+        TemplateType = templateType,
 
-    ModifierList = modifierList,
-    Slot = slot,
-
-    WeaponGroup = weaponGroup,
-    ProficiencyGroup = proficiencyGroup,
-    WeaponProperties = weaponProperties,
-    DamageType = damageType,
-
-    ArmorType = armorType,
-    ArmorClass = armorClass,
-    ArmorClassAbility = armorClassAbility,
-    AbilityModifierCap = abilityModifierCap,
-    Shield = shield,
-}
+        IsStoryItem = isStoryItem,
 
 
-    return record, nil
+        -- ====================================================
+        -- STAT-SPECIFIC DATA
+        -- ====================================================
+
+        Stat = statName,
+
+        Category = category,
+        ClassificationReason = classificationReason,
+
+        Level = level,
+        Rarity = rarity,
+
+        ModifierList = modifierList,
+        Slot = slot,
+
+        WeaponGroup = weaponGroup,
+        ProficiencyGroup = proficiencyGroup,
+
+        WeaponProperties = weaponProperties,
+        DamageType = damageType,
+
+        ArmorType = armorType,
+        ArmorClass = armorClass,
+        ArmorClassAbility = armorClassAbility,
+
+        AbilityModifierCap = abilityModifierCap,
+        Shield = shield
+    }
 
 end
 
@@ -925,10 +962,13 @@ local function ScanItems()
 
         if record then
 
-            if record.isStoryItem then
+            if record.IsStoryItem then
+
                 scanStats.StoryItems =
                     scanStats.StoryItems + 1
+
             end
+
 
             scanStats.PhysicalItems =
                 scanStats.PhysicalItems + 1
@@ -946,49 +986,126 @@ local function ScanItems()
                 record.RootTemplate
 
 
-            -- =================================================
-            -- DEDUPLICATION
-            -- =================================================
-
-            if items[rootTemplate] then
-
-                scanStats.DuplicateTemplates =
-                    scanStats.DuplicateTemplates + 1
-
-            else
+            if not items[rootTemplate] then
 
                 items[rootTemplate] =
-                    record
+                    ULF_ItemRecordModel.New({
 
+                        RootTemplate =
+                            record.RootTemplate,
 
-                -- =============================================
-                -- CATEGORY COUNT
-                -- =============================================
+                        DisplayName =
+                            record.DisplayName,
 
-                local category =
-                    record.Category
+                        Icon =
+                            record.Icon,
 
+                        TemplateName =
+                            record.TemplateName,
 
-                if scanStats.Categories[category] ~= nil then
+                        TemplateType =
+                            record.TemplateType,
 
-                    scanStats.Categories[category] =
-                        scanStats.Categories[category] + 1
+                        IsStoryItem =
+                            record.IsStoryItem
 
-                end
-
-
-                -- =============================================
-                -- SAMPLE
-                -- =============================================
-
-                AddCategorySample(
-                    category,
-                    record,
-                    categorySamples
-                )
+                    })
 
             end
 
+            -- =================================================
+            -- STAT RECORD
+            -- =================================================
+
+            local statRecord =
+                ULF_ItemStatModel.New({
+
+                    Stat =
+                        record.Stat,
+
+                    Category =
+                        record.Category,
+
+                    ClassificationReason =
+                        record.ClassificationReason,
+
+                    Level =
+                        record.Level,
+
+                    Rarity =
+                        record.Rarity,
+
+                    ModifierList =
+                        record.ModifierList,
+
+                    Slot =
+                        record.Slot,
+
+                    WeaponGroup =
+                        record.WeaponGroup,
+
+                    ProficiencyGroup =
+                        record.ProficiencyGroup,
+
+                    WeaponProperties =
+                        record.WeaponProperties,
+
+                    DamageType =
+                        record.DamageType,
+
+                    ArmorType =
+                        record.ArmorType,
+
+                    ArmorClass =
+                        record.ArmorClass,
+
+                    ArmorClassAbility =
+                        record.ArmorClassAbility,
+
+                    AbilityModifierCap =
+                        record.AbilityModifierCap,
+
+                    Shield =
+                        record.Shield
+
+                })
+
+
+            -- =================================================
+            -- ADD STAT
+            -- =================================================
+
+            table.insert(
+                items[rootTemplate].Stats,
+                statRecord
+            )
+
+
+            -- =================================================
+            -- CATEGORY COUNT
+            -- =================================================
+
+            local category =
+                record.Category
+
+
+            if scanStats.Categories[category] ~= nil then
+
+                scanStats.Categories[category] =
+                    scanStats.Categories[category] + 1
+
+            end
+
+
+            -- =================================================
+            -- SAMPLE
+            -- =================================================
+
+            AddCategorySample(
+                category,
+                record,
+                categorySamples
+            )
 
         -- ====================================================
         -- SKIPPED
@@ -999,10 +1116,12 @@ local function ScanItems()
             scanStats.PropertyErrors =
                 scanStats.PropertyErrors + 1
 
+
         elseif errorCode == "NotItemStat" then
 
             scanStats.NotItemStats =
                 scanStats.NotItemStats + 1
+
 
         elseif errorCode == "NoRootTemplate" then
 
@@ -1050,9 +1169,11 @@ local function ScanItems()
     )
 
 
-    ULF_Debug.Print("[ITEM SCANNER] END OF Scan items")
-    ULF_Debug.Print("")
+    ULF_Debug.Print(
+        "[ITEM SCANNER] END OF Scan items"
+    )
 
+    ULF_Debug.Print("")
 
 
     -- ========================================================

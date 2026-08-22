@@ -43,19 +43,26 @@ end
 -- INTERNAL: RESOLVE ITEM ROOT TEMPLATE
 -- ============================================================
 
-local function GetItemRootTemplate(record)
+local function GetItemRootTemplate(queryResult)
 
-    if not record then
+    if not queryResult then
         return nil
     end
 
-    if not record.RootTemplate
-        or record.RootTemplate == "" then
+    if not queryResult.Record then
+        return nil
+    end
+
+    local rootTemplate =
+        queryResult.Record.RootTemplate
+
+    if not rootTemplate
+        or rootTemplate == "" then
 
         return nil
     end
 
-    return record.RootTemplate
+    return rootTemplate
 
 end
 
@@ -64,7 +71,10 @@ end
 -- SPAWN / ADD ITEM TO ENTITY
 -- ============================================================
 
-function ULF_LootSpawner.AddItem(victim, record)
+function ULF_LootSpawner.AddItem(
+    victim,
+    queryResult
+)
 
     if not victim then
 
@@ -76,10 +86,10 @@ function ULF_LootSpawner.AddItem(victim, record)
     end
 
 
-    if not record then
+    if not queryResult then
 
         ULF_Debug.Error(
-            "[LOOT SPAWNER] Item record is nil"
+            "[LOOT SPAWNER] Query result is nil"
         )
 
         return false
@@ -87,14 +97,19 @@ function ULF_LootSpawner.AddItem(victim, record)
 
 
     local rootTemplate =
-        GetItemRootTemplate(record)
+        GetItemRootTemplate(
+            queryResult
+        )
 
 
     if not rootTemplate then
 
         ULF_Debug.Error(
             "[LOOT SPAWNER] RootTemplate could not be resolved: " ..
-            tostring(record.Stat)
+            tostring(
+                queryResult.Stat
+                    and queryResult.Stat.Stat
+            )
         )
 
         return false
@@ -113,9 +128,15 @@ function ULF_LootSpawner.AddItem(victim, record)
 
         ULF_Debug.Print(
             "[LOOT SPAWNER] Added: " ..
-            tostring(record.Stat) ..
+            tostring(
+                queryResult.Stat
+                    and queryResult.Stat.Stat
+            ) ..
             " -> " ..
-            tostring(record.DisplayName)
+            tostring(
+                queryResult.Record
+                    and queryResult.Record.DisplayName
+            )
         )
 
         return true
@@ -125,7 +146,10 @@ function ULF_LootSpawner.AddItem(victim, record)
 
     ULF_Debug.Error(
         "[LOOT SPAWNER] Failed to add item: " ..
-        tostring(record.Stat)
+        tostring(
+            queryResult.Stat
+                and queryResult.Stat.Stat
+        )
     )
 
     return false

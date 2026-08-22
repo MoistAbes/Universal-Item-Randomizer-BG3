@@ -4,9 +4,12 @@ ULF_LootItemEligibility = {}
 -- CHECK ITEM ELIGIBILITY
 -- ============================================================
 
-function ULF_LootItemEligibility.IsEligible(record)
+function ULF_LootItemEligibility.IsEligible(
+    record,
+    stat
+)
 
-    if not record then
+    if not record or not stat then
         return false
     end
 
@@ -15,7 +18,7 @@ function ULF_LootItemEligibility.IsEligible(record)
     end
 
     local category =
-        record.Category
+        stat.Category
 
     if not category then
         return false

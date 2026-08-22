@@ -33,15 +33,16 @@ function ULF_LootItemResolver.Resolve(
 
     local eligible = {}
 
-    for _, record in ipairs(candidates) do
+    for _, candidate in ipairs(candidates) do
 
         if ULF_LootItemEligibility.IsEligible(
-            record
+            candidate.Record,
+            candidate.Stat
         ) then
 
             table.insert(
                 eligible,
-                record
+                candidate
             )
 
         end
@@ -60,18 +61,18 @@ function ULF_LootItemResolver.Resolve(
 
     local affinityEligible = {}
 
-    for _, record in ipairs(eligible) do
+    for _, candidate in ipairs(eligible) do
 
         if affinity == "Random"
             or ULF_LootAffinity.HasAffinity(
-                record,
+                candidate.Stat,
                 affinity
             )
         then
 
             table.insert(
                 affinityEligible,
-                record
+                candidate
             )
 
         end
@@ -109,7 +110,7 @@ function ULF_LootItemResolver.Resolve(
 
     ULF_Debug.Print(
         "[LOOT ITEM] Selected=" ..
-        tostring(selected.Stat)
+        tostring(selected.Stat.Stat)
     )
 
 

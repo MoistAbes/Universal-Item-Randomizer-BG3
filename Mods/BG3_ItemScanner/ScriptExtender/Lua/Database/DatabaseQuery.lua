@@ -1,96 +1,5 @@
 ULF_DatabaseQuery = {}
 
-
--- ============================================================
--- INTERNAL: RANDOM ITEM FROM INDEX
--- ============================================================
-
-local function GetRandomFromIndex(index, value)
-
-    if not index then
-
-        ULF_Debug.Error("[DATABASE QUERY] Index is missing")
-
-        return nil
-    end
-
-
-    local items =
-        index[value]
-
-
-    if not items or #items == 0 then
-
-        ULF_Debug.Print(
-            "[DATABASE QUERY] No items found for value: " ..
-            tostring(value)
-        )
-
-        return nil
-    end
-
-
-    -- ========================================================
-    -- RANDOM ENTRY
-    -- ========================================================
-
-    local randomIndex =
-        math.random(1, #items)
-
-
-    local rootTemplate =
-        items[randomIndex]
-
-
--- ========================================================
--- RESOLVE RECORD
--- ========================================================
-
-local record =
-    ULF_Database.Items[rootTemplate]
-
-
-if not record then
-
-    ULF_Debug.Error(
-        "[DATABASE QUERY] Indexed item not found: " ..
-        tostring(rootTemplate)
-    )
-
-    return nil
-end
-
-
-return record
-end
-
-
--- ============================================================
--- RANDOM BY CATEGORY
--- ============================================================
-
-function ULF_DatabaseQuery.GetRandomByCategory(category)
-
-local categoryIndex =
-    ULF_Database.Indexes.Category
-
-
-if not categoryIndex then
-
-    ULF_Debug.Error(
-        "[DATABASE QUERY] Category index is missing"
-    )
-
-    return nil
-end
-
-
-return GetRandomFromIndex(
-    categoryIndex,
-    category
-)
-end
-
 function ULF_DatabaseQuery.GetByRarity(rarity)
 
     local rarityIndex =
@@ -100,22 +9,41 @@ function ULF_DatabaseQuery.GetByRarity(rarity)
         return {}
     end
 
-    local itemIds =
+    local entries =
         rarityIndex[rarity]
 
-    if not itemIds then
+    if not entries then
         return {}
     end
 
     local results = {}
 
-    for _, itemId in ipairs(itemIds) do
+    for _, entry in ipairs(entries) do
 
         local record =
-            ULF_Database.Items[itemId]
+            ULF_Database.Items[
+                entry.RootTemplate
+            ]
 
-        if record then
-            table.insert(results, record)
+        if record and record.Stats then
+
+            for _, stat in ipairs(record.Stats) do
+
+                if stat.Stat == entry.Stat then
+
+                    table.insert(
+                        results,
+                        ULF_LootItemQueryResultModel.New(
+                            record,
+                            stat
+                        )
+                    )
+
+                    break
+                end
+
+            end
+
         end
 
     end
@@ -1427,16 +1355,5 @@ function ULF_DatabaseQuery.ScanLootDataQuality()
 
     print("")
     print("[DATABASE QUERY] ===============================")
-
-end
-
-
--- ============================================================
--- TEST API
--- ============================================================
-
-function ULF_DatabaseQuery.Test()
-
-    return "QUERY_OK"
 
 end

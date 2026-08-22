@@ -158,18 +158,18 @@ end
 -- ============================================================
 
 function ULF_LootAffinity.HasAffinity(
-    itemRecord,
+    itemStat,
     affinity
 )
 
-    if not itemRecord
+    if not itemStat
         or not affinity
     then
         return false
     end
 
     return Contains(
-        itemRecord.ProficiencyGroup,
+        itemStat.ProficiencyGroup,
         affinity
     )
 

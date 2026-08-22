@@ -34,9 +34,9 @@ ULF_LootConfig = {
 
         Rare = 10,
 
-        VeryRare = 0.1,
+        VeryRare = 0.5,
 
-        Legendary = 0.01
+        Legendary = 0.1
 
     },
 
@@ -51,7 +51,7 @@ ULF_LootConfig = {
 
         VeryRare = 0.3,
 
-        Legendary = 0.05
+        Legendary = 0.1
 
     },
 
