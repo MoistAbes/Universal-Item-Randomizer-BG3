@@ -34,19 +34,25 @@ ULF_LootConfig = {
 
         Rare = 10,
 
-        VeryRare = 4,
+        VeryRare = 0.1,
 
-        Legendary = 1
+        Legendary = 0.01
 
     },
 
 
     RarityThreatShift = {
-        Common = -30,
-        Uncommon = -10,
-        Rare = 20,
-        VeryRare = 15,
-        Legendary = 5
+
+        Common = -20,
+
+        Uncommon = -8,
+
+        Rare = 6,
+
+        VeryRare = 0.3,
+
+        Legendary = 0.05
+
     },
 
 

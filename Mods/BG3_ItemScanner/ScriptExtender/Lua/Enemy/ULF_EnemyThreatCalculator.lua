@@ -508,19 +508,19 @@ function ULF_EnemyThreatCalculator.Calculate(
 
         Components = {
 
-            Level = levelScore,
+            LevelScore = levelScore,
 
-            Health = healthScore,
+            HealthScore = healthScore,
 
-            AC = acScore,
+            ACScore = acScore,
 
-            Abilities = abilityScore,
+            AbilitiesScore = abilityScore,
 
-            Proficiency = proficiencyScore,
+            ProficiencyScore = proficiencyScore,
 
-            Equipment = equipmentScore,
+            EquipmentScore = equipmentScore,
 
-            Resistance = resistanceScore,
+            ResistanceScore = resistanceScore,
 
         },
 
@@ -566,38 +566,38 @@ function ULF_EnemyThreatCalculator.DebugPrint(
         )
 
         ULF_Debug.Print(
-            "  Level:        " ..
-            tostring(result.Components.Level)
+            "  LevelScore:        " ..
+            tostring(result.Components.LevelScore)
         )
 
         ULF_Debug.Print(
-            "  Health:       " ..
-            tostring(result.Components.Health)
+            "  HealthScore:       " ..
+            tostring(result.Components.HealthScore)
         )
 
         ULF_Debug.Print(
-            "  AC:           " ..
-            tostring(result.Components.AC)
+            "  ACScore:           " ..
+            tostring(result.Components.ACScore)
         )
 
         ULF_Debug.Print(
-            "  Abilities:    " ..
-            tostring(result.Components.Abilities)
+            "  AbilitiesScore:    " ..
+            tostring(result.Components.AbilitiesScore)
         )
 
         ULF_Debug.Print(
-            "  Proficiency:  " ..
-            tostring(result.Components.Proficiency)
+            "  ProficiencyScore:  " ..
+            tostring(result.Components.ProficiencyScore)
         )
 
         ULF_Debug.Print(
-            "  Equipment:    " ..
-            tostring(result.Components.Equipment)
+            "  EquipmentScore:    " ..
+            tostring(result.Components.EquipmentScore)
         )
 
         ULF_Debug.Print(
-            "  Resistance:   " ..
-            tostring(result.Components.Resistance)
+            "  ResistanceScore:   " ..
+            tostring(result.Components.ResistanceScore)
         )
 
     end

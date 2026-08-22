@@ -246,7 +246,7 @@ function ULF_LootRarityResolver.Resolve(
             rarity ..
             "=" ..
             string.format(
-                "%.1f%%",
+                "%.3f%%",
                 chance
             )
         )

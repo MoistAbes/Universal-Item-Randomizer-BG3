@@ -43,7 +43,7 @@ local function CreateScanStats()
 
         DuplicateTemplates = 0,
 
-        QuestItems = 0,
+        StoryItems = 0,
 
         PropertyErrors = 0,
 
@@ -237,24 +237,6 @@ local function Contains(text, value)
     ) ~= nil
 
 end
-
-
-local function StartsWith(text, value)
-
-    if not text or not value then
-
-        return false
-
-    end
-
-
-    return string.find(
-        string.upper(text),
-        "^" .. string.upper(value)
-    ) ~= nil
-
-end
-
 
 -- ============================================================
 -- NAME / STAT SIGNALS
@@ -714,10 +696,12 @@ local function BuildItemRecord(statName)
             template
         )
 
-    local IsQuestItem =
-        StartsWith(statName, "QUEST_")
-        or
-        StartsWith(templateName, "QUEST_")
+
+   local isStoryItem =
+        SafeGet(
+            template,
+            "StoryItem"
+        ) == true
 
     -- ============================================
     -- NATIVE ITEM FEATURES
@@ -760,7 +744,7 @@ local record = {
 
     DisplayName = displayName,
     Icon = icon,
-    IsQuestItem = IsQuestItem,
+    isStoryItem = isStoryItem,
 
     Level = level,
     Rarity = rarity,
@@ -941,9 +925,9 @@ local function ScanItems()
 
         if record then
 
-            if record.IsQuestItem then
-                scanStats.QuestItems =
-                    scanStats.QuestItems + 1
+            if record.isStoryItem then
+                scanStats.StoryItems =
+                    scanStats.StoryItems + 1
             end
 
             scanStats.PhysicalItems =

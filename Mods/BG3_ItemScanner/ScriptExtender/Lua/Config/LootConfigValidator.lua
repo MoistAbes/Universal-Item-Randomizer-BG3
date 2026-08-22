@@ -23,12 +23,14 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
 )
 
     if type(rarityWeights) ~= "table" then
-        ULF_Debug.Error("[CONFIG] ERROR: RarityWeights must be a table")
+
+        ULF_Debug.Error(
+            "[CONFIG] RarityWeights must be a table"
+        )
+
         return false
+
     end
-
-
-    local total = 0
 
 
     for _, rarity in ipairs(RARITY_ORDER) do
@@ -38,37 +40,42 @@ function ULF_LootConfigValidator.ValidateRarityWeights(
 
 
         if weight == nil then
-            ULF_Debug.Error("[CONFIG] Missing rarity weight: " + rarity)
+
+            ULF_Debug.Error(
+                "[CONFIG] Missing rarity weight: " ..
+                rarity
+            )
+
             return false
+
         end
 
 
-        if type(weight) ~= "number"
-            or weight % 1 ~= 0 then
+        if type(weight) ~= "number" then
 
-            ULF_Debug.Error("[CONFIG] Rarity weight must be an integert: " + rarity)
+            ULF_Debug.Error(
+                "[CONFIG] Rarity weight must be a number: " ..
+                rarity
+            )
+
             return false
+
         end
 
 
-        if weight < 0
-            or weight > 100 then
+        if weight < 0 then
 
-            ULF_Debug.Error("[CONFIG] Rarity weight out of range: " + rarity)
+            ULF_Debug.Error(
+                "[CONFIG] Rarity weight cannot be negative: " ..
+                rarity
+            )
+
             return false
+
         end
-
-
-        total =
-            total + weight
 
     end
 
-
-    if total ~= 100 then
-        ULF_Debug.Error("[CONFIG] Rarity weights must total 100. Total: " + tostring(total))
-        return false
-    end
 
     return true
 

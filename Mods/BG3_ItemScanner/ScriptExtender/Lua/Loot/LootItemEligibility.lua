@@ -10,7 +10,7 @@ function ULF_LootItemEligibility.IsEligible(record)
         return false
     end
 
-    if record.IsQuestItem == true then
+    if record.IsStoryItem == true then
         return false
     end
 
